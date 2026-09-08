@@ -1,0 +1,445 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#F2F1E9">
+  <title>2.3 Перемещение по каталогам · Практикум по Linux</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Literata:ital,opsz,wght@0,7..72,600;0,7..72,700;1,7..72,400&family=Pixelify+Sans:wght@500;600;700&family=Roboto+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../../styles.css">
+</head>
+<body>
+  <div class="book">
+    <div class="book__body">
+      <div class="spine"><span>Практика №2 · Bash: основные команды</span></div>
+
+      <main class="leaf">
+        <div class="running">
+          <p class="eyebrow"><a href="../../index.html" style="text-decoration:none;color:inherit">Практикум по Linux</a> · практика №2 · bash</p>
+          <p class="running__folio">Глава 2.3</p>
+        </div>
+
+        <header class="chapter-head">
+          <span class="chapter-num">2.3</span>
+          <h1>Перемещение<br>по каталогам</h1>
+          <p class="lead">В графическом файловом менеджере видно, где вы находитесь. В терминале это нужно спросить. Две команды — <code>pwd</code> и <code>cd</code> — закрывают девяносто процентов навигации, а точка и две точки превращают длинные пути в короткие.</p>
+          <blockquote class="quote"><p>«Заблудиться в файловой системе невозможно: она всегда готова сказать, где вы.»</p></blockquote>
+        </header>
+
+        <dl class="passport">
+          <div><dt>Категория</dt><dd>Файловая система</dd></div>
+          <div><dt>Уровень</dt><dd>Начальный</dd></div>
+          <div><dt>Связанные темы</dt><dd>Приглашение, аргументы команд</dd></div>
+          <div><dt>Зачем это знать</dt><dd>Свободно перемещаться по системе и записывать пути двумя способами</dd></div>
+        </dl>
+
+        <nav class="contents">
+          <b>В этой главе</b>
+          <ol>
+            <li><a href="#s1">Где я: команда pwd</a></li>
+            <li><a href="#s2">Дерево каталогов Linux</a></li>
+            <li><a href="#s3">Переход: команда cd</a></li>
+            <li><a href="#s4">Точка и две точки</a></li>
+            <li><a href="#s5">Абсолютный и относительный путь</a></li>
+            <li><a href="#s6">Стек каталогов: pushd, popd, dirs</a></li>
+            <li><a href="#s7">Частые ошибки</a></li>
+            <li><a href="#s8">Проверьте себя</a></li>
+            <li><a href="#s9">Шпаргалка</a></li>
+          </ol>
+        </nav>
+
+        <h2 id="s1"><span class="sec">§1</span>Где я: команда pwd</h2>
+        <p>Прежде чем куда-то идти, полезно узнать, где вы сейчас. Текущее положение в файловой системе называется <span class="term">текущим каталогом</span> (рабочим каталогом), и показывает его команда <code>pwd</code>.</p>
+        <div class="cmdcard">
+          <div class="cmdcard__head"><b>pwd</b><span>present working directory</span></div>
+          <div class="cmdcard__body">
+            <div class="cmdcard__syn">pwd</div>
+            <p style="margin-top:12px">Выводит полный путь к каталогу, в котором вы находитесь. Аргументы не нужны.</p>
+          </div>
+        </div>
+        <figure class="tty">
+          <div class="tty__bar"><div class="tty__dots"><i></i><i></i><i></i></div><span class="tty__title">pwd · <em>сразу после входа</em></span></div>
+<pre><span class="pr">user<i>@</i>ubuntuserver<i>:</i><b>~</b><i>$</i></span> <span class="cmd">pwd</span>
+<span class="out">/home/user</span></pre>
+        </figure>
+        <p>При входе в систему пользователь всегда оказывается в своём <span class="term">домашнем каталоге</span> — как правило, это <code>/home/{имя пользователя}</code>. У него есть короткое обозначение: знак <code>~</code> (тильда). Именно его вы видите в приглашении сразу после входа.</p>
+        <div class="margin-note">
+          <b>На полях: одна загадка приглашения закрыта</b>
+          <p>Внимательный студент уже заметил: тильда в <code>user@ubuntuserver:~$</code> стоит ровно там, где по синтаксису находится текущий каталог. Так и есть — Bash пишет его прямо в приглашение. Перейдёте в другое место — надпись изменится, и <code>pwd</code> станет нужна реже. Но не бесполезной: домашний каталог приглашение сокращает до <code>~</code>, а <code>pwd</code> всегда показывает путь целиком.</p>
+        </div>
+
+        <div class="try">
+          <div class="try__head"><b>⌨️ Попробуйте на своей системе</b><span>задание 1</span></div>
+          <div class="try__body">
+            <ol>
+              <li>Выполните <code class="b">pwd</code> и запишите путь к своему домашнему каталогу.</li>
+              <li>Сравните вывод с тем, что показано в приглашении. Почему они выглядят по-разному?</li>
+              <li>Выполните <code class="b">echo ~</code> — оболочка подставит вместо тильды полный путь.</li>
+            </ol>
+          </div>
+        </div>
+
+        <h2 id="s2"><span class="sec">§2</span>Дерево каталогов Linux</h2>
+        <p>В Linux нет дисков <code>C:</code> и <code>D:</code>. Вся файловая система — одно дерево, растущее из <span class="term">корневого каталога</span> <code>/</code>. Всё остальное — его ветви.</p>
+        <div class="tree">/                      <em>корень файловой системы</em>
+├── <b>bin</b>  →  usr/bin     <em>исполняемые файлы команд</em>
+├── <b>etc</b>                 <em>настройки системы и программ</em>
+│   ├── network
+│   └── apt
+├── <b>home</b>                <em>домашние каталоги пользователей</em>
+│   └── <mark>user</mark>            <em>ваш дом, он же ~</em>
+├── <b>tmp</b>                 <em>временные файлы</em>
+├── <b>usr</b>                 <em>программы и их данные</em>
+│   ├── bin
+│   ├── include
+│   └── lib
+└── <b>var</b>                 <em>изменяемые данные: логи, кэши</em>
+    └── log
+        ├── apt
+        └── journal</div>
+        <p>Путь <code>/home/user</code> читается как маршрут по этому дереву: от корня в <code>home</code>, оттуда в <code>user</code>. Первый символ <code>/</code> — это корень, все последующие — просто разделители между именами каталогов.</p>
+
+        <h2 id="s3"><span class="sec">§3</span>Переход: команда cd</h2>
+        <div class="cmdcard">
+          <div class="cmdcard__head"><b>cd</b><span>change directory</span></div>
+          <div class="cmdcard__body">
+            <div class="cmdcard__syn">cd {путь}</div>
+            <p style="margin-top:12px">Заменяет текущий каталог на указанный. Путь передаётся позиционным аргументом. Без аргументов возвращает в домашний каталог.</p>
+          </div>
+        </div>
+        <figure class="tty">
+          <div class="tty__bar"><div class="tty__dots"><i></i><i></i><i></i></div><span class="tty__title">cd · <em>приглашение меняется вместе с каталогом</em></span></div>
+<pre><span class="pr">user<i>@</i>ubuntuserver<i>:</i><b>~</b><i>$</i></span> <span class="cmd">cd</span> <span class="pth">/usr/bin</span>
+<span class="pr">user<i>@</i>ubuntuserver<i>:</i><b>/usr/bin</b><i>$</i></span> <span class="cmd">pwd</span>
+<span class="out">/usr/bin</span>
+<span class="pr">user<i>@</i>ubuntuserver<i>:</i><b>/usr/bin</b><i>$</i></span> <span class="cmd">cd</span> <span class="pth">~</span>
+<span class="pr">user<i>@</i>ubuntuserver<i>:</i><b>~</b><i>$</i></span> <span class="cur"> </span></pre>
+        </figure>
+        <p>Если каталога не существует или у вас нет к нему доступа, <code>cd</code> сообщит об этом и оставит вас на месте. Испортить ничего нельзя — команда только перемещает.</p>
+
+        <div class="try">
+          <div class="try__head"><b>⌨️ Попробуйте на своей системе</b><span>задание 2</span></div>
+          <div class="try__body">
+            <ol>
+              <li>Переместитесь в каталог <code>/usr/bin</code>. Посмотрите, как изменилось приглашение.</li>
+              <li>Вернитесь в домашний каталог, используя тильду: <code class="b">cd ~</code>.</li>
+              <li>Переместитесь в корневой каталог <code class="b">cd /</code> и выполните там <code class="b">pwd</code>.</li>
+              <li>Введите <code class="b">cd</code> вообще без аргументов. Что произошло? Проверьте результат командой <code>pwd</code>.</li>
+              <li>Попробуйте перейти в несуществующий каталог: <code class="b">cd /usr/binn</code>. Прочитайте сообщение и убедитесь через <code>pwd</code>, что вы остались на месте.</li>
+            </ol>
+            <details>
+              <summary>Что делает <code>cd</code> без аргументов</summary>
+              <p>Возвращает в домашний каталог — то же самое, что <code>cd ~</code>. Это самый быстрый способ вернуться «домой» из любой точки системы: две буквы вместо длинного пути.</p>
+            </details>
+          </div>
+        </div>
+
+        <h2 id="s4"><span class="sec">§4</span>Точка и две точки</h2>
+        <p>В каждом каталоге есть два особых имени. Они не файлы и не папки в обычном смысле — это указатели.</p>
+        <div class="duo">
+          <div>
+            <b>Точка · .</b>
+            <p>Текущий каталог. Команда <code>cd .</code> перемещает вас туда, где вы уже находитесь, то есть не делает ничего.</p>
+          </div>
+          <div>
+            <b>Две точки · ..</b>
+            <p>Родительский каталог — на уровень выше. Если вы в <code>/home/user</code>, то <code>cd ..</code> приведёт в <code>/home</code>.</p>
+          </div>
+        </div>
+        <p>Бессмысленная на первый взгляд точка окажется очень полезной в следующих главах: именно ею указывают «сюда» при копировании файлов и «здесь» при поиске. А две точки можно повторять: <code>cd ../..</code> поднимет на два уровня, <code>cd ../../..</code> — на три.</p>
+        <figure class="tty">
+          <div class="tty__bar"><div class="tty__dots"><i></i><i></i><i></i></div><span class="tty__title">.. · <em>подъём на уровень вверх</em></span></div>
+<pre><span class="pr">user<i>@</i>ubuntuserver<i>:</i><b>~</b><i>$</i></span> <span class="cmd">pwd</span>
+<span class="out">/home/user</span>
+<span class="pr">user<i>@</i>ubuntuserver<i>:</i><b>~</b><i>$</i></span> <span class="cmd">cd</span> <span class="pth">..</span>
+<span class="pr">user<i>@</i>ubuntuserver<i>:</i><b>/home</b><i>$</i></span> <span class="cmd">cd</span> <span class="pth">..</span>
+<span class="pr">user<i>@</i>ubuntuserver<i>:</i><b>/</b><i>$</i></span> <span class="cmd">cd</span> <span class="pth">..</span>
+<span class="pr">user<i>@</i>ubuntuserver<i>:</i><b>/</b><i>$</i></span> <span class="c"># выше корня подняться нельзя — команда молча ничего не делает</span></pre>
+        </figure>
+
+        <div class="try">
+          <div class="try__head"><b>⌨️ Попробуйте на своей системе</b><span>задание 3</span></div>
+          <div class="try__body">
+            <ol>
+              <li>Из домашнего каталога выполните <code class="b">cd .</code> и проверьте <code>pwd</code>. Что изменилось?</li>
+              <li>Выполните <code class="b">cd ..</code> и посмотрите, куда вы попали.</li>
+              <li>Ещё раз <code class="b">cd ..</code> — вы должны оказаться в корне.</li>
+              <li>Попробуйте <code class="b">cd ..</code> из корня. Что произошло?</li>
+              <li>Вернитесь домой и одной командой поднимитесь сразу на два уровня: <code class="b">cd ../..</code></li>
+            </ol>
+          </div>
+        </div>
+
+        <h2 id="s5"><span class="sec">§5</span>Абсолютный и относительный путь</h2>
+        <p>Один и тот же каталог можно указать двумя способами — и от этого зависит, откуда система начнёт отсчёт.</p>
+        <div class="duo">
+          <div>
+            <b>Абсолютный путь</b>
+            <p>Отсчитывается от корневого каталога и всегда начинается с <code>/</code>.</p>
+            <p><code>/var/log/apt</code></p>
+            <p>Работает из любой точки системы — маршрут задан полностью.</p>
+          </div>
+          <div>
+            <b>Относительный путь</b>
+            <p>Отсчитывается от текущего каталога и с <code>/</code> не начинается.</p>
+            <p><code>log/apt</code></p>
+            <p>Работает только оттуда, откуда имеет смысл: в данном случае из <code>/var</code>.</p>
+          </div>
+        </div>
+        <figure class="scheme">
+          <div class="scheme__canvas">
+            <svg viewBox="0 0 700 300" width="700" role="img" aria-label="Сравнение абсолютного и относительного пути на дереве каталогов">
+              <g font-family="Roboto Mono, monospace" font-size="14" font-weight="700">
+                <rect x="300" y="16" width="46" height="30" fill="#020835"/>
+                <text x="323" y="36" fill="#6FB8E3" text-anchor="middle">/</text>
+                <rect x="180" y="96" width="80" height="30" fill="#fff" stroke="#020835" stroke-width="2.5"/>
+                <text x="220" y="116" fill="#020835" text-anchor="middle">var</text>
+                <rect x="390" y="96" width="90" height="30" fill="#fff" stroke="#020835" stroke-width="2.5"/>
+                <text x="435" y="116" fill="#020835" text-anchor="middle">home</text>
+                <rect x="180" y="176" width="80" height="30" fill="#BFE2F5" stroke="#020835" stroke-width="2.5"/>
+                <text x="220" y="196" fill="#020835" text-anchor="middle">log</text>
+                <rect x="180" y="248" width="80" height="30" fill="#2D7FC1" stroke="#020835" stroke-width="2.5"/>
+                <text x="220" y="268" fill="#fff" text-anchor="middle">apt</text>
+              </g>
+              <g stroke="#020835" stroke-width="2" fill="none">
+                <path d="M323 46 V76 H220 V96"/>
+                <path d="M323 46 V76 H435 V96"/>
+                <path d="M220 126 V176"/>
+                <path d="M220 206 V248"/>
+              </g>
+              <g font-family="Inter, sans-serif" font-size="13" fill="#3B4467">
+                <text x="500" y="150">вы находитесь здесь: <tspan font-family="Roboto Mono, monospace" font-weight="700" fill="#020835">/var</tspan></text>
+                <text x="500" y="200">абсолютно: <tspan font-family="Roboto Mono, monospace" font-weight="700" fill="#020835">cd /var/log/apt</tspan></text>
+                <text x="500" y="230">относительно: <tspan font-family="Roboto Mono, monospace" font-weight="700" fill="#020835">cd log/apt</tspan></text>
+                <text x="500" y="260">результат одинаковый</text>
+              </g>
+              <path d="M270 111 H488" stroke="#B4791A" stroke-width="2" stroke-dasharray="6 4" fill="none"/>
+              <circle cx="264" cy="111" r="5" fill="#B4791A"/>
+            </svg>
+          </div>
+          <figcaption>Два способа добраться до одного каталога: от корня и от текущего места</figcaption>
+        </figure>
+        <p>Относительные пути свободно смешиваются с точками. Запись <code>../log</code> означает «подняться на уровень вверх, оттуда войти в <code>log</code>». А наличие лишних точек в середине пути ничего не ломает: <code>./././usr</code> — это тот же <code>usr</code>.</p>
+
+        <div class="try">
+          <div class="try__head"><b>⌨️ Попробуйте на своей системе</b><span>задание 4</span></div>
+          <div class="try__body">
+            <ol>
+              <li>Абсолютным путём перейдите в <code class="b">/var/log</code>.</li>
+              <li>Оттуда относительным путём — в <code>apt</code>: <code class="b">cd apt</code>. Проверьте результат через <code>pwd</code>.</li>
+              <li>Относительным путём вернитесь в <code>/var/log</code>, а затем перейдите в <code>/var</code>.</li>
+              <li>Из <code>/var</code> одной командой с относительным путём попадите обратно в <code>/var/log/apt</code>.</li>
+              <li>Выполните <code class="b">cd ../././..</code> и определите, где вы оказались. Сначала предположите ответ, потом проверьте через <code>pwd</code>.</li>
+            </ol>
+          </div>
+        </div>
+
+        <div class="try try--hard">
+          <div class="try__head"><b>🔥 Усложнённая задача</b><span>без подсказки</span></div>
+          <div class="try__body">
+            <p>Находясь в каталоге <code>/var/log/apt</code>, попадите в корневой каталог <code>/</code> одной командой, используя только относительный путь. Знака <code>/</code> в начале пути быть не должно. Как выглядит команда и почему она работает?</p>
+          </div>
+        </div>
+
+        <h2 id="s6"><span class="sec">§6</span>Стек каталогов: pushd, popd, dirs</h2>
+        <p>Ситуация, знакомая всем: вы работаете глубоко в дереве каталогов, вам нужно отлучиться в другое место и вернуться обратно — а путь длинный. Bash умеет запоминать каталоги в <span class="term">стеке</span>: складывать их стопкой и снимать в обратном порядке.</p>
+        <div class="cmdcard">
+          <div class="cmdcard__head"><b>pushd</b><span>push directory · запомнить и перейти</span></div>
+          <div class="cmdcard__body">
+            <div class="cmdcard__syn">pushd {путь}</div>
+            <p style="margin-top:12px">Кладёт текущий каталог в стек и переходит по указанному пути. Запись <code>pushd .</code> просто сохраняет текущее место, никуда не перемещая.</p>
+          </div>
+        </div>
+        <div class="cmdcard">
+          <div class="cmdcard__head"><b>popd</b><span>pop directory · вернуться</span></div>
+          <div class="cmdcard__body">
+            <div class="cmdcard__syn">popd</div>
+            <p style="margin-top:12px">Снимает верхний каталог со стека и переходит в него. Возврат идёт в порядке, обратном сохранению: последний сохранённый — первый на выход.</p>
+          </div>
+        </div>
+        <div class="cmdcard">
+          <div class="cmdcard__head"><b>dirs</b><span>directories · посмотреть стек</span></div>
+          <div class="cmdcard__body">
+            <div class="cmdcard__syn">dirs</div>
+            <p style="margin-top:12px">Показывает содержимое стека слева направо: первым идёт текущий каталог, дальше — сохранённые в порядке возврата.</p>
+          </div>
+        </div>
+        <figure class="scheme">
+          <div class="scheme__canvas">
+            <svg viewBox="0 0 700 290" width="700" role="img" aria-label="Как растёт стек каталогов при вызовах pushd">
+              <g font-family="Roboto Mono, monospace" font-size="12.5">
+                <text x="20" y="30" font-family="Inter, sans-serif" font-size="13" font-weight="700" fill="#3B4467">cd ~</text>
+                <rect x="20" y="200" width="170" height="34" fill="#2D7FC1" stroke="#020835" stroke-width="2.5"/>
+                <text x="105" y="222" fill="#fff" text-anchor="middle" font-weight="700">~</text>
+
+                <text x="265" y="30" font-family="Inter, sans-serif" font-size="13" font-weight="700" fill="#3B4467">pushd /etc</text>
+                <rect x="265" y="200" width="170" height="34" fill="#fff" stroke="#020835" stroke-width="2.5"/>
+                <text x="350" y="222" fill="#020835" text-anchor="middle">~</text>
+                <rect x="265" y="160" width="170" height="34" fill="#2D7FC1" stroke="#020835" stroke-width="2.5"/>
+                <text x="350" y="182" fill="#fff" text-anchor="middle" font-weight="700">/etc</text>
+
+                <text x="510" y="30" font-family="Inter, sans-serif" font-size="13" font-weight="700" fill="#3B4467">pushd /var/log</text>
+                <rect x="510" y="200" width="170" height="34" fill="#fff" stroke="#020835" stroke-width="2.5"/>
+                <text x="595" y="222" fill="#020835" text-anchor="middle">~</text>
+                <rect x="510" y="160" width="170" height="34" fill="#fff" stroke="#020835" stroke-width="2.5"/>
+                <text x="595" y="182" fill="#020835" text-anchor="middle">/etc</text>
+                <rect x="510" y="120" width="170" height="34" fill="#2D7FC1" stroke="#020835" stroke-width="2.5"/>
+                <text x="595" y="142" fill="#fff" text-anchor="middle" font-weight="700">/var/log</text>
+              </g>
+              <g stroke="#020835" stroke-width="2.5" fill="none" marker-end="url(#ar)">
+                <path d="M200 180 H255"/>
+                <path d="M445 150 H500"/>
+              </g>
+              <defs>
+                <marker id="ar" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+                  <path d="M0 0 L10 5 L0 10 z" fill="#020835"/>
+                </marker>
+              </defs>
+              <g font-family="Inter, sans-serif" font-size="12.5" fill="#3B4467">
+                <text x="20" y="258">синим — текущий каталог, он же вершина стека</text>
+                <text x="20" y="278">popd снимает верхний элемент: /var/log → /etc → ~</text>
+              </g>
+              <text x="20" y="60" font-family="Inter, sans-serif" font-size="12.5" fill="#8A93B2">стек растёт вверх</text>
+              <path d="M118 100 V70" stroke="#8A93B2" stroke-width="2" marker-end="url(#ar)" fill="none"/>
+            </svg>
+          </div>
+          <figcaption>Каждый pushd кладёт каталог сверху, popd снимает его обратно</figcaption>
+        </figure>
+
+        <div class="try">
+          <div class="try__head"><b>⌨️ Попробуйте на своей системе</b><span>задание 5</span></div>
+          <div class="try__body">
+            <p class="warn"><b>Если каталога нет.</b> В некоторых установках Ubuntu Server отсутствует <code>/var/log/journal</code>. Тогда возьмите вместо него любой существующий каталог, например <code>/var/log/apt</code> — на суть задания это не влияет.</p>
+            <ol>
+              <li>Переместитесь в каталог <code class="b">/var/log/journal</code>.</li>
+              <li>Сохраните текущую директорию два раза подряд: <code class="b">pushd .</code> и ещё раз <code class="b">pushd .</code></li>
+              <li>Убедитесь через <code class="b">dirs</code>, что каталоги сохранены.</li>
+              <li>С помощью относительного пути перейдите сначала в <code>/var/log</code>, а затем в <code>/var/log/apt</code>.</li>
+              <li>Вернитесь в сохранённую директорию командой <code class="b">popd</code>.</li>
+              <li>Выполните <code class="b">cd ../././sysstat/./..</code> — в каком каталоге вы оказались? Сначала догадайтесь, потом проверьте.</li>
+              <li>Снова вернитесь в сохранённую директорию.</li>
+            </ol>
+            <details>
+              <summary>Разбор шага 6</summary>
+              <p>Путь читается слева направо. Из <code>/var/log/journal</code>: <code>..</code> — в <code>/var/log</code>; три <code>.</code> ничего не меняют; <code>sysstat</code> — в <code>/var/log/sysstat</code>; последняя <code>..</code> — обратно в <code>/var/log</code>. Итог: <code>/var/log</code>. Если каталога <code>sysstat</code> в системе нет, команда завершится ошибкой и не переместит вас никуда — тогда подставьте существующий подкаталог из вывода <code>ls /var/log</code>.</p>
+            </details>
+          </div>
+        </div>
+
+        <div class="try try--hard">
+          <div class="try__head"><b>🔥 Усложнённая задача</b><span>на бумаге</span></div>
+          <div class="try__body">
+            <p>В какой папке окажется пользователь, если известно, что изначально он находится в домашнем каталоге, и дан список его команд? Решите, не заглядывая в терминал, а потом проверьте на машине.</p>
+            <figure class="code">
+              <figcaption><span>Задача</span><span>восемь команд подряд</span></figcaption>
+<pre>cd /media
+pushd .
+dirs
+cd /etc/network
+pushd ..
+uname -a
+cd
+popd</pre>
+            </figure>
+            <details>
+              <summary>Разбор по шагам</summary>
+              <ul>
+                <li><code>cd /media</code> — текущий каталог <code>/media</code>, стек: <code>/media</code></li>
+                <li><code>pushd .</code> — сохраняем текущий, стек: <code>/media /media</code></li>
+                <li><code>dirs</code> — только показывает стек, ничего не меняет</li>
+                <li><code>cd /etc/network</code> — <code>cd</code> заменяет вершину стека, стек: <code>/etc/network /media</code></li>
+                <li><code>pushd ..</code> — переходим в <code>/etc</code>, стек: <code>/etc /etc/network /media</code></li>
+                <li><code>uname -a</code> — на каталоги не влияет</li>
+                <li><code>cd</code> — уходим домой, стек: <code>~ /etc/network /media</code></li>
+                <li><code>popd</code> — снимаем вершину и переходим в следующую</li>
+              </ul>
+              <p>Ответ: пользователь окажется в <code>/etc/network</code>.</p>
+            </details>
+          </div>
+        </div>
+
+        <h2 id="s7"><span class="sec">§7</span>Частые ошибки</h2>
+        <div class="table-scroll errors-table">
+          <table>
+            <thead><tr><th>Что написано</th><th>Что произойдёт</th><th>Как правильно</th></tr></thead>
+            <tbody>
+              <tr><td><code>cd usr/bin</code> из домашнего каталога</td><td><code>No such file or directory</code> — искали <code>/home/user/usr/bin</code></td><td><code>cd /usr/bin</code> — абсолютный путь начинается со слэша</td></tr>
+              <tr><td><code>cd /Home/user</code></td><td>Ошибка: такого каталога нет</td><td>Регистр в именах важен: <code>/home/user</code></td></tr>
+              <tr><td><code>cd ..bin</code></td><td>Ошибка: это одно имя, а не «вверх и в bin»</td><td><code>cd ../bin</code> — части пути разделяются слэшем</td></tr>
+              <tr><td><code>popd</code> при пустом стеке</td><td><code>directory stack empty</code></td><td>Сначала <code>pushd</code>, и только потом <code>popd</code></td></tr>
+              <tr><td><code>cd /var/log/journal</code> без прав</td><td><code>Permission denied</code></td><td>Каталог существует, но доступ закрыт: возьмите другой или используйте <code>sudo</code></td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <h2 id="s8"><span class="sec">§8</span>Проверьте себя</h2>
+        <details>
+          <summary>Чем <code>cd /log</code> отличается от <code>cd log</code>?</summary>
+          <p>Первая команда — абсолютный путь: ищется каталог <code>log</code> непосредственно в корне (которого там нет). Вторая — относительный: ищется <code>log</code> внутри текущего каталога. Из <code>/var</code> вторая команда сработает, первая — нет.</p>
+        </details>
+        <details>
+          <summary>Что делает <code>cd .</code> и зачем такая команда нужна?</summary>
+          <p>Ничего: точка означает текущий каталог, и переход в него никуда не перемещает. Само обозначение <code>.</code> при этом очень полезно в других командах — например, <code>cp файл .</code> означает «скопировать сюда».</p>
+        </details>
+        <details>
+          <summary>Вы в <code>/usr/include/sys</code>. Куда приведёт <code>cd ../..</code>?</summary>
+          <p>В <code>/usr</code>. Первые две точки поднимают в <code>/usr/include</code>, вторые — в <code>/usr</code>.</p>
+        </details>
+        <details>
+          <summary>Чем <code>pushd /etc</code> отличается от <code>cd /etc</code>?</summary>
+          <p>Обе команды перемещают в <code>/etc</code>. Разница в том, что <code>pushd</code> дополнительно кладёт каталог в стек, и позже туда можно вернуться одной командой <code>popd</code>, не набирая путь заново. У <code>cd</code> такой памяти нет.</p>
+        </details>
+        <details>
+          <summary>Стек содержит <code>/var/log /etc ~</code>. Что покажет <code>pwd</code> после двух <code>popd</code> подряд?</summary>
+          <p>Первый <code>popd</code> снимет <code>/var/log</code> и переместит в <code>/etc</code>. Второй снимет <code>/etc</code> и переместит в <code>~</code>, то есть <code>pwd</code> выведет <code>/home/user</code>.</p>
+        </details>
+
+        <h2 id="s9"><span class="sec">§9</span>Шпаргалка</h2>
+        <div class="cheat">
+          <div>
+            <b>Где я</b>
+            <code>pwd</code>
+          </div>
+          <div>
+            <b>Переход</b>
+            <code>cd /usr/bin   # абсолютно</code>
+            <code>cd bin        # относительно</code>
+          </div>
+          <div>
+            <b>Быстрые адреса</b>
+            <code>cd ~   # домой</code>
+            <code>cd     # тоже домой</code>
+          </div>
+          <div>
+            <b>Точки</b>
+            <code>.    # текущий каталог</code>
+            <code>..   # на уровень вверх</code>
+          </div>
+          <div>
+            <b>Стек каталогов</b>
+            <code>pushd /etc</code>
+            <code>popd    dirs</code>
+          </div>
+          <div>
+            <b>Корень</b>
+            <code>cd /</code>
+            <code># выше подняться нельзя</code>
+          </div>
+        </div>
+
+        <h3>Итог главы</h3>
+        <p>Текущий каталог показывает <code>pwd</code>, а меняет его <code>cd</code>. Путь записывают абсолютно — от корня, начиная со слэша, — или относительно текущего места; в относительных путях участвуют точка (здесь) и две точки (уровнем выше). Домашний каталог обозначается тильдой, и вернуться в него можно командой <code>cd</code> вообще без аргументов. Когда приходится прыгать между двумя далёкими каталогами, помогает стек: <code>pushd</code> запоминает, <code>popd</code> возвращает, <code>dirs</code> показывает, что накопилось.</p>
+
+        <div class="pager"><a href="../02-komanda-i-argumenty/index.html">← 2.2 Команда и её аргументы</a><a href="../../index.html">К содержанию практикума</a><a href="../04-prosmotr-i-poisk/index.html">2.4 Просмотр и поиск →</a></div>
+
+        <div class="colophon">
+          <span>Глава 2.3 · Перемещение по каталогам · Практикум по Linux</span>
+          <span class="author-line">Автор: Макаров Максим Николаевич</span>
+        </div>
+      </main>
+    </div>
+  </div>
+</body>
+</html>

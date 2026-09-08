@@ -1,0 +1,339 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#F2F1E9">
+  <title>2.1 Вход в систему и приглашение · Практикум по Linux</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Literata:ital,opsz,wght@0,7..72,600;0,7..72,700;1,7..72,400&family=Pixelify+Sans:wght@500;600;700&family=Roboto+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../../styles.css">
+</head>
+<body>
+  <div class="book">
+    <div class="book__body">
+      <div class="spine"><span>Практика №2 · Bash: основные команды</span></div>
+
+      <main class="leaf">
+        <div class="running">
+          <p class="eyebrow"><a href="../../index.html" style="text-decoration:none;color:inherit">Практикум по Linux</a> · практика №2 · bash</p>
+          <p class="running__folio">Глава 2.1</p>
+        </div>
+
+        <header class="chapter-head">
+          <span class="chapter-num">2.1</span>
+          <h1>Вход в систему<br>и приглашение</h1>
+          <p class="lead">Чёрный экран с мигающим курсором пугает ровно до тех пор, пока непонятно, что на нём написано. А написано там немного: кто вы, на какой машине находитесь и в каком каталоге. Разберём приглашение по частям и наберём первую команду.</p>
+          <blockquote class="quote"><p>«Терминал ничего не делает сам. Он ждёт, пока вы скажете, что делать.»</p></blockquote>
+        </header>
+
+        <dl class="passport">
+          <div><dt>Категория</dt><dd>Командная оболочка Bash</dd></div>
+          <div><dt>Уровень</dt><dd>Начальный</dd></div>
+          <div><dt>Связанные темы</dt><dd>Установка ОС, виртуальные машины</dd></div>
+          <div><dt>Зачем это знать</dt><dd>Войти в систему и понимать, что показывает командная строка</dd></div>
+        </dl>
+
+        <nav class="contents">
+          <b>В этой главе</b>
+          <ol>
+            <li><a href="#s1">Запуск машины и вход</a></li>
+            <li><a href="#s2">Приглашение командной строки</a></li>
+            <li><a href="#s3">Первая команда: uname</a></li>
+            <li><a href="#s4">Клавиши, которые экономят время</a></li>
+            <li><a href="#s5">Частые ошибки</a></li>
+            <li><a href="#s6">Проверьте себя</a></li>
+            <li><a href="#s7">Шпаргалка</a></li>
+          </ol>
+        </nav>
+
+        <h2 id="s1"><span class="sec">§1</span>Запуск машины и вход</h2>
+        <p>Запустите виртуальную машину с Ubuntu Server. Через несколько секунд загрузки по экрану пробегут строки о запуске служб, и всё остановится на приглашении ко входу — <span class="term">login prompt</span>. Система хочет знать, кто перед ней.</p>
+        <figure class="tty">
+          <div class="tty__bar"><div class="tty__dots"><i></i><i></i><i></i></div><span class="tty__title">Ubuntu Server · <em>экран входа</em></span></div>
+<pre><span class="out">Ubuntu 24.04.4 LTS ubuntuserver tty1</span>
+
+ubuntuserver login: <span class="cmd">user</span>
+Password: <span class="cur"> </span></pre>
+        </figure>
+        <p>Введите имя пользователя, которое задавали при установке, и нажмите <kbd>Enter</kbd>. Затем введите пароль.</p>
+        <div class="margin-note margin-note--warn">
+          <b>Важно: пароль не отображается</b>
+          <p>Пока вы набираете пароль, на экране не появляется ничего — ни символов, ни звёздочек. Это не зависший терминал и не сломанная клавиатура: так сделано специально, чтобы стоящий за спиной человек не сосчитал длину пароля. Наберите его вслепую и нажмите <kbd>Enter</kbd>.</p>
+        </div>
+        <p>Если пароль введён верно, система поздоровается сводкой о состоянии машины и передаст вам управление. Если нет — вежливо напишет <code>Login incorrect</code> и предложит попробовать снова. Частая причина: раскладка клавиатуры или включённый <kbd>Caps Lock</kbd>.</p>
+        <figure class="tty">
+          <div class="tty__bar"><div class="tty__dots"><i></i><i></i><i></i></div><span class="tty__title">Ubuntu Server · <em>после входа</em></span></div>
+<pre><span class="out">The list of available updates is more than a week old.
+To check for new updates run: sudo apt update
+
+To run a command as administrator (user "root"), use "sudo &lt;command&gt;".
+See "man sudo_root" for details.</span>
+
+<span class="pr">user<i>@</i>ubuntuserver<i>:</i><b>~</b><i>$</i></span> <span class="cur"> </span></pre>
+        </figure>
+        <p>Последняя строка — это и есть <span class="term">приглашение командной строки</span>. Всё, что вы наберёте, окажется правее знака <code>$</code>.</p>
+
+        <div class="try">
+          <div class="try__head"><b>⌨️ Попробуйте на своей системе</b><span>задание 1</span></div>
+          <div class="try__body">
+            <ol>
+              <li>Запустите виртуальную машину и дождитесь приглашения <code>login:</code>.</li>
+              <li>Войдите под своим пользователем. Пароль набирайте вслепую — так и должно быть.</li>
+              <li>Специально ошибитесь в пароле один раз и посмотрите, как система на это отвечает. Запомните текст сообщения.</li>
+              <li>Войдите правильно и найдите на экране строку, которая заканчивается знаком <code>$</code>.</li>
+            </ol>
+            <details>
+              <summary>Не подходит пароль, хотя он точно верный</summary>
+              <p>Три обычные причины. Первая — включён <kbd>Caps Lock</kbd>. Вторая — раскладка: в консоли Ubuntu Server по умолчанию только английская, и русские буквы просто не наберутся. Третья — цифры на дополнительной клавиатуре при выключенном <kbd>Num Lock</kbd>. Наберите пароль в поле <code>login:</code> (там символы видны), убедитесь, что он выглядит как надо, нажмите <kbd>Enter</kbd> и введите его заново уже в поле пароля.</p>
+            </details>
+          </div>
+        </div>
+
+        <h2 id="s2"><span class="sec">§2</span>Приглашение командной строки</h2>
+        <p>Строка перед курсором выглядит загадочно только на первый взгляд. У неё жёсткий синтаксис, и каждая часть отвечает на свой вопрос.</p>
+        <figure class="code">
+          <figcaption><span>Синтаксис</span><span>приглашение bash</span></figcaption>
+<pre>имя_пользователя@имя_машины:текущий_каталог$</pre>
+        </figure>
+        <figure class="scheme">
+          <div class="scheme__canvas">
+            <svg viewBox="0 0 700 280" width="700" role="img" aria-label="Разбор приглашения командной строки на части">
+              <text x="30" y="58" font-family="Roboto Mono, monospace" font-size="24" font-weight="700" fill="#020835">user@ubuntuserver:~$</text>
+              <rect x="30" y="68" width="57.6" height="5" fill="#2D7FC1"/>
+              <rect x="102" y="68" width="172.8" height="5" fill="#2D7FC1"/>
+              <rect x="289.2" y="68" width="14.4" height="5" fill="#2D7FC1"/>
+              <rect x="303.6" y="68" width="14.4" height="5" fill="#B4791A"/>
+              <g stroke="#8A93B2" stroke-width="2" fill="none">
+                <path d="M58 76 V110 H408"/>
+                <path d="M188 76 V150 H408"/>
+                <path d="M296 76 V190 H408"/>
+                <path d="M311 76 V230 H408"/>
+              </g>
+              <g font-family="Inter, sans-serif" font-size="14" fill="#020835">
+                <text x="418" y="115"><tspan font-weight="700">user</tspan> — имя пользователя</text>
+                <text x="418" y="155"><tspan font-weight="700">ubuntuserver</tspan> — имя машины</text>
+                <text x="418" y="195"><tspan font-weight="700">~</tspan> — текущий каталог</text>
+                <text x="418" y="235"><tspan font-weight="700">$</tspan> — приглашение к вводу</text>
+              </g>
+              <g font-family="Inter, sans-serif" font-size="12.5" fill="#3B4467">
+                <text x="30" y="115">кто</text>
+                <text x="30" y="155">где</text>
+                <text x="30" y="195">в какой папке</text>
+                <text x="30" y="235">ваша очередь</text>
+              </g>
+            </svg>
+          </div>
+          <figcaption>Приглашение отвечает на три вопроса и передаёт ход вам</figcaption>
+        </figure>
+        <p>Знак <code>~</code> (тильда) — это сокращение для <span class="term">домашнего каталога</span> пользователя, обычно <code>/home/user</code>. Сразу после входа вы всегда оказываетесь именно там. Как только вы перейдёте в другой каталог, тильда в приглашении сменится на новый путь — приглашение живое, оно всё время показывает, где вы находитесь.</p>
+        <div class="margin-note">
+          <b>На полях: почему доллар</b>
+          <p>Знак <code>$</code> означает, что вы работаете как обычный пользователь. У администратора системы — пользователя <code>root</code> — на этом месте стоит решётка <code>#</code>. Различие не косметическое: под <code>#</code> система выполнит любую команду без вопросов, включая ту, которая её сломает. В учебных примерах и в этом практикуме приглашение всегда <code>$</code>.</p>
+        </div>
+
+        <div class="try">
+          <div class="try__head"><b>⌨️ Попробуйте на своей системе</b><span>задание 2</span></div>
+          <div class="try__body">
+            <ol>
+              <li>Прочитайте своё приглашение и назовите вслух три вещи: имя пользователя, имя машины, текущий каталог.</li>
+              <li>Наберите <code class="b">whoami</code> и нажмите <kbd>Enter</kbd>. Совпал ли ответ с первой частью приглашения?</li>
+              <li>Наберите <code class="b">hostname</code>. Совпал ли ответ со второй частью?</li>
+            </ol>
+            <figure class="tty">
+              <div class="tty__bar"><div class="tty__dots"><i></i><i></i><i></i></div><span class="tty__title">ожидаемый результат</span></div>
+<pre><span class="pr">user<i>@</i>ubuntuserver<i>:</i><b>~</b><i>$</i></span> <span class="cmd">whoami</span>
+<span class="out">user</span>
+<span class="pr">user<i>@</i>ubuntuserver<i>:</i><b>~</b><i>$</i></span> <span class="cmd">hostname</span>
+<span class="out">ubuntuserver</span></pre>
+            </figure>
+          </div>
+        </div>
+
+        <h2 id="s3"><span class="sec">§3</span>Первая команда: uname</h2>
+        <p>Первое, что стоит сделать в незнакомой системе, — спросить у неё, что она такое. За это отвечает команда <code>uname</code>.</p>
+        <div class="cmdcard">
+          <div class="cmdcard__head"><b>uname</b><span>unix name · информация о системе</span></div>
+          <div class="cmdcard__body">
+            <div class="cmdcard__syn">uname [аргументы]…</div>
+            <p style="margin-top:12px">Без аргументов выводит одно слово — название ядра. Ответ настолько скромный, что кажется, будто команда не сработала.</p>
+          </div>
+        </div>
+        <figure class="tty">
+          <div class="tty__bar"><div class="tty__dots"><i></i><i></i><i></i></div><span class="tty__title">uname · <em>без аргументов</em></span></div>
+<pre><span class="pr">user<i>@</i>ubuntuserver<i>:</i><b>~</b><i>$</i></span> <span class="cmd">uname</span>
+<span class="out">Linux</span></pre>
+        </figure>
+        <p>Чтобы получить всю информацию сразу, к команде добавляют <span class="term">аргумент</span> <code>-a</code> — от слова <i>all</i>:</p>
+        <figure class="tty">
+          <div class="tty__bar"><div class="tty__dots"><i></i><i></i><i></i></div><span class="tty__title">uname -a · <em>всё сразу</em></span></div>
+<pre><span class="pr">user<i>@</i>ubuntuserver<i>:</i><b>~</b><i>$</i></span> <span class="cmd">uname</span> <span class="arg">-a</span>
+<span class="out">Linux ubuntuserver 6.8.0-51-generic #52-Ubuntu SMP PREEMPT_DYNAMIC
+Mon Dec  9 15:00:52 UTC 2024 x86_64 x86_64 x86_64 GNU/Linux</span></pre>
+        </figure>
+        <p>Обратите внимание: <code>uname -a</code> — это не отдельная команда. Это та же <code>uname</code>, которой через пробел передали аргумент <code>-a</code>. Из основной части и списка аргументов состоит вообще любая команда в Bash — подробно разберём это в следующей главе.</p>
+
+        <div class="try">
+          <div class="try__head"><b>⌨️ Попробуйте на своей системе</b><span>задание 3</span></div>
+          <div class="try__body">
+            <ol>
+              <li>Выполните <code class="b">uname</code> без аргументов. Запомните, что вывелось.</li>
+              <li>Выполните <code class="b">uname -a</code> и сравните объём вывода.</li>
+              <li>Найдите в длинном выводе версию ядра — это набор цифр вида <code>6.8.0-51-generic</code>.</li>
+              <li>Выполните <code class="b">uname --version</code>. Эта команда покажет версию самой утилиты, а не системы: не перепутайте.</li>
+            </ol>
+          </div>
+        </div>
+
+        <h2 id="s4"><span class="sec">§4</span>Клавиши, которые экономят время</h2>
+        <p>Терминал не заставляет набирать всё вручную. Несколько клавиш экономят больше времени, чем любая изученная команда.</p>
+        <div class="cheat">
+          <div>
+            <b>История команд</b>
+            <code>↑ / ↓</code>
+            <code># листать уже введённое</code>
+          </div>
+          <div>
+            <b>Автодополнение</b>
+            <code>Tab</code>
+            <code>Tab Tab — показать варианты</code>
+          </div>
+          <div>
+            <b>Начало и конец строки</b>
+            <code>Home / End</code>
+            <code>Ctrl+A / Ctrl+E</code>
+          </div>
+          <div>
+            <b>Прервать выполнение</b>
+            <code>Ctrl+C</code>
+            <code># вернуться к приглашению</code>
+          </div>
+          <div>
+            <b>Очистить экран</b>
+            <code>clear</code>
+            <code>Ctrl+L</code>
+          </div>
+          <div>
+            <b>Пролистать экран</b>
+            <code>Shift+PageUp</code>
+            <code>Shift+PageDown</code>
+          </div>
+        </div>
+        <p>Отдельно об автодополнении. Начните набирать имя команды или путь и нажмите <kbd>Tab</kbd>: если продолжение однозначно, Bash допишет его сам. Если вариантов несколько, первое нажатие не даст ничего, а второе покажет список. Это не только быстрее — это ещё и защита от опечаток в длинных путях.</p>
+        <figure class="tty">
+          <div class="tty__bar"><div class="tty__dots"><i></i><i></i><i></i></div><span class="tty__title">автодополнение · <em>двойной Tab</em></span></div>
+<pre><span class="pr">user<i>@</i>ubuntuserver<i>:</i><b>~</b><i>$</i></span> <span class="cmd">una</span><span class="c">⇥⇥</span>
+<span class="out">unattended-upgrade  uname  unalias</span>
+<span class="pr">user<i>@</i>ubuntuserver<i>:</i><b>~</b><i>$</i></span> <span class="cmd">unam</span><span class="c">⇥</span>
+<span class="pr">user<i>@</i>ubuntuserver<i>:</i><b>~</b><i>$</i></span> <span class="cmd">uname</span> <span class="cur"> </span></pre>
+        </figure>
+        <div class="margin-note">
+          <b>На полях: экран захламлён</b>
+          <p>После десятка команд экран превращается в стену текста. Команда <code>clear</code> (или <kbd>Ctrl</kbd>+<kbd>L</kbd>) убирает всё и возвращает чистое приглашение наверх экрана. Вывод при этом не удаляется — его по-прежнему можно пролистать вверх через <kbd>Shift</kbd>+<kbd>PageUp</kbd>.</p>
+        </div>
+
+        <div class="try">
+          <div class="try__head"><b>⌨️ Попробуйте на своей системе</b><span>задание 4</span></div>
+          <div class="try__body">
+            <ol>
+              <li>Наберите <code>un</code> и дважды нажмите <kbd>Tab</kbd>. Сколько команд начинается на эти две буквы?</li>
+              <li>Наберите <code>unam</code> и нажмите <kbd>Tab</kbd> один раз — Bash допишет имя целиком.</li>
+              <li>Нажмите <kbd>↑</kbd> несколько раз и вернитесь к <code>uname -a</code>, не набирая её заново.</li>
+              <li>Нажав <kbd>↑</kbd>, доберитесь до <code>uname -a</code>, клавишей <kbd>Home</kbd> перейдите в начало строки, а <kbd>End</kbd> — в конец.</li>
+              <li>Наберите <code class="b">clear</code> и посмотрите, что произойдёт с экраном.</li>
+            </ol>
+          </div>
+        </div>
+
+        <div class="try try--hard">
+          <div class="try__head"><b>🔥 Усложнённая задача</b><span>без подсказки</span></div>
+          <div class="try__body">
+            <p>Команда <code>history</code> показывает список всех введённых вами команд с номерами. Выполните её и ответьте: какая команда была самой первой в этой сессии и сколько всего команд вы уже ввели? Затем найдите способ выполнить команду по её номеру из истории, не набирая текст заново.</p>
+          </div>
+        </div>
+
+        <h2 id="s5"><span class="sec">§5</span>Частые ошибки</h2>
+        <div class="table-scroll errors-table">
+          <table>
+            <thead><tr><th>Что произошло</th><th>Что видно на экране</th><th>Что делать</th></tr></thead>
+            <tbody>
+              <tr><td>Набираете пароль, символы не появляются</td><td>Пустая строка после <code>Password:</code></td><td>Ничего. Так и задумано — набирайте вслепую и жмите <kbd>Enter</kbd></td></tr>
+              <tr><td><code>Uname -a</code> с большой буквы</td><td><code>Uname: command not found</code></td><td>Регистр имеет значение: все команды набираются строчными буквами</td></tr>
+              <tr><td><code>uname-a</code> без пробела</td><td><code>uname-a: command not found</code></td><td>Команда и аргументы разделяются пробелом: <code>uname -a</code></td></tr>
+              <tr><td>Команда не завершается, курсор мигает</td><td>Приглашение не возвращается</td><td><kbd>Ctrl</kbd>+<kbd>C</kbd> прерывает выполнение и возвращает приглашение</td></tr>
+              <tr><td>Ввели русские буквы</td><td>Ничего не набирается</td><td>В консоли Ubuntu Server по умолчанию только английская раскладка</td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <h2 id="s6"><span class="sec">§6</span>Проверьте себя</h2>
+        <details>
+          <summary>Что означает каждая часть строки <code>student@vm-01:~$</code>?</summary>
+          <p><code>student</code> — имя пользователя, под которым вы вошли. <code>vm-01</code> — имя машины. <code>~</code> — текущий каталог, в данном случае домашний. <code>$</code> — приглашение: система готова принять команду от обычного пользователя.</p>
+        </details>
+        <details>
+          <summary>Почему при вводе пароля на экране ничего не появляется?</summary>
+          <p>Это защита от подглядывания: по количеству символов или звёздочек можно оценить длину пароля. Терминал принимает нажатия клавиш, просто не отображает их. Пароль вводится вслепую.</p>
+        </details>
+        <details>
+          <summary>Чем <code>uname</code> отличается от <code>uname -a</code>?</summary>
+          <p>Это одна и та же команда. Во втором случае ей передан аргумент <code>-a</code> (all), который просит вывести всю доступную информацию, а не только название ядра. Отдельной командой <code>uname -a</code> не является.</p>
+        </details>
+        <details>
+          <summary>Что произойдёт при двойном нажатии <kbd>Tab</kbd> после <code>ls /et</code>?</summary>
+          <p>Первое нажатие допишет путь до <code>/etc/</code>, потому что вариант единственный. Если бы вариантов было несколько, первое нажатие не изменило бы строку, а второе показало бы список всех подходящих имён — и вы дописали бы нужное вручную.</p>
+        </details>
+        <details>
+          <summary>Вы случайно запустили команду, которая не завершается. Что нажать?</summary>
+          <p><kbd>Ctrl</kbd>+<kbd>C</kbd> — эта комбинация посылает работающему процессу сигнал прерывания, и управление возвращается к приглашению. Закрывать окно терминала или перезагружать машину не нужно.</p>
+        </details>
+
+        <h2 id="s7"><span class="sec">§7</span>Шпаргалка</h2>
+        <div class="cheat">
+          <div>
+            <b>Кто я и где я</b>
+            <code>whoami</code>
+            <code>hostname</code>
+          </div>
+          <div>
+            <b>Информация о системе</b>
+            <code>uname</code>
+            <code>uname -a</code>
+          </div>
+          <div>
+            <b>Приглашение</b>
+            <code>user@host:каталог$</code>
+            <code># $ — пользователь, # — root</code>
+          </div>
+          <div>
+            <b>Домашний каталог</b>
+            <code>~</code>
+            <code># то же, что /home/user</code>
+          </div>
+          <div>
+            <b>История</b>
+            <code>↑ ↓</code>
+            <code>history</code>
+          </div>
+          <div>
+            <b>Порядок на экране</b>
+            <code>clear</code>
+            <code>Ctrl+C — прервать</code>
+          </div>
+        </div>
+
+        <h3>Итог главы</h3>
+        <p>Вход в систему — это ввод имени пользователя и пароля, который принципиально не отображается на экране. После входа терминал показывает приглашение вида <code>user@host:каталог$</code>: кто вы, на какой машине и в каком каталоге находитесь. Знак <code>$</code> означает обычного пользователя, <code>#</code> — администратора. Первая полезная команда — <code>uname</code>, а первый полезный навык — <kbd>Tab</kbd>, <kbd>↑</kbd> и <kbd>Ctrl</kbd>+<kbd>C</kbd>, без которых работа в терминале превращается в набор текста вручную.</p>
+
+        <div class="pager"><a href="../../index.html">← К содержанию практикума</a><a href="../02-komanda-i-argumenty/index.html">2.2 Команда и её аргументы →</a></div>
+
+        <div class="colophon">
+          <span>Глава 2.1 · Вход в систему и приглашение · Практикум по Linux</span>
+          <span class="author-line">Автор: Макаров Максим Николаевич</span>
+        </div>
+      </main>
+    </div>
+  </div>
+</body>
+</html>

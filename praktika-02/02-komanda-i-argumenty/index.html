@@ -1,0 +1,346 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#F2F1E9">
+  <title>2.2 Команда и её аргументы · Практикум по Linux</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Literata:ital,opsz,wght@0,7..72,600;0,7..72,700;1,7..72,400&family=Pixelify+Sans:wght@500;600;700&family=Roboto+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../../styles.css">
+</head>
+<body>
+  <div class="book">
+    <div class="book__body">
+      <div class="spine"><span>Практика №2 · Bash: основные команды</span></div>
+
+      <main class="leaf">
+        <div class="running">
+          <p class="eyebrow"><a href="../../index.html" style="text-decoration:none;color:inherit">Практикум по Linux</a> · практика №2 · bash</p>
+          <p class="running__folio">Глава 2.2</p>
+        </div>
+
+        <header class="chapter-head">
+          <span class="chapter-num">2.2</span>
+          <h1>Команда<br>и её аргументы</h1>
+          <p class="lead">В Linux сотни команд, и заучивать их бессмысленно. Гораздо полезнее один раз понять общее правило: любая команда устроена одинаково — имя и список аргументов через пробел. Разобравшись с этим, незнакомую команду вы сможете прочитать по её же справке.</p>
+          <blockquote class="quote"><p>«Не нужно помнить все команды. Нужно помнить, как спросить у команды, что она умеет.»</p></blockquote>
+        </header>
+
+        <dl class="passport">
+          <div><dt>Категория</dt><dd>Командная оболочка Bash</dd></div>
+          <div><dt>Уровень</dt><dd>Начальный</dd></div>
+          <div><dt>Связанные темы</dt><dd>Терминал, справка, исполняемые файлы</dd></div>
+          <div><dt>Зачем это знать</dt><dd>Читать синтаксис любой команды и пользоваться её справкой</dd></div>
+        </dl>
+
+        <nav class="contents">
+          <b>В этой главе</b>
+          <ol>
+            <li><a href="#s1">Общая форма команды</a></li>
+            <li><a href="#s2">Как читать синтаксис</a></li>
+            <li><a href="#s3">Три вида аргументов</a></li>
+            <li><a href="#s4">Справка: --help и --version</a></li>
+            <li><a href="#s5">Склеивание коротких аргументов</a></li>
+            <li><a href="#s6">Что вообще считается командой</a></li>
+            <li><a href="#s7">Частые ошибки</a></li>
+            <li><a href="#s8">Проверьте себя</a></li>
+            <li><a href="#s9">Шпаргалка</a></li>
+          </ol>
+        </nav>
+
+        <h2 id="s1"><span class="sec">§1</span>Общая форма команды</h2>
+        <p>Всё, что вы набираете в Bash, оболочка разбирает по пробелам. Первое слово — имя команды, все остальные — её <span class="term">аргументы</span>. Это верно и для <code>uname -a</code>, и для команды в десять слов.</p>
+        <figure class="code">
+          <figcaption><span>Синтаксис</span><span>любая команда bash</span></figcaption>
+<pre>{команда} [аргументы]…</pre>
+        </figure>
+        <figure class="scheme">
+          <div class="scheme__canvas">
+            <svg viewBox="0 0 720 260" width="720" role="img" aria-label="Разбор команды find на имя и аргументы">
+              <text x="20" y="50" font-family="Roboto Mono, monospace" font-size="19" font-weight="700" fill="#020835">find /usr/include -maxdepth 2 -name "*.h"</text>
+              <g>
+                <rect x="18" y="28" width="48" height="30" fill="none" stroke="#2D7FC1" stroke-width="2.5"/>
+                <rect x="66" y="28" width="147" height="30" fill="none" stroke="#8A93B2" stroke-width="2" stroke-dasharray="5 4"/>
+                <rect x="213" y="28" width="128" height="30" fill="none" stroke="#8A93B2" stroke-width="2" stroke-dasharray="5 4"/>
+                <rect x="341" y="28" width="122" height="30" fill="none" stroke="#8A93B2" stroke-width="2" stroke-dasharray="5 4"/>
+              </g>
+              <g stroke="#8A93B2" stroke-width="2" fill="none">
+                <path d="M42 60 V96 H480"/>
+                <path d="M139 60 V136 H480"/>
+                <path d="M277 60 V176 H480"/>
+                <path d="M402 60 V216 H480"/>
+              </g>
+              <g font-family="Inter, sans-serif" font-size="13.5" fill="#020835">
+                <text x="490" y="101"><tspan font-weight="700">имя команды</tspan></text>
+                <text x="490" y="141">позиционный аргумент — где искать</text>
+                <text x="490" y="181">короткий аргумент со значением</text>
+                <text x="490" y="221">короткий аргумент со значением</text>
+              </g>
+              <line x1="20" y1="240" x2="463" y2="240" stroke="#2D7FC1" stroke-width="2"/>
+              <text x="20" y="256" font-family="Inter, sans-serif" font-size="12" fill="#3B4467">всё разделяется пробелами — оболочка режет строку именно по ним</text>
+            </svg>
+          </div>
+          <figcaption>Имя команды и четыре аргумента: разделитель — пробел</figcaption>
+        </figure>
+        <p>Отсюда следует простое, но принципиальное правило: <b>пробел — это разделитель</b>. Написав <code>uname-a</code>, вы просите систему запустить программу с именем <code>uname-a</code>, а такой не существует.</p>
+
+        <div class="try">
+          <div class="try__head"><b>⌨️ Попробуйте на своей системе</b><span>задание 1</span></div>
+          <div class="try__body">
+            <ol>
+              <li>Выполните <code class="b">uname -a</code> — команда отработает.</li>
+              <li>Теперь выполните <code class="b">uname-a</code> без пробела и прочитайте сообщение об ошибке.</li>
+              <li>Выполните <code class="b">Uname -a</code> с большой буквы и сравните текст ошибки с предыдущим.</li>
+            </ol>
+            <details>
+              <summary>Что означает <code>command not found</code></summary>
+              <p>Оболочка не нашла исполняемый файл с таким именем. Ошибка одна и та же и для опечатки, и для несуществующей программы, и для неверного регистра: <code>Uname</code> и <code>uname</code> — для Linux два разных имени.</p>
+            </details>
+          </div>
+        </div>
+
+        <h2 id="s2"><span class="sec">§2</span>Как читать синтаксис</h2>
+        <p>В документации, в справке и в этом практикуме синтаксис команд записывают одинаковыми условными обозначениями. Их четыре, и они стоят того, чтобы запомнить их сразу.</p>
+        <div class="table-scroll">
+          <table>
+            <thead><tr><th>Запись</th><th>Что означает</th><th>Пример</th></tr></thead>
+            <tbody>
+              <tr><td><code>{определение}</code></td><td>Обязательная часть. Без неё команда не работает</td><td><code>cd {путь}</code> — путь указать нужно</td></tr>
+              <tr><td><code>[определение]</code></td><td>Необязательная часть. Можно опустить</td><td><code>ls [каталог]</code> — без каталога тоже сработает</td></tr>
+              <tr><td><code>…</code></td><td>Таких частей может быть несколько</td><td><code>cat [путь]…</code> — файлов можно перечислить много</td></tr>
+              <tr><td>текст без скобок</td><td>Пишется буквально, как есть</td><td><code>uname --help</code> — именно эти символы</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="margin-note">
+          <b>На полях: скобки не набираются</b>
+          <p>Фигурные и квадратные скобки — часть описания, а не часть команды. Запись <code>cd {путь}</code> означает «наберите <code>cd</code>, пробел и нужный путь», то есть, например, <code>cd /usr/bin</code>. Если набрать буквально <code>cd {путь}</code>, Bash попытается перейти в каталог с таким странным именем и, разумеется, его не найдёт.</p>
+        </div>
+
+        <h2 id="s3"><span class="sec">§3</span>Три вида аргументов</h2>
+        <p>Аргументы бывают трёх видов. Различаются они внешне — по тому, сколько дефисов стоит впереди, — и исторически: каждый формат пришёл из своего семейства Unix-систем.</p>
+        <div class="cheat">
+          <div>
+            <b>Позиционные · формат BSD</b>
+            <code>cd /usr/bin</code>
+            <code># указываются как есть</code>
+          </div>
+          <div>
+            <b>Короткие · формат UNIX</b>
+            <code>uname -a</code>
+            <code># дефис и одна латинская буква</code>
+          </div>
+          <div>
+            <b>Длинные · формат GNU</b>
+            <code>uname --all</code>
+            <code># два дефиса и слово</code>
+          </div>
+        </div>
+        <p>Смысл у позиционного аргумента определяется его местом в строке: в <code>cp файл1 файл2</code> первый путь — откуда копировать, второй — куда. Короткие и длинные аргументы, наоборот, распознаются по своему имени и обычно могут стоять в любом порядке.</p>
+        <p>Часто один и тот же ключ существует в обеих формах — короткой и длинной. Они полностью равнозначны: <code>-a</code> и <code>--all</code> у <code>uname</code> дают одинаковый результат. Короткая форма быстрее набирается, длинная понятнее читается — поэтому в скриптах, которые будут читать другие люди, обычно пишут длинную.</p>
+        <div class="margin-note">
+          <b>На полях: соглашения соблюдаются не всегда</b>
+          <p>В некоторых программах встречается смешанный формат, а изредка — вообще собственный. Классический пример — <code>find</code>, у которого фильтры записываются с одним дефисом, но целым словом: <code>-maxdepth</code>, <code>-name</code>. Правило «один дефис — одна буква» тут не работает. Такие исключения редки, но помнить о них стоит.</p>
+        </div>
+
+        <h2 id="s4"><span class="sec">§4</span>Справка: --help и --version</h2>
+        <p>Встретив незнакомую команду, не нужно искать её описание в интернете. Почти каждая утилита умеет рассказать о себе сама двумя длинными аргументами.</p>
+        <div class="cmdcard">
+          <div class="cmdcard__head"><b>--help</b><span>краткая справка</span></div>
+          <div class="cmdcard__body">
+            <div class="cmdcard__syn">{команда} --help</div>
+            <p style="margin-top:12px">Выводит список аргументов команды с однострочным описанием каждого. Материал для быстрого ознакомления: понять, что команда умеет, и найти нужный ключ.</p>
+          </div>
+        </div>
+        <figure class="tty">
+          <div class="tty__bar"><div class="tty__dots"><i></i><i></i><i></i></div><span class="tty__title">uname --help · <em>фрагмент вывода</em></span></div>
+<pre><span class="pr">user<i>@</i>ubuntuserver<i>:</i><b>~</b><i>$</i></span> <span class="cmd">uname</span> <span class="arg">--help</span>
+<span class="out">Usage: uname [OPTION]...
+Print certain system information.  With no OPTION, same as -s.
+
+  -a, --all                print all information
+  -s, --kernel-name        print the kernel name
+  -n, --nodename           print the network node hostname
+  -r, --kernel-release     print the kernel release
+  -o, --operating-system   print the operating system
+  -m, --machine            print the machine hardware name
+  -i, --hardware-platform  print the hardware platform</span></pre>
+        </figure>
+        <p>Читается такая справка ровно так, как мы разобрали в §2: строка <code>Usage: uname [OPTION]...</code> означает «команда <code>uname</code>, за ней сколько угодно необязательных ключей». Дальше идут пары «короткая форма, длинная форма — что делает».</p>
+        <div class="cmdcard">
+          <div class="cmdcard__head"><b>--version</b><span>версия утилиты</span></div>
+          <div class="cmdcard__body">
+            <div class="cmdcard__syn">{команда} --version</div>
+            <p style="margin-top:12px">Выводит номер версии программы. Пригодится, чтобы сравнить версии на двух машинах, а ещё — чтобы просто проверить, что программа установлена и запускается.</p>
+          </div>
+        </div>
+
+        <div class="try">
+          <div class="try__head"><b>⌨️ Попробуйте на своей системе</b><span>задание 2</span></div>
+          <div class="try__body">
+            <p>Вернёмся к <code>uname</code> и научимся пользоваться его справкой.</p>
+            <ol>
+              <li>Выполните <code class="b">uname --help</code> и прочитайте список ключей.</li>
+              <li>Пользуясь справкой, выведите отдельно версию ядра.</li>
+              <li>Выведите отдельно название операционной системы.</li>
+              <li>Выведите отдельно аппаратную платформу.</li>
+              <li>Каждый из трёх ключей попробуйте и в короткой, и в длинной форме — результат должен совпасть.</li>
+              <li>Скомбинируйте все три ключа в одной команде так, чтобы вся эта информация вывелась сразу.</li>
+            </ol>
+            <details>
+              <summary>Подсказка: какие ключи нужны</summary>
+              <p>Версия ядра — <code>-r</code> или <code>--kernel-release</code>. Операционная система — <code>-o</code> или <code>--operating-system</code>. Аппаратная платформа — <code>-i</code> или <code>--hardware-platform</code>. Три ключа в одной команде: <code>uname -r -o -i</code>.</p>
+            </details>
+          </div>
+        </div>
+
+        <h2 id="s5"><span class="sec">§5</span>Склеивание коротких аргументов</h2>
+        <p>Набирать <code>uname -r -o -i</code> утомительно. Короткие ключи, которым не нужны собственные значения, разрешается <span class="term">склеивать</span> — записывать под одним дефисом.</p>
+        <div class="duo">
+          <div class="duo--ok">
+            <b>Развёрнутая запись</b>
+            <p><code>uname -r -o -i</code></p>
+            <p>Три отдельных аргумента. Работает всегда.</p>
+          </div>
+          <div class="duo--ok">
+            <b>Склеенная запись</b>
+            <p><code>uname -roi</code></p>
+            <p>Один аргумент. Результат тот же, набирать быстрее.</p>
+          </div>
+        </div>
+        <p>То же самое с <code>ls</code>: вместо <code>ls -l -a -h</code> обычно пишут <code>ls -lah</code>. Порядок букв внутри склейки значения не имеет.</p>
+        <div class="margin-note margin-note--warn">
+          <b>Важно: склеивать можно не всё</b>
+          <p>Склеиваются только те ключи, которые ничего за собой не требуют. Если ключ ожидает значение — как <code>-maxdepth 2</code> у <code>find</code>, — он должен стоять отдельно, потому что значение читается сразу за ним. Системные утилиты склейку поддерживают почти всегда, а вот сторонние программы могут воспринять её как одну незнакомую опцию и выдать ошибку.</p>
+        </div>
+
+        <div class="try">
+          <div class="try__head"><b>⌨️ Попробуйте на своей системе</b><span>задание 3</span></div>
+          <div class="try__body">
+            <ol>
+              <li>Выполните <code class="b">uname -r -o -i</code> и запомните вывод.</li>
+              <li>Выполните <code class="b">uname -roi</code> и убедитесь, что вывод совпал символ в символ.</li>
+              <li>Поменяйте буквы местами: <code class="b">uname -ior</code>. Изменился ли порядок значений в выводе?</li>
+            </ol>
+            <details>
+              <summary>Почему порядок в выводе не меняется</summary>
+              <p>Ключи только включают нужные поля, а порядок их вывода жёстко зашит в саму утилиту — тот же, что у <code>uname -a</code>. Поэтому <code>-roi</code> и <code>-ior</code> дают идентичный результат.</p>
+            </details>
+          </div>
+        </div>
+
+        <h2 id="s6"><span class="sec">§6</span>Что вообще считается командой</h2>
+        <p>Мы всё время говорим «команда», но за этим словом в Bash скрываются две разные вещи.</p>
+        <div class="duo">
+          <div>
+            <b>Исполняемый файл</b>
+            <p>Программа, лежащая на диске, к которой у вас есть доступ. <code>uname</code> — это файл <code>/usr/bin/uname</code>. Оболочка находит его по имени и запускает.</p>
+          </div>
+          <div>
+            <b>Конструкция оболочки</b>
+            <p>Часть самого языка Bash: переменные, условия, циклы, а также встроенные команды вроде <code>cd</code>. Отдельного файла на диске у них нет.</p>
+          </div>
+        </div>
+        <p>Разница обычно незаметна — набираются они одинаково. Но она объясняет, например, почему <code>cd</code> не может быть отдельной программой: сменить текущий каталог оболочки способна только сама оболочка.</p>
+        <p>Проверить, чем является конкретное имя, можно командой <code>type</code>:</p>
+        <figure class="tty">
+          <div class="tty__bar"><div class="tty__dots"><i></i><i></i><i></i></div><span class="tty__title">type · <em>файл или конструкция</em></span></div>
+<pre><span class="pr">user<i>@</i>ubuntuserver<i>:</i><b>~</b><i>$</i></span> <span class="cmd">type</span> <span class="pth">uname</span>
+<span class="out">uname is /usr/bin/uname</span>
+<span class="pr">user<i>@</i>ubuntuserver<i>:</i><b>~</b><i>$</i></span> <span class="cmd">type</span> <span class="pth">cd</span>
+<span class="out">cd is a shell builtin</span></pre>
+        </figure>
+
+        <div class="try try--hard">
+          <div class="try__head"><b>🔥 Усложнённая задача</b><span>без подсказки</span></div>
+          <div class="try__body">
+            <p>Выясните с помощью <code>type</code>, чем является каждое из имён: <code>ls</code>, <code>echo</code>, <code>pwd</code>, <code>history</code>, <code>grep</code>. Разделите их на две группы — исполняемые файлы и конструкции оболочки. Для тех, что оказались файлами, найдите полный путь и проверьте, что этот файл действительно существует.</p>
+          </div>
+        </div>
+
+        <h2 id="s7"><span class="sec">§7</span>Частые ошибки</h2>
+        <div class="table-scroll errors-table">
+          <table>
+            <thead><tr><th>Что написано</th><th>Что произойдёт</th><th>Как правильно</th></tr></thead>
+            <tbody>
+              <tr><td><code>uname-a</code></td><td><code>command not found</code> — оболочка ищет программу с таким именем</td><td><code>uname -a</code> — команда и аргумент через пробел</td></tr>
+              <tr><td><code>uname -all</code></td><td>Ошибка: <code>-all</code> читается как склейка ключей <code>-a -l -l</code></td><td><code>uname --all</code> — длинный ключ пишется с двумя дефисами</td></tr>
+              <tr><td><code>uname —all</code> (длинное тире)</td><td>Ошибка: это другой символ, не два дефиса</td><td>Набирать два обычных дефиса подряд</td></tr>
+              <tr><td><code>cd {путь}</code></td><td>Каталога с именем <code>{путь}</code> нет</td><td>Скобки — часть описания синтаксиса, а не команды</td></tr>
+              <tr><td><code>find /etc -maxdepth2</code></td><td>Ключ не распознан</td><td><code>-maxdepth 2</code> — значение отделяется пробелом</td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <h2 id="s8"><span class="sec">§8</span>Проверьте себя</h2>
+        <details>
+          <summary>Что означает запись <code>ls [каталог]…</code>?</summary>
+          <p>Команда <code>ls</code>, после которой можно указать каталог, а можно не указывать (квадратные скобки — необязательность), причём каталогов можно перечислить несколько (троеточие). Все три варианта корректны: <code>ls</code>, <code>ls /etc</code>, <code>ls /etc /var</code>.</p>
+        </details>
+        <details>
+          <summary>Чем позиционный аргумент отличается от короткого?</summary>
+          <p>Позиционный пишется как есть, без дефисов, и его смысл определяется местом в строке. Короткий начинается с одного дефиса и распознаётся по своей букве, поэтому обычно может стоять в любом месте среди других ключей.</p>
+        </details>
+        <details>
+          <summary>Почему <code>uname -all</code> — ошибка, а <code>uname --all</code> — нет?</summary>
+          <p>Один дефис означает короткие ключи, а короткий ключ — это ровно одна буква. Запись <code>-all</code> оболочка передаёт утилите как склейку из трёх ключей: <code>-a</code>, <code>-l</code>, <code>-l</code>. Ключа <code>-l</code> у <code>uname</code> нет, отсюда ошибка. Длинный ключ требует двух дефисов.</p>
+        </details>
+        <details>
+          <summary>Можно ли записать <code>find /etc -maxdepth 2</code> как <code>find /etc -m2</code>?</summary>
+          <p>Нет. У <code>find</code> свой формат: фильтры пишутся с одним дефисом, но целым словом, и сокращать их нельзя. Кроме того, <code>-maxdepth</code> требует значение, а такие ключи не склеиваются в принципе.</p>
+        </details>
+        <details>
+          <summary>Вам встретилась незнакомая команда <code>df</code>. С чего начать?</summary>
+          <p>С <code>df --help</code>: справка покажет назначение и список ключей. Дополнительно <code>type df</code> скажет, файл это или конструкция оболочки, а <code>df --version</code> подтвердит, что программа установлена и запускается.</p>
+        </details>
+
+        <h2 id="s9"><span class="sec">§9</span>Шпаргалка</h2>
+        <div class="cheat">
+          <div>
+            <b>Общая форма</b>
+            <code>{команда} [аргументы]…</code>
+            <code># разделитель — пробел</code>
+          </div>
+          <div>
+            <b>Обозначения синтаксиса</b>
+            <code>{} — обязательно</code>
+            <code>[] — необязательно, … — много</code>
+          </div>
+          <div>
+            <b>Виды аргументов</b>
+            <code>путь        # позиционный</code>
+            <code>-a  --all   # короткий, длинный</code>
+          </div>
+          <div>
+            <b>Справка</b>
+            <code>uname --help</code>
+            <code>uname --version</code>
+          </div>
+          <div>
+            <b>Склейка ключей</b>
+            <code>ls -l -a -h</code>
+            <code>ls -lah   # то же самое</code>
+          </div>
+          <div>
+            <b>Файл или конструкция</b>
+            <code>type ls</code>
+            <code>type cd</code>
+          </div>
+        </div>
+
+        <h3>Итог главы</h3>
+        <p>Любая команда Bash — это имя и аргументы, разделённые пробелами. Аргументы бывают позиционными (пишутся как есть, важен порядок), короткими (<code>-a</code>) и длинными (<code>--all</code>); короткие ключи без собственных значений можно склеивать в один. Синтаксис читается по четырём обозначениям: фигурные скобки — обязательное, квадратные — необязательное, троеточие — повторяемое, остальное — буквально. А если команда незнакома, начинать нужно не с поиска в интернете, а с <code>--help</code>.</p>
+
+        <div class="pager"><a href="../01-terminal/index.html">← 2.1 Вход в систему</a><a href="../../index.html">К содержанию практикума</a><a href="../03-peremeshchenie/index.html">2.3 Перемещение по каталогам →</a></div>
+
+        <div class="colophon">
+          <span>Глава 2.2 · Команда и её аргументы · Практикум по Linux</span>
+          <span class="author-line">Автор: Макаров Максим Николаевич</span>
+        </div>
+      </main>
+    </div>
+  </div>
+</body>
+</html>
