@@ -87,7 +87,7 @@
         <p>Отсюда следует простое, но принципиальное правило: <b>пробел — это разделитель</b>. Написав <code>uname-a</code>, вы просите систему запустить программу с именем <code>uname-a</code>, а такой не существует.</p>
 
         <div class="try">
-          <div class="try__head"><b>⌨️ Попробуйте на своей системе</b><span>задание 1</span></div>
+          <div class="try__head"><b>Попробуйте на своей системе</b><span>задание 1</span></div>
           <div class="try__body">
             <ol>
               <li>Выполните <code class="b">uname -a</code> — команда отработает.</li>
@@ -156,7 +156,7 @@
         </div>
         <figure class="tty">
           <div class="tty__bar"><div class="tty__dots"><i></i><i></i><i></i></div><span class="tty__title">uname --help · <em>фрагмент вывода</em></span></div>
-<pre><span class="pr">user<i>@</i>ubuntuserver<i>:</i><b>~</b><i>$</i></span> <span class="cmd">uname</span> <span class="arg">--help</span>
+<pre><span class="pr">user<i>@</i>ubuntu<i>:</i><b>~</b><i>$</i></span> <span class="cmd">uname</span> <span class="arg">--help</span>
 <span class="out">Usage: uname [OPTION]...
 Print certain system information.  With no OPTION, same as -s.
 
@@ -178,7 +178,7 @@ Print certain system information.  With no OPTION, same as -s.
         </div>
 
         <div class="try">
-          <div class="try__head"><b>⌨️ Попробуйте на своей системе</b><span>задание 2</span></div>
+          <div class="try__head"><b>Попробуйте на своей системе</b><span>задание 2</span></div>
           <div class="try__body">
             <p>Вернёмся к <code>uname</code> и научимся пользоваться его справкой.</p>
             <ol>
@@ -217,7 +217,7 @@ Print certain system information.  With no OPTION, same as -s.
         </div>
 
         <div class="try">
-          <div class="try__head"><b>⌨️ Попробуйте на своей системе</b><span>задание 3</span></div>
+          <div class="try__head"><b>Попробуйте на своей системе</b><span>задание 3</span></div>
           <div class="try__body">
             <ol>
               <li>Выполните <code class="b">uname -r -o -i</code> и запомните вывод.</li>
@@ -247,14 +247,14 @@ Print certain system information.  With no OPTION, same as -s.
         <p>Проверить, чем является конкретное имя, можно командой <code>type</code>:</p>
         <figure class="tty">
           <div class="tty__bar"><div class="tty__dots"><i></i><i></i><i></i></div><span class="tty__title">type · <em>файл или конструкция</em></span></div>
-<pre><span class="pr">user<i>@</i>ubuntuserver<i>:</i><b>~</b><i>$</i></span> <span class="cmd">type</span> <span class="pth">uname</span>
+<pre><span class="pr">user<i>@</i>ubuntu<i>:</i><b>~</b><i>$</i></span> <span class="cmd">type</span> <span class="pth">uname</span>
 <span class="out">uname is /usr/bin/uname</span>
-<span class="pr">user<i>@</i>ubuntuserver<i>:</i><b>~</b><i>$</i></span> <span class="cmd">type</span> <span class="pth">cd</span>
+<span class="pr">user<i>@</i>ubuntu<i>:</i><b>~</b><i>$</i></span> <span class="cmd">type</span> <span class="pth">cd</span>
 <span class="out">cd is a shell builtin</span></pre>
         </figure>
 
         <div class="try try--hard">
-          <div class="try__head"><b>🔥 Усложнённая задача</b><span>без подсказки</span></div>
+          <div class="try__head"><b>Усложнённая задача</b><span>без подсказки</span></div>
           <div class="try__body">
             <p>Выясните с помощью <code>type</code>, чем является каждое из имён: <code>ls</code>, <code>echo</code>, <code>pwd</code>, <code>history</code>, <code>grep</code>. Разделите их на две группы — исполняемые файлы и конструкции оболочки. Для тех, что оказались файлами, найдите полный путь и проверьте, что этот файл действительно существует.</p>
           </div>
@@ -333,7 +333,7 @@ Print certain system information.  With no OPTION, same as -s.
         <h3>Итог главы</h3>
         <p>Любая команда Bash — это имя и аргументы, разделённые пробелами. Аргументы бывают позиционными (пишутся как есть, важен порядок), короткими (<code>-a</code>) и длинными (<code>--all</code>); короткие ключи без собственных значений можно склеивать в один. Синтаксис читается по четырём обозначениям: фигурные скобки — обязательное, квадратные — необязательное, троеточие — повторяемое, остальное — буквально. А если команда незнакома, начинать нужно не с поиска в интернете, а с <code>--help</code>.</p>
 
-        <div class="pager"><a href="../01-terminal/index.html">← 2.1 Вход в систему</a><a href="../../index.html">К содержанию практикума</a><a href="../03-peremeshchenie/index.html">2.3 Перемещение по каталогам →</a></div>
+        <div class="pager"><a href="../01-terminal/index.html">← 2.1 Терминал и приглашение</a><a href="../../index.html">К содержанию практикума</a><a href="../03-peremeshchenie/index.html">2.3 Перемещение по каталогам →</a></div>
 
         <div class="colophon">
           <span>Глава 2.2 · Команда и её аргументы · Практикум по Linux</span>

@@ -64,9 +64,9 @@
         </div>
         <figure class="tty">
           <div class="tty__bar"><div class="tty__dots"><i></i><i></i><i></i></div><span class="tty__title">mkdir · <em>один каталог и сразу три</em></span></div>
-<pre><span class="pr">user<i>@</i>ubuntuserver<i>:</i><b>~</b><i>$</i></span> <span class="cmd">mkdir</span> <span class="pth">test</span>
-<span class="pr">user<i>@</i>ubuntuserver<i>:</i><b>~</b><i>$</i></span> <span class="cmd">mkdir</span> <span class="pth">test/dir1 test/dir2 test/dir3</span>
-<span class="pr">user<i>@</i>ubuntuserver<i>:</i><b>~</b><i>$</i></span> <span class="cmd">ls</span> <span class="pth">test</span>
+<pre><span class="pr">user<i>@</i>ubuntu<i>:</i><b>~</b><i>$</i></span> <span class="cmd">mkdir</span> <span class="pth">test</span>
+<span class="pr">user<i>@</i>ubuntu<i>:</i><b>~</b><i>$</i></span> <span class="cmd">mkdir</span> <span class="pth">test/dir1 test/dir2 test/dir3</span>
+<span class="pr">user<i>@</i>ubuntu<i>:</i><b>~</b><i>$</i></span> <span class="cmd">ls</span> <span class="pth">test</span>
 <span class="out">dir1  dir2  dir3</span></pre>
         </figure>
         <p>Обратите внимание на важное ограничение: <code>mkdir</code> создаёт <b>один</b> уровень вложенности. Команда <code>mkdir /tmp/dir1/dir2/dir3</code> завершится ошибкой, если <code>/tmp/dir1</code> ещё не существует, — родительский каталог должен быть на месте. Обойти это позволяет ключ <code>-p</code> (parents): он создаст всю цепочку разом.</p>
@@ -84,7 +84,7 @@
         </div>
 
         <div class="try">
-          <div class="try__head"><b>⌨️ Попробуйте на своей системе</b><span>задание 1</span></div>
+          <div class="try__head"><b>Попробуйте на своей системе</b><span>задание 1</span></div>
           <div class="try__body">
             <ol>
               <li>Создайте папку <code>test</code> в домашней директории. Можете сначала перейти туда командой <code>cd</code>.</li>
@@ -107,8 +107,8 @@
         <p>Название команды объясняется её основным назначением: изначально <code>touch</code> придумали не для создания файлов, а для изменения их временных отметок — времени модификации и времени последнего доступа. «Прикоснуться к файлу», ничего в нём не поменяв. Побочный эффект — создание пустого файла, если его не было, — оказался настолько удобным, что стал основным способом применения.</p>
         <figure class="tty">
           <div class="tty__bar"><div class="tty__dots"><i></i><i></i><i></i></div><span class="tty__title">touch · <em>создание нескольких файлов</em></span></div>
-<pre><span class="pr">user<i>@</i>ubuntuserver<i>:</i><b>~</b><i>$</i></span> <span class="cmd">touch</span> <span class="pth">notes.txt report.txt data.csv</span>
-<span class="pr">user<i>@</i>ubuntuserver<i>:</i><b>~</b><i>$</i></span> <span class="cmd">ls</span> <span class="arg">-l</span>
+<pre><span class="pr">user<i>@</i>ubuntu<i>:</i><b>~</b><i>$</i></span> <span class="cmd">touch</span> <span class="pth">notes.txt report.txt data.csv</span>
+<span class="pr">user<i>@</i>ubuntu<i>:</i><b>~</b><i>$</i></span> <span class="cmd">ls</span> <span class="arg">-l</span>
 <span class="out">-rw-rw-r-- 1 user user 0 сен  8 10:14 data.csv
 -rw-rw-r-- 1 user user 0 сен  8 10:14 notes.txt
 -rw-rw-r-- 1 user user 0 сен  8 10:14 report.txt
@@ -117,7 +117,7 @@ drwxrwxr-x 5 user user 4096 сен  8 10:12 test</span></pre>
         <p>Размер созданных файлов — ноль байт: они действительно пустые. Заполнять их мы научимся в следующей главе.</p>
 
         <div class="try">
-          <div class="try__head"><b>⌨️ Попробуйте на своей системе</b><span>задание 2</span></div>
+          <div class="try__head"><b>Попробуйте на своей системе</b><span>задание 2</span></div>
           <div class="try__body">
             <ol>
               <li>Создайте в домашней папке несколько пустых файлов одной командой.</li>
@@ -180,7 +180,7 @@ drwxrwxr-x 5 user user 4096 сен  8 10:12 test</span></pre>
         <p>Правило про второй аргумент важно помнить: если файлов копируется <b>несколько</b>, последним аргументом обязан быть каталог — иначе непонятно, во что их всех превращать. А если файл <b>один</b>, второй аргумент может быть новым именем.</p>
 
         <div class="try">
-          <div class="try__head"><b>⌨️ Попробуйте на своей системе</b><span>задание 3</span></div>
+          <div class="try__head"><b>Попробуйте на своей системе</b><span>задание 3</span></div>
           <div class="try__body">
             <ol>
               <li>Скопируйте созданные в прошлом задании файлы в папку <code>test</code>.</li>
@@ -196,8 +196,8 @@ drwxrwxr-x 5 user user 4096 сен  8 10:12 test</span></pre>
         <p>Отдельной команды для переименования в Linux нет — и она не нужна. Переименование это частный случай перемещения: файл переносится туда же, где лежал, но под другим именем.</p>
         <figure class="tty">
           <div class="tty__bar"><div class="tty__dots"><i></i><i></i><i></i></div><span class="tty__title">mv · <em>переименование</em></span></div>
-<pre><span class="pr">user<i>@</i>ubuntuserver<i>:</i><b>~</b><i>$</i></span> <span class="cmd">mv</span> <span class="pth">text.txt newtext.txt</span>
-<span class="pr">user<i>@</i>ubuntuserver<i>:</i><b>~</b><i>$</i></span> <span class="cmd">ls</span>
+<pre><span class="pr">user<i>@</i>ubuntu<i>:</i><b>~</b><i>$</i></span> <span class="cmd">mv</span> <span class="pth">text.txt newtext.txt</span>
+<span class="pr">user<i>@</i>ubuntu<i>:</i><b>~</b><i>$</i></span> <span class="cmd">ls</span>
 <span class="out">newtext.txt  test</span></pre>
         </figure>
         <div class="margin-note margin-note--warn">
@@ -206,7 +206,7 @@ drwxrwxr-x 5 user user 4096 сен  8 10:12 test</span></pre>
         </div>
 
         <div class="try">
-          <div class="try__head"><b>⌨️ Попробуйте на своей системе</b><span>задание 4</span></div>
+          <div class="try__head"><b>Попробуйте на своей системе</b><span>задание 4</span></div>
           <div class="try__body">
             <ol>
               <li>Переименуйте любой из своих файлов.</li>
@@ -228,7 +228,7 @@ drwxrwxr-x 5 user user 4096 сен  8 10:12 test</span></pre>
         <p>Осторожность <code>rmdir</code> выглядит неудобной, пока не вспомнить, что удаление в Linux необратимо. Отказ удалить каталог, в котором что-то лежит, — это защита от случайной потери данных, а не каприз.</p>
 
         <div class="try">
-          <div class="try__head"><b>⌨️ Попробуйте на своей системе</b><span>задание 5</span></div>
+          <div class="try__head"><b>Попробуйте на своей системе</b><span>задание 5</span></div>
           <div class="try__body">
             <ol>
               <li>Удалите каталог <code class="b">test/dir3</code> — он пуст, всё пройдёт гладко.</li>
@@ -274,7 +274,7 @@ drwxrwxr-x 5 user user 4096 сен  8 10:12 test</span></pre>
         </div>
 
         <div class="try">
-          <div class="try__head"><b>⌨️ Попробуйте на своей системе</b><span>задание 6</span></div>
+          <div class="try__head"><b>Попробуйте на своей системе</b><span>задание 6</span></div>
           <div class="try__body">
             <p class="warn"><b>Только внутри своего домашнего каталога.</b> Все пути в этом задании начинаются с <code>~/test</code>. Не экспериментируйте с <code>rm</code> в системных каталогах и никогда не запускайте эту команду с путём <code>/</code>.</p>
             <ol>
@@ -292,7 +292,7 @@ drwxrwxr-x 5 user user 4096 сен  8 10:12 test</span></pre>
         </div>
 
         <div class="try try--hard">
-          <div class="try__head"><b>🔥 Усложнённая задача</b><span>без подсказки</span></div>
+          <div class="try__head"><b>Усложнённая задача</b><span>без подсказки</span></div>
           <div class="try__body">
             <p>Соберите в домашнем каталоге такую структуру одной-двумя командами: каталог <code>projects</code>, внутри него <code>lab1</code>, <code>lab2</code>, <code>lab3</code>, а в каждом из них — пустые файлы <code>main.c</code> и <code>readme.txt</code>. Затем: скопируйте <code>lab1</code> целиком под именем <code>lab4</code>, переименуйте в нём <code>main.c</code> в <code>main_v2.c</code> и удалите каталог <code>lab2</code> вместе с содержимым. Проверьте итог командой <code>ls -R ~/projects</code>.</p>
           </div>

@@ -61,17 +61,17 @@
         </div>
         <figure class="tty">
           <div class="tty__bar"><div class="tty__dots"><i></i><i></i><i></i></div><span class="tty__title">pwd · <em>сразу после входа</em></span></div>
-<pre><span class="pr">user<i>@</i>ubuntuserver<i>:</i><b>~</b><i>$</i></span> <span class="cmd">pwd</span>
+<pre><span class="pr">user<i>@</i>ubuntu<i>:</i><b>~</b><i>$</i></span> <span class="cmd">pwd</span>
 <span class="out">/home/user</span></pre>
         </figure>
         <p>При входе в систему пользователь всегда оказывается в своём <span class="term">домашнем каталоге</span> — как правило, это <code>/home/{имя пользователя}</code>. У него есть короткое обозначение: знак <code>~</code> (тильда). Именно его вы видите в приглашении сразу после входа.</p>
         <div class="margin-note">
           <b>На полях: одна загадка приглашения закрыта</b>
-          <p>Внимательный студент уже заметил: тильда в <code>user@ubuntuserver:~$</code> стоит ровно там, где по синтаксису находится текущий каталог. Так и есть — Bash пишет его прямо в приглашение. Перейдёте в другое место — надпись изменится, и <code>pwd</code> станет нужна реже. Но не бесполезной: домашний каталог приглашение сокращает до <code>~</code>, а <code>pwd</code> всегда показывает путь целиком.</p>
+          <p>Внимательный студент уже заметил: тильда в <code>user@ubuntu:~$</code> стоит ровно там, где по синтаксису находится текущий каталог. Так и есть — Bash пишет его прямо в приглашение. Перейдёте в другое место — надпись изменится, и <code>pwd</code> станет нужна реже. Но не бесполезной: домашний каталог приглашение сокращает до <code>~</code>, а <code>pwd</code> всегда показывает путь целиком.</p>
         </div>
 
         <div class="try">
-          <div class="try__head"><b>⌨️ Попробуйте на своей системе</b><span>задание 1</span></div>
+          <div class="try__head"><b>Попробуйте на своей системе</b><span>задание 1</span></div>
           <div class="try__body">
             <ol>
               <li>Выполните <code class="b">pwd</code> и запишите путь к своему домашнему каталогу.</li>
@@ -111,16 +111,16 @@
         </div>
         <figure class="tty">
           <div class="tty__bar"><div class="tty__dots"><i></i><i></i><i></i></div><span class="tty__title">cd · <em>приглашение меняется вместе с каталогом</em></span></div>
-<pre><span class="pr">user<i>@</i>ubuntuserver<i>:</i><b>~</b><i>$</i></span> <span class="cmd">cd</span> <span class="pth">/usr/bin</span>
-<span class="pr">user<i>@</i>ubuntuserver<i>:</i><b>/usr/bin</b><i>$</i></span> <span class="cmd">pwd</span>
+<pre><span class="pr">user<i>@</i>ubuntu<i>:</i><b>~</b><i>$</i></span> <span class="cmd">cd</span> <span class="pth">/usr/bin</span>
+<span class="pr">user<i>@</i>ubuntu<i>:</i><b>/usr/bin</b><i>$</i></span> <span class="cmd">pwd</span>
 <span class="out">/usr/bin</span>
-<span class="pr">user<i>@</i>ubuntuserver<i>:</i><b>/usr/bin</b><i>$</i></span> <span class="cmd">cd</span> <span class="pth">~</span>
-<span class="pr">user<i>@</i>ubuntuserver<i>:</i><b>~</b><i>$</i></span> <span class="cur"> </span></pre>
+<span class="pr">user<i>@</i>ubuntu<i>:</i><b>/usr/bin</b><i>$</i></span> <span class="cmd">cd</span> <span class="pth">~</span>
+<span class="pr">user<i>@</i>ubuntu<i>:</i><b>~</b><i>$</i></span> <span class="cur"> </span></pre>
         </figure>
         <p>Если каталога не существует или у вас нет к нему доступа, <code>cd</code> сообщит об этом и оставит вас на месте. Испортить ничего нельзя — команда только перемещает.</p>
 
         <div class="try">
-          <div class="try__head"><b>⌨️ Попробуйте на своей системе</b><span>задание 2</span></div>
+          <div class="try__head"><b>Попробуйте на своей системе</b><span>задание 2</span></div>
           <div class="try__body">
             <ol>
               <li>Переместитесь в каталог <code>/usr/bin</code>. Посмотрите, как изменилось приглашение.</li>
@@ -151,16 +151,16 @@
         <p>Бессмысленная на первый взгляд точка окажется очень полезной в следующих главах: именно ею указывают «сюда» при копировании файлов и «здесь» при поиске. А две точки можно повторять: <code>cd ../..</code> поднимет на два уровня, <code>cd ../../..</code> — на три.</p>
         <figure class="tty">
           <div class="tty__bar"><div class="tty__dots"><i></i><i></i><i></i></div><span class="tty__title">.. · <em>подъём на уровень вверх</em></span></div>
-<pre><span class="pr">user<i>@</i>ubuntuserver<i>:</i><b>~</b><i>$</i></span> <span class="cmd">pwd</span>
+<pre><span class="pr">user<i>@</i>ubuntu<i>:</i><b>~</b><i>$</i></span> <span class="cmd">pwd</span>
 <span class="out">/home/user</span>
-<span class="pr">user<i>@</i>ubuntuserver<i>:</i><b>~</b><i>$</i></span> <span class="cmd">cd</span> <span class="pth">..</span>
-<span class="pr">user<i>@</i>ubuntuserver<i>:</i><b>/home</b><i>$</i></span> <span class="cmd">cd</span> <span class="pth">..</span>
-<span class="pr">user<i>@</i>ubuntuserver<i>:</i><b>/</b><i>$</i></span> <span class="cmd">cd</span> <span class="pth">..</span>
-<span class="pr">user<i>@</i>ubuntuserver<i>:</i><b>/</b><i>$</i></span> <span class="c"># выше корня подняться нельзя — команда молча ничего не делает</span></pre>
+<span class="pr">user<i>@</i>ubuntu<i>:</i><b>~</b><i>$</i></span> <span class="cmd">cd</span> <span class="pth">..</span>
+<span class="pr">user<i>@</i>ubuntu<i>:</i><b>/home</b><i>$</i></span> <span class="cmd">cd</span> <span class="pth">..</span>
+<span class="pr">user<i>@</i>ubuntu<i>:</i><b>/</b><i>$</i></span> <span class="cmd">cd</span> <span class="pth">..</span>
+<span class="pr">user<i>@</i>ubuntu<i>:</i><b>/</b><i>$</i></span> <span class="c"># выше корня подняться нельзя — команда молча ничего не делает</span></pre>
         </figure>
 
         <div class="try">
-          <div class="try__head"><b>⌨️ Попробуйте на своей системе</b><span>задание 3</span></div>
+          <div class="try__head"><b>Попробуйте на своей системе</b><span>задание 3</span></div>
           <div class="try__body">
             <ol>
               <li>Из домашнего каталога выполните <code class="b">cd .</code> и проверьте <code>pwd</code>. Что изменилось?</li>
@@ -224,7 +224,7 @@
         <p>Относительные пути свободно смешиваются с точками. Запись <code>../log</code> означает «подняться на уровень вверх, оттуда войти в <code>log</code>». А наличие лишних точек в середине пути ничего не ломает: <code>./././usr</code> — это тот же <code>usr</code>.</p>
 
         <div class="try">
-          <div class="try__head"><b>⌨️ Попробуйте на своей системе</b><span>задание 4</span></div>
+          <div class="try__head"><b>Попробуйте на своей системе</b><span>задание 4</span></div>
           <div class="try__body">
             <ol>
               <li>Абсолютным путём перейдите в <code class="b">/var/log</code>.</li>
@@ -237,7 +237,7 @@
         </div>
 
         <div class="try try--hard">
-          <div class="try__head"><b>🔥 Усложнённая задача</b><span>без подсказки</span></div>
+          <div class="try__head"><b>Усложнённая задача</b><span>без подсказки</span></div>
           <div class="try__body">
             <p>Находясь в каталоге <code>/var/log/apt</code>, попадите в корневой каталог <code>/</code> одной командой, используя только относительный путь. Знака <code>/</code> в начале пути быть не должно. Как выглядит команда и почему она работает?</p>
           </div>
@@ -309,7 +309,7 @@
         </figure>
 
         <div class="try">
-          <div class="try__head"><b>⌨️ Попробуйте на своей системе</b><span>задание 5</span></div>
+          <div class="try__head"><b>Попробуйте на своей системе</b><span>задание 5</span></div>
           <div class="try__body">
             <p class="warn"><b>Если каталога нет.</b> В некоторых установках Ubuntu Server отсутствует <code>/var/log/journal</code>. Тогда возьмите вместо него любой существующий каталог, например <code>/var/log/apt</code> — на суть задания это не влияет.</p>
             <ol>
@@ -329,7 +329,7 @@
         </div>
 
         <div class="try try--hard">
-          <div class="try__head"><b>🔥 Усложнённая задача</b><span>на бумаге</span></div>
+          <div class="try__head"><b>Усложнённая задача</b><span>на бумаге</span></div>
           <div class="try__body">
             <p>В какой папке окажется пользователь, если известно, что изначально он находится в домашнем каталоге, и дан список его команд? Решите, не заглядывая в терминал, а потом проверьте на машине.</p>
             <figure class="code">

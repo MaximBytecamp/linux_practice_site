@@ -69,16 +69,16 @@
         <p>Скрытыми в Linux считаются файлы, имя которых начинается с точки. Никакого специального признака «скрытый» у них нет — это просто соглашение, которого придерживается <code>ls</code>. Именно поэтому в домашнем каталоге по умолчанию почти пусто, а с ключом <code>-a</code> обнаруживается десяток файлов настроек.</p>
         <figure class="tty">
           <div class="tty__bar"><div class="tty__dots"><i></i><i></i><i></i></div><span class="tty__title">ls · <em>обычный вывод и полный</em></span></div>
-<pre><span class="pr">user<i>@</i>ubuntuserver<i>:</i><b>~</b><i>$</i></span> <span class="cmd">ls</span>
+<pre><span class="pr">user<i>@</i>ubuntu<i>:</i><b>~</b><i>$</i></span> <span class="cmd">ls</span>
 <span class="out">Documents  notes.txt</span>
-<span class="pr">user<i>@</i>ubuntuserver<i>:</i><b>~</b><i>$</i></span> <span class="cmd">ls</span> <span class="arg">-a</span>
+<span class="pr">user<i>@</i>ubuntu<i>:</i><b>~</b><i>$</i></span> <span class="cmd">ls</span> <span class="arg">-a</span>
 <span class="out">.   .bash_history  .bashrc   Documents
 ..  .bash_logout   .profile  notes.txt</span></pre>
         </figure>
         <p>Ключи, как мы помним из главы 2.2, склеиваются: <code>ls -l -a -h</code> обычно пишут как <code>ls -lah</code>.</p>
 
         <div class="try">
-          <div class="try__head"><b>⌨️ Попробуйте на своей системе</b><span>задание 1</span></div>
+          <div class="try__head"><b>Попробуйте на своей системе</b><span>задание 1</span></div>
           <div class="try__body">
             <ol>
               <li>Находясь в домашнем каталоге, выполните <code class="b">ls</code>. Сколько файлов видно?</li>
@@ -148,7 +148,7 @@
         <p>Права доступа подробно разбираются в следующих практиках и на лекциях. Пока достаточно знать, как устроены эти девять символов: они делятся на три группы по три — права владельца, права группы и права всех остальных, где <code>r</code> — чтение, <code>w</code> — запись, <code>x</code> — выполнение, а прочерк означает отсутствие права.</p>
 
         <div class="try try--hard">
-          <div class="try__head"><b>🔥 Усложнённая задача</b><span>прочитать строку</span></div>
+          <div class="try__head"><b>Усложнённая задача</b><span>прочитать строку</span></div>
           <div class="try__body">
             <p>Что можно сказать об этом файле? Назовите как можно больше фактов.</p>
             <figure class="code">
@@ -181,16 +181,16 @@
         </div>
         <figure class="tty">
           <div class="tty__bar"><div class="tty__dots"><i></i><i></i><i></i></div><span class="tty__title">cat · <em>два файла подряд</em></span></div>
-<pre><span class="pr">user<i>@</i>ubuntuserver<i>:</i><b>~</b><i>$</i></span> <span class="cmd">cat</span> <span class="pth">/etc/hostname</span>
-<span class="out">ubuntuserver</span>
-<span class="pr">user<i>@</i>ubuntuserver<i>:</i><b>~</b><i>$</i></span> <span class="cmd">cat</span> <span class="pth">/etc/hostname /etc/hosts</span>
-<span class="out">ubuntuserver
+<pre><span class="pr">user<i>@</i>ubuntu<i>:</i><b>~</b><i>$</i></span> <span class="cmd">cat</span> <span class="pth">/etc/hostname</span>
+<span class="out">ubuntu</span>
+<span class="pr">user<i>@</i>ubuntu<i>:</i><b>~</b><i>$</i></span> <span class="cmd">cat</span> <span class="pth">/etc/hostname /etc/hosts</span>
+<span class="out">ubuntu
 127.0.0.1 localhost
-127.0.1.1 ubuntuserver</span></pre>
+127.0.1.1 ubuntu</span></pre>
         </figure>
 
         <div class="try">
-          <div class="try__head"><b>⌨️ Попробуйте на своей системе</b><span>задание 2</span></div>
+          <div class="try__head"><b>Попробуйте на своей системе</b><span>задание 2</span></div>
           <div class="try__body">
             <ol>
               <li>Выведите на экран содержимое файла <code class="b">/etc/hostname</code>. Совпадает ли оно с именем машины в приглашении?</li>
@@ -227,7 +227,7 @@
         </div>
 
         <div class="try">
-          <div class="try__head"><b>⌨️ Попробуйте на своей системе</b><span>задание 3</span></div>
+          <div class="try__head"><b>Попробуйте на своей системе</b><span>задание 3</span></div>
           <div class="try__body">
             <ol>
               <li>Откройте файл <code class="b">less /usr/include/stdint.h</code>.</li>
@@ -255,7 +255,7 @@
         </div>
         <figure class="tty">
           <div class="tty__bar"><div class="tty__dots"><i></i><i></i><i></i></div><span class="tty__title">grep · <em>поиск строки в файле</em></span></div>
-<pre><span class="pr">user<i>@</i>ubuntuserver<i>:</i><b>~</b><i>$</i></span> <span class="cmd">grep</span> <span class="arg">-n</span> <span class="pth">root /etc/passwd</span>
+<pre><span class="pr">user<i>@</i>ubuntu<i>:</i><b>~</b><i>$</i></span> <span class="cmd">grep</span> <span class="arg">-n</span> <span class="pth">root /etc/passwd</span>
 <span class="out">1:root:x:0:0:root:/root:/bin/bash</span></pre>
         </figure>
         <p>В качестве образца может выступать любое <span class="term">регулярное выражение</span> — язык описания шаблонов текста. Обычная строка тоже является регулярным выражением, самым простым. Несколько символов, которые пригодятся уже сейчас:</p>
@@ -277,7 +277,7 @@
         </div>
 
         <div class="try">
-          <div class="try__head"><b>⌨️ Попробуйте на своей системе</b><span>задание 4</span></div>
+          <div class="try__head"><b>Попробуйте на своей системе</b><span>задание 4</span></div>
           <div class="try__body">
             <p class="warn"><b>Если файла нет.</b> В Ubuntu 24.04 может отсутствовать <code>/etc/netconfig</code>, а системный журнал вместо <code>/var/log/syslog</code> вести через <code>journalctl</code>. Проверьте наличие файла командой <code>ls</code> и при необходимости возьмите <code>/etc/services</code> и <code>/var/log/auth.log</code>.</p>
             <ol>
@@ -290,7 +290,7 @@
         </div>
 
         <div class="try try--hard">
-          <div class="try__head"><b>🔥 Усложнённая задача</b><span>регулярное выражение</span></div>
+          <div class="try__head"><b>Усложнённая задача</b><span>регулярное выражение</span></div>
           <div class="try__body">
             <p>Используя регулярное выражение, отобразите все события из системного журнала, произошедшие за последний час. Подумайте, как выглядит отметка времени в начале строки лога и какой шаблон опишет нужный час.</p>
           </div>
@@ -315,7 +315,7 @@
         <p>Пример: нужно отыскать все файлы, <b>не</b> заканчивающиеся на <code>.h</code>, в каталоге <code>/usr/include</code>, углубляясь не более чем на два уровня.</p>
         <figure class="tty">
           <div class="tty__bar"><div class="tty__dots"><i></i><i></i><i></i></div><span class="tty__title">find · <em>четыре фильтра сразу</em></span></div>
-<pre><span class="pr">user<i>@</i>ubuntuserver<i>:</i><b>~</b><i>$</i></span> <span class="cmd">find</span> <span class="pth">/usr/include</span> <span class="arg">-maxdepth</span> 2 <span class="arg">-not</span> <span class="arg">-name</span> <span class="pth">"*.h"</span> <span class="arg">-type</span> f
+<pre><span class="pr">user<i>@</i>ubuntu<i>:</i><b>~</b><i>$</i></span> <span class="cmd">find</span> <span class="pth">/usr/include</span> <span class="arg">-maxdepth</span> 2 <span class="arg">-not</span> <span class="arg">-name</span> <span class="pth">"*.h"</span> <span class="arg">-type</span> f
 <span class="out">/usr/include/stdc-predef.h.gch
 /usr/include/x86_64-linux-gnu/asm/unistd_32.hpp</span></pre>
         </figure>
@@ -325,7 +325,7 @@
         </div>
 
         <div class="try">
-          <div class="try__head"><b>⌨️ Попробуйте на своей системе</b><span>задание 5</span></div>
+          <div class="try__head"><b>Попробуйте на своей системе</b><span>задание 5</span></div>
           <div class="try__body">
             <ol>
               <li>Найдите расположение файла с именем <code>libc</code> в каталоге <code>/usr</code>: <code class="b">find /usr -name "libc*"</code>.</li>
@@ -377,7 +377,7 @@
         <p>Поэтому <code>cat /home/user/*.txt</code> прочитает все текстовые файлы каталога, а <code>find /etc -name *.conf</code> без кавычек может сработать неверно: оболочка подставит в него имена из текущего каталога. Правило простое: если шаблон описывает файлы <i>здесь и сейчас</i> — пишите без кавычек; если шаблон предназначен команде — берите в кавычки.</p>
 
         <div class="try">
-          <div class="try__head"><b>⌨️ Попробуйте на своей системе</b><span>задание 6</span></div>
+          <div class="try__head"><b>Попробуйте на своей системе</b><span>задание 6</span></div>
           <div class="try__body">
             <ol>
               <li>Выведите список всех файлов настроек в <code>/etc</code>, оканчивающихся на <code>.conf</code>: <code class="b">ls /etc/*.conf</code>.</li>

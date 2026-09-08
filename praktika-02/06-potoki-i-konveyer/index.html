@@ -108,14 +108,14 @@
         <p>Если файла не существует, он будет создан. Если существует — <b>перезаписан целиком</b>.</p>
         <figure class="tty">
           <div class="tty__bar"><div class="tty__dots"><i></i><i></i><i></i></div><span class="tty__title">&gt; · <em>вывод уходит в файл, экран пуст</em></span></div>
-<pre><span class="pr">user<i>@</i>ubuntuserver<i>:</i><b>~</b><i>$</i></span> <span class="cmd">ls</span> <span class="arg">-l</span> <span class="pth">/etc</span> <span class="op">&gt;</span> <span class="pth">etc.txt</span>
-<span class="pr">user<i>@</i>ubuntuserver<i>:</i><b>~</b><i>$</i></span> <span class="cmd">ls</span> <span class="arg">-lh</span> <span class="pth">etc.txt</span>
+<pre><span class="pr">user<i>@</i>ubuntu<i>:</i><b>~</b><i>$</i></span> <span class="cmd">ls</span> <span class="arg">-l</span> <span class="pth">/etc</span> <span class="op">&gt;</span> <span class="pth">etc.txt</span>
+<span class="pr">user<i>@</i>ubuntu<i>:</i><b>~</b><i>$</i></span> <span class="cmd">ls</span> <span class="arg">-lh</span> <span class="pth">etc.txt</span>
 <span class="out">-rw-rw-r-- 1 user user 12K сен  8 10:31 etc.txt</span></pre>
         </figure>
         <p>Ничего не вывелось на экран — и это признак того, что всё сработало: вывод целиком ушёл в файл.</p>
 
         <div class="try">
-          <div class="try__head"><b>⌨️ Попробуйте на своей системе</b><span>задание 1</span></div>
+          <div class="try__head"><b>Попробуйте на своей системе</b><span>задание 1</span></div>
           <div class="try__body">
             <ol>
               <li>Выполните <code class="b">ls -l /etc &gt; etc.txt</code>. Что появилось на экране?</li>
@@ -141,10 +141,10 @@
         </div>
         <figure class="tty">
           <div class="tty__bar"><div class="tty__dots"><i></i><i></i><i></i></div><span class="tty__title">echo · <em>на экран и в файл</em></span></div>
-<pre><span class="pr">user<i>@</i>ubuntuserver<i>:</i><b>~</b><i>$</i></span> <span class="cmd">echo</span> <span class="pth">"Hello world!"</span>
+<pre><span class="pr">user<i>@</i>ubuntu<i>:</i><b>~</b><i>$</i></span> <span class="cmd">echo</span> <span class="pth">"Hello world!"</span>
 <span class="out">Hello world!</span>
-<span class="pr">user<i>@</i>ubuntuserver<i>:</i><b>~</b><i>$</i></span> <span class="cmd">echo</span> <span class="pth">"Hello world!"</span> <span class="op">&gt;</span> <span class="pth">hello.txt</span>
-<span class="pr">user<i>@</i>ubuntuserver<i>:</i><b>~</b><i>$</i></span> <span class="cmd">cat</span> <span class="pth">hello.txt</span>
+<span class="pr">user<i>@</i>ubuntu<i>:</i><b>~</b><i>$</i></span> <span class="cmd">echo</span> <span class="pth">"Hello world!"</span> <span class="op">&gt;</span> <span class="pth">hello.txt</span>
+<span class="pr">user<i>@</i>ubuntu<i>:</i><b>~</b><i>$</i></span> <span class="cmd">cat</span> <span class="pth">hello.txt</span>
 <span class="out">Hello world!</span></pre>
         </figure>
         <p>В основном <code>echo</code> используется в скриптах для вывода сообщений о ходе работы. Но её второе применение — быстро создать файл с нужным содержимым, не открывая редактор.</p>
@@ -172,7 +172,7 @@
         <p>В файл можно направить результат выполнения любой команды, не только <code>echo</code>. Обычная практика — накапливать в одном файле вывод нескольких команд подряд, дописывая каждый следующий через <code>&gt;&gt;</code>.</p>
 
         <div class="try">
-          <div class="try__head"><b>⌨️ Попробуйте на своей системе</b><span>задание 2</span></div>
+          <div class="try__head"><b>Попробуйте на своей системе</b><span>задание 2</span></div>
           <div class="try__body">
             <p>Создайте файл и заполните его информацией о себе, а затем удостоверьтесь, что записалось именно то, что вы вводили.</p>
             <ol>
@@ -196,8 +196,8 @@
         <p>Самое частое применение — собрать ошибки и обычный вывод в один файл. Запись <code>&gt; log.txt 2&gt;&amp;1</code> читается так: «стандартный вывод отправить в <code>log.txt</code>, а поток ошибок — туда же, куда сейчас направлен стандартный вывод».</p>
         <figure class="tty">
           <div class="tty__bar"><div class="tty__dots"><i></i><i></i><i></i></div><span class="tty__title">2&gt;&amp;1 · <em>обе струи в один файл</em></span></div>
-<pre><span class="pr">user<i>@</i>ubuntuserver<i>:</i><b>~</b><i>$</i></span> <span class="cmd">find</span> <span class="pth">/etc</span> <span class="arg">-name</span> <span class="pth">"*.conf"</span> <span class="op">&gt;</span> <span class="pth">result.txt</span> <span class="op">2&gt;&amp;1</span>
-<span class="pr">user<i>@</i>ubuntuserver<i>:</i><b>~</b><i>$</i></span> <span class="cmd">grep</span> <span class="arg">-c</span> <span class="pth">"Permission denied" result.txt</span>
+<pre><span class="pr">user<i>@</i>ubuntu<i>:</i><b>~</b><i>$</i></span> <span class="cmd">find</span> <span class="pth">/etc</span> <span class="arg">-name</span> <span class="pth">"*.conf"</span> <span class="op">&gt;</span> <span class="pth">result.txt</span> <span class="op">2&gt;&amp;1</span>
+<span class="pr">user<i>@</i>ubuntu<i>:</i><b>~</b><i>$</i></span> <span class="cmd">grep</span> <span class="arg">-c</span> <span class="pth">"Permission denied" result.txt</span>
 <span class="out">12</span></pre>
         </figure>
         <div class="margin-note margin-note--warn">
@@ -248,14 +248,14 @@
         <p>Задача из трёх шагов сворачивается в одну строку. И конвейер не ограничен двумя командами — их можно выстраивать в цепочку любой длины, где каждая следующая обрабатывает результат предыдущей.</p>
         <figure class="tty">
           <div class="tty__bar"><div class="tty__dots"><i></i><i></i><i></i></div><span class="tty__title">конвейер · <em>цепочка из трёх команд</em></span></div>
-<pre><span class="pr">user<i>@</i>ubuntuserver<i>:</i><b>~</b><i>$</i></span> <span class="cmd">cat</span> <span class="pth">/etc/passwd</span> <span class="op">|</span> <span class="cmd">grep</span> <span class="pth">"/bin/bash"</span> <span class="op">|</span> <span class="cmd">less</span>
+<pre><span class="pr">user<i>@</i>ubuntu<i>:</i><b>~</b><i>$</i></span> <span class="cmd">cat</span> <span class="pth">/etc/passwd</span> <span class="op">|</span> <span class="cmd">grep</span> <span class="pth">"/bin/bash"</span> <span class="op">|</span> <span class="cmd">less</span>
 <span class="out">root:x:0:0:root:/root:/bin/bash
 user:x:1000:1000:User,,,:/home/user:/bin/bash</span></pre>
         </figure>
         <p>Читается слева направо: прочитать файл → отобрать из прочитанного строки со словом <code>/bin/bash</code> → отдать отобранное в постраничный просмотр.</p>
 
         <div class="try">
-          <div class="try__head"><b>⌨️ Попробуйте на своей системе</b><span>задание 3</span></div>
+          <div class="try__head"><b>Попробуйте на своей системе</b><span>задание 3</span></div>
           <div class="try__body">
             <p>Сначала сделайте всё «длинным» способом, через промежуточный файл, — потом тем же результатом через конвейер. Разница почувствуется сразу.</p>
             <ol>
@@ -279,19 +279,19 @@ user:x:1000:1000:User,,,:/home/user:/bin/bash</span></pre>
         <p>Ошибки идут потоком <code>stderr</code>, а значит, их можно перенаправить отдельно от полезного вывода. Осталось найти место, куда их отправить. В Linux для этого предусмотрен специальный файл <code>/dev/null</code> — он принимает в себя любую информацию и ничего с ней не делает. Что представляют собой такие файлы и какие они бывают, разберём позже.</p>
         <figure class="tty">
           <div class="tty__bar"><div class="tty__dots"><i></i><i></i><i></i></div><span class="tty__title">2&gt; /dev/null · <em>ошибки в никуда</em></span></div>
-<pre><span class="pr">user<i>@</i>ubuntuserver<i>:</i><b>~</b><i>$</i></span> <span class="cmd">find</span> <span class="pth">/</span> <span class="arg">-name</span> <span class="pth">"libc*"</span>
+<pre><span class="pr">user<i>@</i>ubuntu<i>:</i><b>~</b><i>$</i></span> <span class="cmd">find</span> <span class="pth">/</span> <span class="arg">-name</span> <span class="pth">"libc*"</span>
 <span class="err">find: '/root': Permission denied
 find: '/var/lib/private': Permission denied</span>
 <span class="out">/usr/lib/x86_64-linux-gnu/libc.so.6</span>
 <span class="err">find: '/proc/tty/driver': Permission denied</span>
 
-<span class="pr">user<i>@</i>ubuntuserver<i>:</i><b>~</b><i>$</i></span> <span class="cmd">find</span> <span class="pth">/</span> <span class="arg">-name</span> <span class="pth">"libc*"</span> <span class="op">2&gt;</span> <span class="pth">/dev/null</span>
+<span class="pr">user<i>@</i>ubuntu<i>:</i><b>~</b><i>$</i></span> <span class="cmd">find</span> <span class="pth">/</span> <span class="arg">-name</span> <span class="pth">"libc*"</span> <span class="op">2&gt;</span> <span class="pth">/dev/null</span>
 <span class="out">/usr/lib/x86_64-linux-gnu/libc.so.6</span></pre>
         </figure>
         <p>Здесь наглядно видно то, о чём говорилось в §1: обычный вывод и ошибки — действительно разные потоки. Стоило увести второй в <code>/dev/null</code>, как на экране остался только результат.</p>
 
         <div class="try">
-          <div class="try__head"><b>⌨️ Попробуйте на своей системе</b><span>задание 4</span></div>
+          <div class="try__head"><b>Попробуйте на своей системе</b><span>задание 4</span></div>
           <div class="try__body">
             <ol>
               <li>Выполните <code class="b">find / -name "libc*"</code> и оцените, сколько ошибок доступа появилось.</li>
@@ -307,7 +307,7 @@ find: '/var/lib/private': Permission denied</span>
         </div>
 
         <div class="try try--hard">
-          <div class="try__head"><b>🔥 Усложнённая задача</b><span>итоговая</span></div>
+          <div class="try__head"><b>Усложнённая задача</b><span>итоговая</span></div>
           <div class="try__body">
             <p>Соберите одной строкой команду, которая: ищет по всему каталогу <code>/usr</code> файлы с расширением <code>.so</code>, не показывает ошибок доступа, оставляет только те строки, где встречается <code>libc</code>, и записывает результат в файл <code>~/report.txt</code>. После выполнения проверьте количество найденных строк, не открывая файл целиком.</p>
           </div>

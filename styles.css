@@ -645,8 +645,7 @@ p code.b, li code.b, td code.b { font-weight: 700; }
 }
 .try ol > li ul { margin: 8px 0 0; }
 .try details { margin: 0 0 14px; border-width: 2px; border-style: dashed; max-width: none; background: var(--paper); }
-.try details summary::before { content: "🗝 "; }
-.try details[open] summary::before { content: "🗝 "; }
+
 
 /* Усложнённая задача */
 .try--hard { box-shadow: 7px 7px 0 var(--amber); }
@@ -679,7 +678,16 @@ p code.b, li code.b, td code.b { font-weight: 700; }
   background: #fff;
   box-shadow: 5px 5px 0 var(--ink);
 }
-.legend i { font-size: 24px; font-style: normal; text-align: center; }
+.legend i {
+  display: grid;
+  place-items: center;
+  width: 34px;
+  height: 34px;
+  background: var(--ink);
+  color: var(--sky);
+  font: 700 15px/1 var(--mono);
+  font-style: normal;
+}
 .legend b { display: block; font-size: 15px; }
 .legend span { font-size: 13.5px; color: var(--ink-soft); line-height: 1.4; }
 
