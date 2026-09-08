@@ -1,0 +1,758 @@
+/* Практикум по Linux — общая типографика и «книжная» вёрстка
+   Автор: Макаров Максим Николаевич */
+:root {
+  --ink: #020835;
+  --ink-soft: #3B4467;
+  --ink-faint: #8A93B2;
+  --blue: #2D7FC1;
+  --sky: #6FB8E3;
+  --light: #BFE2F5;
+  --paper: #F2F1E9;
+  --page: #FFFDF8;
+  --rule: rgba(2, 8, 53, .16);
+  --pixel: "Pixelify Sans", "Roboto Mono", monospace;
+  --body: Inter, system-ui, -apple-system, sans-serif;
+  --display: Literata, "PT Serif", Georgia, "Times New Roman", serif;
+  --mono: "Roboto Mono", "SFMono-Regular", Consolas, monospace;
+}
+
+* { box-sizing: border-box; }
+
+body {
+  margin: 0;
+  background: var(--paper);
+  color: var(--ink);
+  font-family: var(--body);
+  font-size: 17px;
+  line-height: 1.6;
+  background-image:
+    linear-gradient(rgba(2, 8, 53, .055) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(2, 8, 53, .055) 1px, transparent 1px);
+  background-size: 32px 32px;
+  -webkit-font-smoothing: antialiased;
+}
+
+a { color: var(--blue); }
+code, kbd, samp { font-family: var(--mono); }
+
+/* ── Служебные подписи ───────────────────────────────────────── */
+.eyebrow {
+  margin: 0;
+  font: 600 11px/1.4 var(--pixel);
+  letter-spacing: 1.4px;
+  text-transform: uppercase;
+  color: var(--blue);
+}
+.author-line {
+  font: 600 11px/1.5 var(--pixel);
+  letter-spacing: 1.2px;
+  text-transform: uppercase;
+  color: var(--ink-soft);
+}
+
+/* ── Книга: корешок + блок страниц ───────────────────────────── */
+.book {
+  max-width: 1180px;
+  margin: 0 auto;
+  padding: 5vh 24px 8vh;
+}
+.book__body {
+  display: grid;
+  grid-template-columns: 62px minmax(0, 1fr);
+  border: 3px solid var(--ink);
+  box-shadow: 10px 10px 0 var(--ink);
+  background: var(--page);
+}
+
+/* Корешок с прошивкой */
+.spine {
+  position: relative;
+  background: var(--ink);
+  color: var(--light);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 22px 0;
+  overflow: hidden;
+}
+.spine span {
+  writing-mode: vertical-rl;
+  transform: rotate(180deg);
+  font: 600 11px/1 var(--pixel);
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  white-space: nowrap;
+  color: var(--sky);
+}
+.spine::before,
+.spine::after {
+  content: "";
+  position: absolute;
+  top: 26px;
+  bottom: 26px;
+  width: 0;
+  border-left: 2px dashed rgba(191, 226, 245, .45);
+}
+.spine::before { left: 14px; }
+.spine::after { right: 14px; }
+
+/* Страница: край сшивки слева, «стопка листов» справа */
+.leaf {
+  position: relative;
+  padding: 46px clamp(22px, 4.4vw, 64px) 40px;
+  background: var(--page);
+  border-left: 3px solid var(--ink);
+  background-image: linear-gradient(90deg, rgba(2, 8, 53, .07), rgba(2, 8, 53, 0) 26px);
+}
+
+/* ── Колонтитул ──────────────────────────────────────────────── */
+.running {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px 16px;
+  align-items: baseline;
+  justify-content: space-between;
+  padding-bottom: 12px;
+  margin-bottom: 34px;
+  border-bottom: 2px solid var(--ink);
+}
+.running__folio {
+  font: 700 12px/1 var(--mono);
+  color: var(--ink-soft);
+}
+
+/* ── Заголовки ───────────────────────────────────────────────── */
+h1 {
+  margin: 0 0 14px;
+  font-family: var(--display);
+  font-size: clamp(29px, 4vw, 53px);
+  line-height: 1.04;
+  letter-spacing: -.022em;
+}
+h2 {
+  margin: 56px 0 16px;
+  font-family: var(--display);
+  font-size: clamp(21px, 2.05vw, 29px);
+  line-height: 1.2;
+  letter-spacing: -.015em;
+  scroll-margin-top: 24px;
+}
+h2 .sec {
+  display: inline-block;
+  margin-right: 12px;
+  padding: 5px 10px;
+  background: var(--ink);
+  color: var(--sky);
+  font: 700 13px/1 var(--mono);
+  letter-spacing: 0;
+  vertical-align: middle;
+}
+h3 {
+  margin: 32px 0 10px;
+  font-size: clamp(17px, 1.4vw, 21px);
+  letter-spacing: -.01em;
+}
+p { margin: 0 0 16px; max-width: 74ch; }
+.lead {
+  max-width: 70ch;
+  color: var(--ink-soft);
+  font-size: clamp(17px, 1.35vw, 21px);
+  line-height: 1.5;
+}
+strong { font-weight: 700; }
+.term { font-weight: 700; box-shadow: inset 0 -.42em 0 var(--light); }
+
+ul, ol { max-width: 74ch; margin: 0 0 16px; padding-left: 22px; }
+li { margin-bottom: 7px; }
+li::marker { color: var(--blue); font-weight: 700; }
+
+/* ── Паспорт темы ────────────────────────────────────────────── */
+.passport {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(190px, 1fr));
+  gap: 0;
+  margin: 30px 0 8px;
+  border: 3px solid var(--ink);
+  background: #fff;
+  box-shadow: 6px 6px 0 var(--ink);
+}
+.passport div {
+  padding: 14px 16px;
+  border-right: 2px solid var(--rule);
+}
+.passport div:last-child { border-right: 0; }
+.passport dt {
+  margin: 0 0 6px;
+  font: 600 10px/1.3 var(--pixel);
+  letter-spacing: 1.2px;
+  text-transform: uppercase;
+  color: var(--blue);
+}
+.passport dd { margin: 0; font-size: 15px; line-height: 1.4; }
+
+/* ── Код ─────────────────────────────────────────────────────── */
+figure.code {
+  margin: 22px 0;
+  border: 3px solid var(--ink);
+  background: #0E1430;
+  box-shadow: 6px 6px 0 var(--ink);
+  overflow: hidden;
+}
+figure.code figcaption {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 9px 14px;
+  background: var(--ink);
+  color: var(--sky);
+  font: 600 11px/1.3 var(--pixel);
+  letter-spacing: 1.2px;
+  text-transform: uppercase;
+}
+figure.code pre {
+  margin: 0;
+  padding: 18px 16px;
+  overflow-x: auto;
+  color: #E8ECF8;
+  font: 400 14.5px/1.65 var(--mono);
+  tab-size: 4;
+}
+figure.code--out { background: #fff; }
+figure.code--out pre { color: var(--ink); }
+figure.code--out figcaption { background: var(--light); color: var(--ink); }
+.c { color: #7E8AAE; }
+.s { color: #9BE38C; }
+.n { color: #FFC46B; }
+.k { color: #78C6FF; }
+.f { color: #FF9ED2; }
+p code, li code, td code {
+  padding: 1px 5px;
+  background: #fff;
+  border: 1px solid var(--rule);
+  font-size: .9em;
+}
+
+figure.illustration {
+  margin: 22px 0;
+  border: 3px solid var(--ink);
+  background: #fff;
+  box-shadow: 6px 6px 0 var(--ink);
+  overflow: hidden;
+}
+figure.illustration img {
+  display: block;
+  width: 100%;
+  max-height: 520px;
+  object-fit: contain;
+}
+figure.illustration figcaption {
+  padding: 9px 14px;
+  border-top: 2px solid var(--ink);
+  background: var(--light);
+  color: var(--ink-soft);
+  font: 600 10px/1.4 var(--pixel);
+  letter-spacing: 1px;
+  text-transform: uppercase;
+}
+
+/* ── Заметка на полях ────────────────────────────────────────── */
+.margin-note {
+  margin: 24px 0;
+  padding: 16px 18px;
+  border-left: 6px solid var(--blue);
+  background: #fff;
+  border-top: 2px solid var(--rule);
+  border-right: 2px solid var(--rule);
+  border-bottom: 2px solid var(--rule);
+  max-width: 74ch;
+}
+.margin-note b {
+  display: block;
+  margin-bottom: 6px;
+  font: 600 10px/1.3 var(--pixel);
+  letter-spacing: 1.2px;
+  text-transform: uppercase;
+  color: var(--blue);
+}
+.margin-note p:last-child { margin-bottom: 0; }
+.margin-note--warn { border-left-color: #D7541F; }
+.margin-note--warn b { color: #D7541F; }
+
+/* ── Таблицы ─────────────────────────────────────────────────── */
+.table-scroll { overflow-x: auto; margin: 22px 0; }
+table {
+  width: 100%;
+  min-width: 460px;
+  border-collapse: collapse;
+  background: #fff;
+  border: 3px solid var(--ink);
+  box-shadow: 6px 6px 0 var(--ink);
+  font-size: 15.5px;
+}
+th, td { padding: 11px 14px; text-align: left; border-bottom: 2px solid var(--rule); vertical-align: top; }
+th {
+  background: var(--ink);
+  color: var(--sky);
+  font: 600 11px/1.3 var(--pixel);
+  letter-spacing: 1.2px;
+  text-transform: uppercase;
+}
+tbody tr:last-child td { border-bottom: 0; }
+
+/* Таблицы «Частые ошибки»: коду и пояснениям нужно больше места. */
+.errors-table table {
+  min-width: 920px;
+  table-layout: fixed;
+}
+.errors-table th:nth-child(1),
+.errors-table td:nth-child(1) { width: 30%; }
+.errors-table th:nth-child(2),
+.errors-table td:nth-child(2) { width: 35%; }
+.errors-table th:nth-child(3),
+.errors-table td:nth-child(3) { width: 35%; }
+.errors-table td { overflow-wrap: break-word; }
+.errors-table td code {
+  white-space: normal;
+  overflow-wrap: anywhere;
+  -webkit-box-decoration-break: clone;
+  box-decoration-break: clone;
+}
+
+/* ── Схема «имя → значение» ──────────────────────────────────── */
+.boxes { display: grid; gap: 10px; margin: 22px 0; max-width: 640px; }
+.boxes div {
+  display: grid;
+  grid-template-columns: minmax(120px, 180px) 26px 1fr;
+  align-items: center;
+  gap: 10px;
+}
+.boxes b {
+  padding: 9px 12px;
+  border: 2px solid var(--ink);
+  background: #fff;
+  font: 500 14px/1 var(--mono);
+  font-weight: 700;
+}
+.boxes i { color: var(--blue); font-style: normal; text-align: center; font-weight: 700; }
+.boxes span {
+  padding: 9px 12px;
+  border: 2px dashed var(--ink);
+  background: var(--light);
+  font: 500 14px/1 var(--mono);
+}
+
+/* ── Проверь себя ────────────────────────────────────────────── */
+details {
+  margin: 0 0 10px;
+  padding: 14px 16px;
+  border: 2px solid var(--ink);
+  background: #fff;
+  max-width: 74ch;
+}
+details summary {
+  cursor: pointer;
+  font-weight: 650;
+  list-style: none;
+}
+details summary::-webkit-details-marker { display: none; }
+details summary::before {
+  content: "▸ ";
+  color: var(--blue);
+  font-weight: 700;
+}
+details[open] summary::before { content: "▾ "; }
+details[open] summary { margin-bottom: 10px; }
+details p:last-child, details ul:last-child { margin-bottom: 0; }
+
+/* ── Колофон / подпись автора ────────────────────────────────── */
+.colophon {
+  margin-top: 60px;
+  padding-top: 18px;
+  border-top: 3px solid var(--ink);
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px 26px;
+  justify-content: space-between;
+  align-items: baseline;
+  color: var(--ink-soft);
+  font-size: 14px;
+}
+.pager {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin-top: 34px;
+}
+.pager a {
+  padding: 12px 16px;
+  border: 3px solid var(--ink);
+  background: var(--light);
+  color: var(--ink);
+  text-decoration: none;
+  box-shadow: 4px 4px 0 var(--ink);
+  font-weight: 650;
+  transition: transform .08s steps(2), box-shadow .08s steps(2);
+}
+.pager a:hover { transform: translate(2px, 2px); box-shadow: 2px 2px 0 var(--ink); }
+
+@media (max-width: 720px) {
+  body { font-size: 16px; }
+  .book { padding: 3vh 12px 6vh; }
+  .book__body { grid-template-columns: 34px minmax(0, 1fr); box-shadow: 6px 6px 0 var(--ink); }
+  .spine::before { left: 8px; }
+  .spine::after { right: 8px; }
+  .leaf { padding: 28px 18px 30px; }
+  .boxes div { grid-template-columns: 1fr; gap: 4px; }
+  .boxes i { text-align: left; }
+
+  .errors-table { overflow: visible; }
+  .errors-table table,
+  .errors-table tbody,
+  .errors-table tr,
+  .errors-table td { display: block; width: 100%; }
+  .errors-table table {
+    min-width: 0;
+    border: 0;
+    box-shadow: none;
+    background: transparent;
+  }
+  .errors-table thead {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip: rect(0 0 0 0);
+    clip-path: inset(50%);
+    white-space: nowrap;
+  }
+  .errors-table tr {
+    margin-bottom: 16px;
+    border: 2px solid var(--ink);
+    background: #fff;
+    box-shadow: 4px 4px 0 var(--ink);
+  }
+  .errors-table td {
+    padding: 10px 12px;
+    border-bottom: 1px solid var(--rule);
+  }
+  .errors-table td:nth-child(1),
+  .errors-table td:nth-child(2),
+  .errors-table td:nth-child(3) { width: 100%; }
+  .errors-table tbody tr td { border-bottom: 1px solid var(--rule); }
+  .errors-table tbody tr td:last-child { border-bottom: 0; }
+  .errors-table td::before {
+    display: block;
+    margin-bottom: 4px;
+    color: var(--blue);
+    font: 600 9px/1.3 var(--pixel);
+    letter-spacing: 1px;
+    text-transform: uppercase;
+  }
+  .errors-table td:nth-child(1)::before { content: "Что написано"; }
+  .errors-table td:nth-child(2)::before { content: "Что произойдёт"; }
+  .errors-table td:nth-child(3)::before { content: "Как правильно"; }
+  .errors-table td code {
+    white-space: normal;
+    overflow-wrap: anywhere;
+  }
+}
+
+/* ── Элементы страницы главы ─────────────────────────────────── */
+.chapter-head { display: grid; grid-template-columns: minmax(0, 1fr); gap: 0; }
+.chapter-num { display: inline-block; margin-bottom: 14px; padding: 6px 12px; background: var(--blue); color: #fff; font: 700 13px/1 var(--mono); box-shadow: 4px 4px 0 var(--ink); }
+.quote { margin: 30px 0 0; padding: 16px 20px; border-left: 6px solid var(--ink); background: var(--light); font-size: 17px; line-height: 1.5; }
+.quote p { margin: 0; max-width: none; }
+
+.contents { margin: 34px 0 0; padding: 18px 20px; border: 2px dashed var(--ink); background: #fff; }
+.contents b { display: block; margin-bottom: 10px; font: 600 10px/1.3 var(--pixel); letter-spacing: 1.2px; text-transform: uppercase; color: var(--blue); }
+.contents ol { margin: 0; padding-left: 20px; columns: 2; column-gap: 32px; max-width: none; }
+.contents li { break-inside: avoid; margin-bottom: 4px; font-size: 15px; }
+.contents a { color: var(--ink); text-decoration: none; }
+.contents a:hover { color: var(--blue); text-decoration: underline; }
+
+.cheat { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 14px; margin: 22px 0; }
+.cheat div { padding: 16px 18px; border: 3px solid var(--ink); background: #fff; box-shadow: 5px 5px 0 var(--ink); }
+.cheat b { display: block; margin-bottom: 8px; font: 600 10px/1.3 var(--pixel); letter-spacing: 1.2px; text-transform: uppercase; color: var(--blue); }
+.cheat code { display: block; margin-bottom: 6px; font-size: 14px; background: none; border: 0; padding: 0; }
+
+.type-badge { display: inline-block; margin-right: 10px; padding: 4px 10px; background: var(--light); border: 2px solid var(--ink); font: 700 14px/1 var(--mono); letter-spacing: 0; vertical-align: middle; }
+.u { color: var(--blue); font-weight: 700; box-shadow: inset 0 -2px 0 var(--sky); }
+
+.steps { counter-reset: st; list-style: none; padding: 0; margin: 22px 0; max-width: 74ch; }
+.steps li { counter-increment: st; position: relative; padding: 10px 0 10px 46px; border-bottom: 2px solid var(--rule); }
+.steps li:last-child { border-bottom: 0; }
+.steps li::before { content: counter(st); position: absolute; left: 0; top: 10px; width: 30px; height: 30px; display: grid; place-items: center; background: var(--ink); color: var(--sky); font: 700 13px/1 var(--mono); }
+
+@media (max-width: 720px) { .contents ol { columns: 1; } }
+
+/* ═══════════════════════════════════════════════════════════════
+   ПРАКТИКУМ ПО LINUX — дополнительные элементы
+   ═══════════════════════════════════════════════════════════════ */
+
+:root {
+  --green: #2E7D4F;
+  --amber: #B4791A;
+  --red: #D7541F;
+  --term-bg: #0B1026;
+}
+
+/* ── Окно терминала ──────────────────────────────────────────── */
+.tty {
+  margin: 22px 0;
+  border: 3px solid var(--ink);
+  background: var(--term-bg);
+  box-shadow: 6px 6px 0 var(--ink);
+  overflow: hidden;
+}
+.tty__bar {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 8px 12px;
+  background: var(--ink);
+  border-bottom: 2px solid #2A3565;
+}
+.tty__dots { display: flex; gap: 5px; flex: none; }
+.tty__dots i { width: 10px; height: 10px; border-radius: 50%; background: #4A5586; }
+.tty__dots i:nth-child(1) { background: #E06C5A; }
+.tty__dots i:nth-child(2) { background: #E0B84F; }
+.tty__dots i:nth-child(3) { background: #6FBF73; }
+.tty__title {
+  font: 600 10px/1.3 var(--pixel);
+  letter-spacing: 1.2px;
+  text-transform: uppercase;
+  color: var(--sky);
+}
+.tty__title em { font-style: normal; color: var(--ink-faint); }
+.tty pre {
+  margin: 0;
+  padding: 16px 16px 18px;
+  overflow-x: auto;
+  color: #DCE3F5;
+  font: 400 14.5px/1.7 var(--mono);
+  tab-size: 4;
+}
+
+/* Подсветка bash */
+.pr  { color: #6FBF73; font-weight: 700; }          /* приглашение user@host */
+.pr b { color: #78C6FF; font-weight: 700; }         /* текущий каталог в приглашении */
+.pr i { color: #DCE3F5; font-style: normal; }       /* : и $ */
+.cmd { color: #FFC46B; font-weight: 700; }          /* сама команда */
+.arg { color: #FF9ED2; }                            /* аргументы-ключи */
+.pth { color: #9BE38C; }                            /* пути и строки */
+.op  { color: #78C6FF; font-weight: 700; }          /* операторы > | & */
+.out { color: #98A3C4; }                            /* вывод команды */
+.err { color: #F08A72; }                            /* сообщения об ошибках */
+.cur { background: #DCE3F5; color: var(--term-bg); } /* курсор */
+.tty .c { color: #7E8AAE; }
+
+/* Строчный код в тексте — команда */
+p code.b, li code.b, td code.b { font-weight: 700; }
+
+/* ── Карточка команды ────────────────────────────────────────── */
+.cmdcard {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  margin: 24px 0;
+  border: 3px solid var(--ink);
+  background: #fff;
+  box-shadow: 6px 6px 0 var(--ink);
+  max-width: 74ch;
+}
+.cmdcard__head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 6px 14px;
+  padding: 12px 16px;
+  background: var(--ink);
+}
+.cmdcard__head b { font: 700 19px/1 var(--mono); color: #FFC46B; }
+.cmdcard__head span {
+  font: 600 10px/1.4 var(--pixel);
+  letter-spacing: 1.2px;
+  text-transform: uppercase;
+  color: var(--sky);
+}
+.cmdcard__body { padding: 14px 16px 4px; }
+.cmdcard__body p { margin-bottom: 12px; }
+.cmdcard__syn {
+  padding: 10px 14px;
+  border: 2px dashed var(--ink);
+  background: var(--paper);
+  font: 500 14.5px/1.5 var(--mono);
+  overflow-x: auto;
+}
+.cmdcard dl { margin: 12px 0 14px; display: grid; grid-template-columns: auto minmax(0, 1fr); gap: 6px 14px; align-items: baseline; }
+.cmdcard dt { font: 700 14px/1.5 var(--mono); color: var(--blue); }
+.cmdcard dd { margin: 0; font-size: 15px; line-height: 1.5; }
+
+/* ── Задание «Попробуйте на своей системе» ───────────────────── */
+.try {
+  margin: 26px 0;
+  border: 3px solid var(--ink);
+  background: #FFFDF8;
+  box-shadow: 7px 7px 0 var(--blue);
+  max-width: 78ch;
+}
+.try__head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px 12px;
+  padding: 11px 16px;
+  background: var(--blue);
+  border-bottom: 3px solid var(--ink);
+}
+.try__head b {
+  font: 600 11px/1.3 var(--pixel);
+  letter-spacing: 1.6px;
+  text-transform: uppercase;
+  color: #fff;
+}
+.try__head span {
+  margin-left: auto;
+  padding: 3px 8px;
+  background: #fff;
+  border: 2px solid var(--ink);
+  font: 700 10px/1.4 var(--pixel);
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  color: var(--ink);
+}
+.try__body { padding: 16px 18px 6px; }
+.try__body > p:first-child { margin-top: 0; }
+.try ol { counter-reset: tsk; list-style: none; padding: 0; margin: 0 0 14px; max-width: none; }
+.try ol > li {
+  counter-increment: tsk;
+  position: relative;
+  padding: 8px 0 8px 40px;
+  border-bottom: 2px solid var(--rule);
+}
+.try ol > li:last-child { border-bottom: 0; }
+.try ol > li::before {
+  content: counter(tsk);
+  position: absolute;
+  left: 0;
+  top: 8px;
+  width: 26px;
+  height: 26px;
+  display: grid;
+  place-items: center;
+  background: var(--ink);
+  color: var(--sky);
+  font: 700 12px/1 var(--mono);
+}
+.try ol > li ul { margin: 8px 0 0; }
+.try details { margin: 0 0 14px; border-width: 2px; border-style: dashed; max-width: none; background: var(--paper); }
+.try details summary::before { content: "🗝 "; }
+.try details[open] summary::before { content: "🗝 "; }
+
+/* Усложнённая задача */
+.try--hard { box-shadow: 7px 7px 0 var(--amber); }
+.try--hard .try__head { background: var(--amber); }
+
+/* Предупреждение внутри задания */
+.try .warn {
+  margin: 0 0 14px;
+  padding: 10px 14px;
+  border-left: 6px solid var(--red);
+  background: #FFF3EF;
+  font-size: 15px;
+}
+.try .warn b { color: var(--red); }
+
+/* ── Легенда обозначений ─────────────────────────────────────── */
+.legend {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
+  gap: 14px;
+  margin: 26px 0;
+}
+.legend div {
+  display: grid;
+  grid-template-columns: 44px minmax(0, 1fr);
+  align-items: center;
+  gap: 12px;
+  padding: 12px 14px;
+  border: 3px solid var(--ink);
+  background: #fff;
+  box-shadow: 5px 5px 0 var(--ink);
+}
+.legend i { font-size: 24px; font-style: normal; text-align: center; }
+.legend b { display: block; font-size: 15px; }
+.legend span { font-size: 13.5px; color: var(--ink-soft); line-height: 1.4; }
+
+/* ── Клавиши ─────────────────────────────────────────────────── */
+kbd {
+  display: inline-block;
+  padding: 2px 8px;
+  border: 2px solid var(--ink);
+  border-bottom-width: 4px;
+  border-radius: 4px;
+  background: #fff;
+  font: 700 13px/1.5 var(--mono);
+  color: var(--ink);
+  white-space: nowrap;
+}
+
+/* ── Схемы и диаграммы ───────────────────────────────────────── */
+figure.scheme {
+  margin: 24px 0;
+  border: 3px solid var(--ink);
+  background: #fff;
+  box-shadow: 6px 6px 0 var(--ink);
+  overflow: hidden;
+}
+figure.scheme .scheme__canvas { padding: 20px 16px; overflow-x: auto; }
+figure.scheme svg { display: block; margin: 0 auto; max-width: 100%; height: auto; }
+figure.scheme figcaption {
+  padding: 9px 14px;
+  border-top: 2px solid var(--ink);
+  background: var(--light);
+  color: var(--ink-soft);
+  font: 600 10px/1.4 var(--pixel);
+  letter-spacing: 1px;
+  text-transform: uppercase;
+}
+
+/* ── Дерево каталогов ────────────────────────────────────────── */
+.tree {
+  margin: 22px 0;
+  padding: 16px 18px;
+  border: 3px solid var(--ink);
+  background: #fff;
+  box-shadow: 6px 6px 0 var(--ink);
+  overflow-x: auto;
+  font: 400 14px/1.75 var(--mono);
+  white-space: pre;
+  max-width: 74ch;
+}
+.tree b { color: var(--blue); font-weight: 700; }
+.tree em { font-style: normal; color: var(--ink-faint); }
+.tree mark { background: var(--light); color: var(--ink); font-weight: 700; }
+
+/* ── Сравнение двух подходов ─────────────────────────────────── */
+.duo { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 14px; margin: 24px 0; }
+.duo > div { padding: 16px 18px; border: 3px solid var(--ink); background: #fff; box-shadow: 5px 5px 0 var(--ink); }
+.duo b { display: block; margin-bottom: 8px; font: 600 10px/1.3 var(--pixel); letter-spacing: 1.2px; text-transform: uppercase; color: var(--blue); }
+.duo p:last-child { margin-bottom: 0; }
+.duo code { font-size: 14px; }
+.duo--ok b { color: var(--green); }
+.duo--no b { color: var(--red); }
+
+/* ── Оглавление практик на обложке ───────────────────────────── */
+.practices { display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 16px; margin-top: 22px; }
+.practice { border: 3px solid var(--ink); background: #fff; box-shadow: 6px 6px 0 var(--ink); display: grid; grid-template-columns: 40px minmax(0, 1fr); }
+.practice__spine { background: var(--ink); color: var(--sky); display: flex; align-items: center; justify-content: center; }
+.practice__spine b { writing-mode: vertical-rl; transform: rotate(180deg); font: 700 12px/1 var(--mono); letter-spacing: 2px; }
+.practice__body { padding: 18px 20px 16px; }
+.practice h3 { margin: 0 0 6px; font-family: var(--display); font-size: 19px; letter-spacing: -.02em; }
+.practice p { margin: 0 0 14px; color: var(--ink-soft); font-size: 14.5px; line-height: 1.45; }
+
+@media (max-width: 720px) {
+  .cmdcard dl { grid-template-columns: minmax(0, 1fr); gap: 2px; }
+  .cmdcard dd { margin-bottom: 8px; }
+  .try { box-shadow: 4px 4px 0 var(--blue); }
+  .try--hard { box-shadow: 4px 4px 0 var(--amber); }
+}

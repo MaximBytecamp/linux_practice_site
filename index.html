@@ -1,0 +1,136 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#F2F1E9">
+  <title>Практикум по Linux · Макаров Максим Николаевич</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Literata:ital,opsz,wght@0,7..72,600;0,7..72,700;1,7..72,400&family=Pixelify+Sans:wght@500;600;700&family=Roboto+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+  <style>
+    .cover { display: grid; grid-template-columns: minmax(0, 1.15fr) minmax(260px, .78fr); gap: clamp(24px, 4vw, 56px); align-items: start; }
+    .cover h1 { font-size: clamp(36px, 5.6vw, 74px); }
+    .cover__sub { margin: 0 0 22px; font-family: var(--display); font-size: clamp(17px, 1.8vw, 26px); letter-spacing: -.02em; color: var(--blue); }
+    .cover__meta { display: flex; flex-wrap: wrap; gap: 8px; margin: 26px 0 0; }
+    .cover__meta span { padding: 8px 12px; border: 2px solid var(--ink); background: #fff; font: 600 11px/1 var(--pixel); letter-spacing: 1px; }
+    .diary { position: relative; padding: 30px 28px 24px; border: 3px solid var(--ink); background: #FFFDF8; box-shadow: 7px 7px 0 var(--ink); transform: rotate(-.7deg); background-image: repeating-linear-gradient(to bottom, transparent, transparent 33px, rgba(2,8,53,.07) 33px, rgba(2,8,53,.07) 34px); background-position: 0 74px; }
+    .diary__tag { display: inline-block; margin: 0 0 18px; padding: 6px 11px; background: var(--ink); color: var(--sky); font: 600 10px/1 var(--pixel); letter-spacing: 1.4px; text-transform: uppercase; }
+    .diary blockquote { margin: 0 0 20px; font-family: var(--display); font-style: italic; font-size: clamp(19px, 1.75vw, 25px); line-height: 34px; letter-spacing: -.005em; text-wrap: balance; }
+    .diary blockquote::before { content: "«"; color: var(--blue); }
+    .diary blockquote::after { content: "»"; color: var(--blue); }
+    .diary__sign { display: block; padding-top: 12px; border-top: 2px solid var(--rule); font: 600 11px/1.5 var(--pixel); letter-spacing: 1.2px; text-transform: uppercase; color: var(--ink-soft); }
+
+    .toc { margin: 0; padding: 0; list-style: none; border-top: 2px solid var(--rule); }
+    .toc li { margin: 0; border-bottom: 2px solid var(--rule); }
+    .toc li:last-child { border-bottom: 0; }
+    .toc a, .toc s { display: flex; align-items: baseline; gap: 10px; padding: 9px 0; text-decoration: none; font-size: 15px; }
+    .toc a { color: var(--ink); font-weight: 600; }
+    .toc a:hover { color: var(--blue); }
+    .toc s { color: var(--ink-faint); text-decoration: none; }
+    .toc em { margin-left: auto; font: 600 10px/1 var(--pixel); letter-spacing: 1px; text-transform: uppercase; font-style: normal; }
+    .toc a em { color: var(--blue); }
+    .toc s em { color: var(--ink-faint); }
+    .toc i { font: 700 12px/1 var(--mono); font-style: normal; color: var(--ink-faint); min-width: 34px; }
+    @media (max-width: 860px) { .cover { grid-template-columns: 1fr; } }
+  </style>
+</head>
+<body>
+  <div class="book">
+    <div class="book__body">
+      <div class="spine"><span>Практикум по Linux · Макаров М. Н.</span></div>
+
+      <main class="leaf">
+        <div class="running">
+          <p class="eyebrow">Учебное издание · операционные системы и среды</p>
+          <p class="author-line">Макаров Максим Николаевич</p>
+        </div>
+
+        <section class="cover">
+          <div>
+            <h1>Практикум<br>по Linux</h1>
+            <p class="cover__sub">От первой команды до конвейера: работа в терминале Ubuntu Server</p>
+            <p>Практический курс для тех, кто впервые садится за чёрный экран. Каждая глава устроена одинаково: сначала короткий разбор — что делает команда и почему она так называется, — а сразу за ним задание, которое нужно выполнить на своей системе. Читать эту книгу, не открыв терминал, бессмысленно: всё, что здесь написано, проверяется руками за минуту.</p>
+            <p>Все примеры рассчитаны на виртуальную машину с Ubuntu Server, но почти без изменений работают в любом дистрибутиве Linux, в macOS и в WSL. Ничего устанавливать не нужно — только запустить машину и войти в систему.</p>
+            <div class="cover__meta">
+              <span>Ubuntu Server 24.04</span>
+              <span>оболочка Bash</span>
+              <span>задания после каждой темы</span>
+              <span>без воды</span>
+            </div>
+          </div>
+          <aside class="diary">
+            <span class="diary__tag">из личного дневника</span>
+            <blockquote>Терминал перестаёт быть страшным ровно в тот момент, когда вы набрали в нём первую команду сами.</blockquote>
+            <span class="diary__sign">Макаров Максим Николаевич</span>
+          </aside>
+        </section>
+
+        <h2><span class="sec">i</span>Как читать этот практикум</h2>
+        <p>По ходу текста встречаются четыре обозначения. Они пришли из презентаций к занятиям и означают ровно то же самое.</p>
+        <div class="legend">
+          <div><i>💬</i><span><b>Пояснение</b><span>Обычный текст: разбор того, как устроена команда.</span></span></div>
+          <div><i>❗</i><span><b>Важное пояснение</b><span>Заметка на полях. Место, где чаще всего ошибаются.</span></span></div>
+          <div><i>⌨️</i><span><b>Задача</b><span>Синяя карточка. Выполняется в терминале сразу после чтения.</span></span></div>
+          <div><i>🔥</i><span><b>Усложнённая задача</b><span>Жёлтая карточка. Ответ не написан — его нужно собрать самому.</span></span></div>
+        </div>
+
+        <h2><span class="sec">1</span>Практика №2. Bash: основные команды</h2>
+        <p>Первый большой блок практикума: командная оболочка Bash в терминале Ubuntu Server. Шесть глав, которые проходят путь от входа в систему до конвейеров — минимального набора, с которым в Linux уже можно работать всерьёз.</p>
+        <div class="practices">
+          <div class="practice">
+            <div class="practice__spine"><b>ПР 2</b></div>
+            <div class="practice__body">
+              <h3>Первые шаги в терминале</h3>
+              <p>Вход в систему, приглашение командной строки, устройство команды.</p>
+              <ul class="toc">
+                <li><a href="praktika-02/01-terminal/index.html"><i>2.1</i>Вход в систему и приглашение<em>глава</em></a></li>
+                <li><a href="praktika-02/02-komanda-i-argumenty/index.html"><i>2.2</i>Команда и её аргументы<em>глава</em></a></li>
+              </ul>
+            </div>
+          </div>
+          <div class="practice">
+            <div class="practice__spine"><b>ПР 2</b></div>
+            <div class="practice__body">
+              <h3>Файловая система</h3>
+              <p>Где вы находитесь, как перемещаться и как читать содержимое каталогов.</p>
+              <ul class="toc">
+                <li><a href="praktika-02/03-peremeshchenie/index.html"><i>2.3</i>Перемещение по каталогам<em>глава</em></a></li>
+                <li><a href="praktika-02/04-prosmotr-i-poisk/index.html"><i>2.4</i>Просмотр и поиск информации<em>глава</em></a></li>
+              </ul>
+            </div>
+          </div>
+          <div class="practice">
+            <div class="practice__spine"><b>ПР 2</b></div>
+            <div class="practice__body">
+              <h3>Работа с данными</h3>
+              <p>Создание и удаление файлов, перенаправление потоков, конвейеры.</p>
+              <ul class="toc">
+                <li><a href="praktika-02/05-fayly-i-katalogi/index.html"><i>2.5</i>Файлы и каталоги<em>глава</em></a></li>
+                <li><a href="praktika-02/06-potoki-i-konveyer/index.html"><i>2.6</i>Потоки и конвейер<em>глава</em></a></li>
+              </ul>
+            </div>
+          </div>
+        </div>
+
+        <h2><span class="sec">2</span>Что понадобится</h2>
+        <ol class="steps">
+          <li>Виртуальная машина с <b>Ubuntu Server</b>, установленная на практике №1. Подойдёт VirtualBox, UTM или любой другой гипервизор.</li>
+          <li>Имя пользователя и пароль, которые вы задали при установке. Без них дальше первого экрана не пройти.</li>
+          <li>Полчаса времени и готовность ошибаться: сообщение об ошибке в терминале — это не поломка, а ответ системы.</li>
+        </ol>
+        <div class="margin-note">
+          <b>На полях: можно и без виртуальной машины</b>
+          <p>Если Ubuntu Server ещё не установлена, почти все задания получится выполнить в терминале macOS, в WSL на Windows или в любом онлайн-эмуляторе Linux. Расходятся мелочи: в macOS нет каталога <code>/var/log/journal</code> и часть ключей <code>ls</code> называется иначе. Там, где это важно, в тексте стоит отдельная пометка.</p>
+        </div>
+
+        <div class="colophon">
+          <span>Практикум по Linux · Операционные системы и среды</span>
+          <span class="author-line">Автор: Макаров Максим Николаевич</span>
+        </div>
+      </main>
+    </div>
+  </div>
+</body>
+</html>
