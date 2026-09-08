@@ -1,0 +1,400 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#F2F1E9">
+  <title>2.6 Потоки и конвейер · Практикум по Linux</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Literata:ital,opsz,wght@0,7..72,600;0,7..72,700;1,7..72,400&family=Pixelify+Sans:wght@500;600;700&family=Roboto+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../../styles.css">
+</head>
+<body>
+  <div class="book">
+    <div class="book__body">
+      <div class="spine"><span>Практика №2 · Bash: основные команды</span></div>
+
+      <main class="leaf">
+        <div class="running">
+          <p class="eyebrow"><a href="../../index.html" style="text-decoration:none;color:inherit">Практикум по Linux</a> · практика №2 · bash</p>
+          <p class="running__folio">Глава 2.6</p>
+        </div>
+
+        <header class="chapter-head">
+          <span class="chapter-num">2.6</span>
+          <h1>Потоки<br>и конвейер</h1>
+          <p class="lead">Последняя и самая важная глава практики. До сих пор команды работали поодиночке: одна выводила результат на экран, вы читали его глазами и набирали следующую. Сейчас мы научимся направлять вывод команды в файл — и прямо на вход другой команде. Именно на этом держится вся сила командной строки.</p>
+          <blockquote class="quote"><p>«Каждая программа делает одну вещь. Соединять их — ваша работа.»</p></blockquote>
+        </header>
+
+        <dl class="passport">
+          <div><dt>Категория</dt><dd>Командная оболочка Bash</dd></div>
+          <div><dt>Уровень</dt><dd>Средний</dd></div>
+          <div><dt>Связанные темы</dt><dd>Процессы, файловые дескрипторы, утилиты</dd></div>
+          <div><dt>Зачем это знать</dt><dd>Сохранять результаты в файлы и соединять команды между собой</dd></div>
+        </dl>
+
+        <nav class="contents">
+          <b>В этой главе</b>
+          <ol>
+            <li><a href="#s1">Три стандартных потока</a></li>
+            <li><a href="#s2">Перенаправление в файл</a></li>
+            <li><a href="#s3">Команда echo</a></li>
+            <li><a href="#s4">Дозапись вместо перезаписи</a></li>
+            <li><a href="#s5">Перенаправление потока в поток</a></li>
+            <li><a href="#s6">Конвейер</a></li>
+            <li><a href="#s7">Игнорирование ошибок: /dev/null</a></li>
+            <li><a href="#s8">Частые ошибки</a></li>
+            <li><a href="#s9">Проверьте себя</a></li>
+            <li><a href="#s10">Шпаргалка</a></li>
+          </ol>
+        </nav>
+
+        <h2 id="s1"><span class="sec">§1</span>Три стандартных потока</h2>
+        <p><span class="term">Поток</span> (англ. <i>stream</i>) — универсальное средство чтения и записи информации в Unix-подобных системах. Запуская любой процесс, операционная система автоматически выдаёт ему три потока с постоянными номерами — <span class="term">файловыми дескрипторами</span>.</p>
+        <div class="table-scroll">
+          <table>
+            <thead><tr><th>Поток</th><th>Дескриптор</th><th>Назначение</th><th>Куда ведёт по умолчанию</th></tr></thead>
+            <tbody>
+              <tr><td><code>stdin</code></td><td><code>0</code></td><td>стандартный ввод</td><td>клавиатура в терминале</td></tr>
+              <tr><td><code>stdout</code></td><td><code>1</code></td><td>стандартный вывод</td><td>экран терминала</td></tr>
+              <tr><td><code>stderr</code></td><td><code>2</code></td><td>стандартный поток ошибок</td><td>экран терминала</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <figure class="scheme">
+          <div class="scheme__canvas">
+            <svg viewBox="0 0 700 240" width="700" role="img" aria-label="Три стандартных потока процесса: stdin, stdout и stderr">
+              <rect x="270" y="80" width="160" height="80" fill="#020835"/>
+              <text x="350" y="115" font-family="Inter, sans-serif" font-size="14" font-weight="700" fill="#6FB8E3" text-anchor="middle">процесс</text>
+              <text x="350" y="136" font-family="Roboto Mono, monospace" font-size="12" fill="#BFE2F5" text-anchor="middle">grep, ls, cat…</text>
+
+              <rect x="20" y="100" width="130" height="40" fill="#fff" stroke="#020835" stroke-width="2.5"/>
+              <text x="85" y="118" font-family="Inter, sans-serif" font-size="12" fill="#020835" text-anchor="middle">клавиатура</text>
+              <text x="85" y="133" font-family="Roboto Mono, monospace" font-size="11" fill="#3B4467" text-anchor="middle">stdin · 0</text>
+              <path d="M156 120 H262" stroke="#2D7FC1" stroke-width="3" fill="none" marker-end="url(#a4)"/>
+
+              <rect x="550" y="50" width="130" height="40" fill="#BFE2F5" stroke="#020835" stroke-width="2.5"/>
+              <text x="615" y="68" font-family="Inter, sans-serif" font-size="12" fill="#020835" text-anchor="middle">экран</text>
+              <text x="615" y="83" font-family="Roboto Mono, monospace" font-size="11" fill="#3B4467" text-anchor="middle">stdout · 1</text>
+              <path d="M436 105 H500 V70 H542" stroke="#2D7FC1" stroke-width="3" fill="none" marker-end="url(#a4)"/>
+
+              <rect x="550" y="150" width="130" height="40" fill="#FFF3EF" stroke="#D7541F" stroke-width="2.5"/>
+              <text x="615" y="168" font-family="Inter, sans-serif" font-size="12" fill="#D7541F" text-anchor="middle">экран</text>
+              <text x="615" y="183" font-family="Roboto Mono, monospace" font-size="11" fill="#D7541F" text-anchor="middle">stderr · 2</text>
+              <path d="M436 135 H500 V170 H542" stroke="#D7541F" stroke-width="3" fill="none" marker-end="url(#a4)"/>
+
+              <defs>
+                <marker id="a4" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+                  <path d="M0 0 L10 5 L0 10 z" fill="#020835"/>
+                </marker>
+              </defs>
+              <text x="350" y="215" font-family="Inter, sans-serif" font-size="12.5" fill="#3B4467" text-anchor="middle">по умолчанию оба вывода идут на один и тот же экран — и потому смешиваются</text>
+            </svg>
+          </div>
+          <figcaption>Каждому процессу система выдаёт три потока с номерами 0, 1 и 2</figcaption>
+        </figure>
+        <p>Обратите внимание на последнюю строку схемы. Обычный вывод и сообщения об ошибках идут <b>разными</b> потоками, но по умолчанию оба показываются на экране, поэтому кажутся одним целым. Как только мы начнём перенаправлять их по отдельности, разница станет наглядной.</p>
+
+        <h2 id="s2"><span class="sec">§2</span>Перенаправление в файл</h2>
+        <p>Операционная система позволяет отвязать поток от терминала и подключить его к файлу. Делается это специальными операторами прямо в командной строке.</p>
+        <figure class="code">
+          <figcaption><span>Синтаксис</span><span>перенаправление потоков</span></figcaption>
+<pre>{команда} [поток]&lt; {файл}   <span class="c"># ввод из файла в поток команды</span>
+{команда} [поток]&gt; {файл}   <span class="c"># вывод команды из потока в файл</span></pre>
+        </figure>
+        <p>Номер потока указывать необязательно. Если его не написать, для <code>&lt;</code> подразумевается стандартный ввод (<code>stdin</code>, 0), а для <code>&gt;</code> — стандартный вывод (<code>stdout</code>, 1). Именно поэтому в жизни чаще всего встречается просто <code>&gt;</code> и <code>2&gt;</code>.</p>
+        <p>Если файла не существует, он будет создан. Если существует — <b>перезаписан целиком</b>.</p>
+        <figure class="tty">
+          <div class="tty__bar"><div class="tty__dots"><i></i><i></i><i></i></div><span class="tty__title">&gt; · <em>вывод уходит в файл, экран пуст</em></span></div>
+<pre><span class="pr">user<i>@</i>ubuntuserver<i>:</i><b>~</b><i>$</i></span> <span class="cmd">ls</span> <span class="arg">-l</span> <span class="pth">/etc</span> <span class="op">&gt;</span> <span class="pth">etc.txt</span>
+<span class="pr">user<i>@</i>ubuntuserver<i>:</i><b>~</b><i>$</i></span> <span class="cmd">ls</span> <span class="arg">-lh</span> <span class="pth">etc.txt</span>
+<span class="out">-rw-rw-r-- 1 user user 12K сен  8 10:31 etc.txt</span></pre>
+        </figure>
+        <p>Ничего не вывелось на экран — и это признак того, что всё сработало: вывод целиком ушёл в файл.</p>
+
+        <div class="try">
+          <div class="try__head"><b>⌨️ Попробуйте на своей системе</b><span>задание 1</span></div>
+          <div class="try__body">
+            <ol>
+              <li>Выполните <code class="b">ls -l /etc &gt; etc.txt</code>. Что появилось на экране?</li>
+              <li>Убедитесь, что файл создан: <code class="b">ls -lh etc.txt</code>.</li>
+              <li>Посмотрите его содержимое: <code class="b">less etc.txt</code>, выход по <kbd>q</kbd>.</li>
+              <li>Выполните <code class="b">uname -a &gt; etc.txt</code>, а затем снова откройте файл. Куда делся прежний список?</li>
+            </ol>
+            <details>
+              <summary>Что случилось с содержимым файла</summary>
+              <p>Оператор <code>&gt;</code> не дописывает, а заменяет: файл обнуляется и заполняется новым выводом. Прежний список <code>/etc</code> утрачен. Способ дописывать в конец — в §4.</p>
+            </details>
+          </div>
+        </div>
+
+        <h2 id="s3"><span class="sec">§3</span>Команда echo</h2>
+        <p>Чтобы записать в файл собственный текст, нужна команда, которая этот текст выводит. Такая команда есть.</p>
+        <div class="cmdcard">
+          <div class="cmdcard__head"><b>echo</b><span>вывести строку</span></div>
+          <div class="cmdcard__body">
+            <div class="cmdcard__syn">echo [строка]</div>
+            <p style="margin-top:12px">Выводит переданную строку в стандартный поток вывода. Сама по себе команда выглядит бесполезной — но именно она в связке с перенаправлением заполняет файлы.</p>
+          </div>
+        </div>
+        <figure class="tty">
+          <div class="tty__bar"><div class="tty__dots"><i></i><i></i><i></i></div><span class="tty__title">echo · <em>на экран и в файл</em></span></div>
+<pre><span class="pr">user<i>@</i>ubuntuserver<i>:</i><b>~</b><i>$</i></span> <span class="cmd">echo</span> <span class="pth">"Hello world!"</span>
+<span class="out">Hello world!</span>
+<span class="pr">user<i>@</i>ubuntuserver<i>:</i><b>~</b><i>$</i></span> <span class="cmd">echo</span> <span class="pth">"Hello world!"</span> <span class="op">&gt;</span> <span class="pth">hello.txt</span>
+<span class="pr">user<i>@</i>ubuntuserver<i>:</i><b>~</b><i>$</i></span> <span class="cmd">cat</span> <span class="pth">hello.txt</span>
+<span class="out">Hello world!</span></pre>
+        </figure>
+        <p>В основном <code>echo</code> используется в скриптах для вывода сообщений о ходе работы. Но её второе применение — быстро создать файл с нужным содержимым, не открывая редактор.</p>
+
+        <h2 id="s4"><span class="sec">§4</span>Дозапись вместо перезаписи</h2>
+        <p>Как мы убедились, <code>&gt;</code> стирает прежнее содержимое файла. Чтобы этого избежать, существует парная форма оператора — она добавляет данные <b>в конец</b>.</p>
+        <figure class="code">
+          <figcaption><span>Синтаксис</span><span>дозапись</span></figcaption>
+<pre>{команда} [поток]&gt;&gt; {файл}   <span class="c"># дописать в конец файла</span></pre>
+        </figure>
+        <div class="duo">
+          <div class="duo--no">
+            <b>Одна стрелка — перезапись</b>
+            <p><code>echo "строка 1" &gt; f.txt</code></p>
+            <p><code>echo "строка 2" &gt; f.txt</code></p>
+            <p>В файле только «строка 2».</p>
+          </div>
+          <div class="duo--ok">
+            <b>Две стрелки — дозапись</b>
+            <p><code>echo "строка 1" &gt; f.txt</code></p>
+            <p><code>echo "строка 2" &gt;&gt; f.txt</code></p>
+            <p>В файле обе строки.</p>
+          </div>
+        </div>
+        <p>В файл можно направить результат выполнения любой команды, не только <code>echo</code>. Обычная практика — накапливать в одном файле вывод нескольких команд подряд, дописывая каждый следующий через <code>&gt;&gt;</code>.</p>
+
+        <div class="try">
+          <div class="try__head"><b>⌨️ Попробуйте на своей системе</b><span>задание 2</span></div>
+          <div class="try__body">
+            <p>Создайте файл и заполните его информацией о себе, а затем удостоверьтесь, что записалось именно то, что вы вводили.</p>
+            <ol>
+              <li><code class="b">echo "Иванов Иван Иванович" &gt; about.txt</code> — первая строка, файл создан.</li>
+              <li><code class="b">echo "Группа: ИС-21" &gt;&gt; about.txt</code> — вторая строка дописана в конец.</li>
+              <li>Допишите третьей строкой дату выполнения работы.</li>
+              <li>Проверьте результат: <code class="b">cat about.txt</code>. Все три строки на месте?</li>
+              <li>Теперь допишите в конец файла вывод команды <code>uname -a</code>: <code class="b">uname -a &gt;&gt; about.txt</code> и снова прочитайте файл.</li>
+              <li>Специально ошибитесь: повторите шаг 2 с одной стрелкой вместо двух и посмотрите, что стало с файлом.</li>
+            </ol>
+          </div>
+        </div>
+
+        <h2 id="s5"><span class="sec">§5</span>Перенаправление потока в поток</h2>
+        <p>Потоки можно направлять не только в файл, но и друг в друга. Для этого к оператору добавляется амперсанд.</p>
+        <figure class="code">
+          <figcaption><span>Синтаксис</span><span>поток в поток</span></figcaption>
+<pre>{команда} [поток1]&lt;&amp;{поток2}   <span class="c"># ввод из потока 2 в поток 1</span>
+{команда} [поток1]&gt;&amp;{поток2}   <span class="c"># вывод из потока 1 в поток 2</span></pre>
+        </figure>
+        <p>Самое частое применение — собрать ошибки и обычный вывод в один файл. Запись <code>&gt; log.txt 2&gt;&amp;1</code> читается так: «стандартный вывод отправить в <code>log.txt</code>, а поток ошибок — туда же, куда сейчас направлен стандартный вывод».</p>
+        <figure class="tty">
+          <div class="tty__bar"><div class="tty__dots"><i></i><i></i><i></i></div><span class="tty__title">2&gt;&amp;1 · <em>обе струи в один файл</em></span></div>
+<pre><span class="pr">user<i>@</i>ubuntuserver<i>:</i><b>~</b><i>$</i></span> <span class="cmd">find</span> <span class="pth">/etc</span> <span class="arg">-name</span> <span class="pth">"*.conf"</span> <span class="op">&gt;</span> <span class="pth">result.txt</span> <span class="op">2&gt;&amp;1</span>
+<span class="pr">user<i>@</i>ubuntuserver<i>:</i><b>~</b><i>$</i></span> <span class="cmd">grep</span> <span class="arg">-c</span> <span class="pth">"Permission denied" result.txt</span>
+<span class="out">12</span></pre>
+        </figure>
+        <div class="margin-note margin-note--warn">
+          <b>Важно: порядок операторов имеет значение</b>
+          <p>Запись <code>2&gt;&amp;1 &gt; log.txt</code> не то же самое, что <code>&gt; log.txt 2&gt;&amp;1</code>. В первом случае ошибки направляются туда, куда вывод указывал <i>на тот момент</i>, то есть на экран, — и только потом вывод уходит в файл. Оболочка читает операторы слева направо, и от их порядка зависит результат.</p>
+        </div>
+
+        <h2 id="s6"><span class="sec">§6</span>Конвейер</h2>
+        <p>Представим задачу: посмотреть содержимое <code>/etc</code> подробным списком. Вывод длинный, на экран не помещается, значит, нужен <code>less</code>. Как их соединить? Через файл это выглядит так:</p>
+        <ol class="steps">
+          <li>Перенаправить вывод <code>ls -l /etc</code> в файл <code>tmp.txt</code>.</li>
+          <li>Просмотреть файл: <code>less tmp.txt</code>.</li>
+          <li>Удалить файл: <code>rm tmp.txt</code>.</li>
+        </ol>
+        <p>Три команды и мусорный файл ради одного взгляда на список. Именно поэтому в Unix-системах существует <span class="term">конвейер</span> (англ. <i>pipeline</i>) — способ направить вывод одной команды прямо на вход другой, минуя диск.</p>
+        <figure class="code">
+          <figcaption><span>Синтаксис</span><span>конвейер</span></figcaption>
+<pre>{команда1} | {команда2}</pre>
+        </figure>
+        <figure class="scheme">
+          <div class="scheme__canvas">
+            <svg viewBox="0 0 700 200" width="700" role="img" aria-label="Конвейер: stdout первой команды становится stdin второй">
+              <rect x="30" y="60" width="180" height="60" fill="#020835"/>
+              <text x="120" y="86" font-family="Roboto Mono, monospace" font-size="14" font-weight="700" fill="#FFC46B" text-anchor="middle">ls -l /etc</text>
+              <text x="120" y="105" font-family="Inter, sans-serif" font-size="11" fill="#BFE2F5" text-anchor="middle">команда 1</text>
+
+              <rect x="490" y="60" width="180" height="60" fill="#020835"/>
+              <text x="580" y="86" font-family="Roboto Mono, monospace" font-size="14" font-weight="700" fill="#FFC46B" text-anchor="middle">less</text>
+              <text x="580" y="105" font-family="Inter, sans-serif" font-size="11" fill="#BFE2F5" text-anchor="middle">команда 2</text>
+
+              <path d="M216 90 H484" stroke="#2D7FC1" stroke-width="3" fill="none" marker-end="url(#a5)"/>
+              <rect x="310" y="72" width="80" height="36" fill="#BFE2F5" stroke="#020835" stroke-width="2.5"/>
+              <text x="350" y="95" font-family="Roboto Mono, monospace" font-size="18" font-weight="700" fill="#020835" text-anchor="middle">|</text>
+              <text x="248" y="82" font-family="Roboto Mono, monospace" font-size="11" fill="#3B4467">stdout</text>
+              <text x="404" y="82" font-family="Roboto Mono, monospace" font-size="11" fill="#3B4467">stdin</text>
+
+              <defs>
+                <marker id="a5" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+                  <path d="M0 0 L10 5 L0 10 z" fill="#020835"/>
+                </marker>
+              </defs>
+              <text x="350" y="155" font-family="Inter, sans-serif" font-size="12.5" fill="#3B4467" text-anchor="middle">данные идут напрямую, промежуточный файл не создаётся</text>
+              <text x="350" y="176" font-family="Roboto Mono, monospace" font-size="13" font-weight="700" fill="#020835" text-anchor="middle">ls -l /etc | less</text>
+            </svg>
+          </div>
+          <figcaption>Вертикальная черта соединяет вывод первой команды со входом второй</figcaption>
+        </figure>
+        <p>Задача из трёх шагов сворачивается в одну строку. И конвейер не ограничен двумя командами — их можно выстраивать в цепочку любой длины, где каждая следующая обрабатывает результат предыдущей.</p>
+        <figure class="tty">
+          <div class="tty__bar"><div class="tty__dots"><i></i><i></i><i></i></div><span class="tty__title">конвейер · <em>цепочка из трёх команд</em></span></div>
+<pre><span class="pr">user<i>@</i>ubuntuserver<i>:</i><b>~</b><i>$</i></span> <span class="cmd">cat</span> <span class="pth">/etc/passwd</span> <span class="op">|</span> <span class="cmd">grep</span> <span class="pth">"/bin/bash"</span> <span class="op">|</span> <span class="cmd">less</span>
+<span class="out">root:x:0:0:root:/root:/bin/bash
+user:x:1000:1000:User,,,:/home/user:/bin/bash</span></pre>
+        </figure>
+        <p>Читается слева направо: прочитать файл → отобрать из прочитанного строки со словом <code>/bin/bash</code> → отдать отобранное в постраничный просмотр.</p>
+
+        <div class="try">
+          <div class="try__head"><b>⌨️ Попробуйте на своей системе</b><span>задание 3</span></div>
+          <div class="try__body">
+            <p>Сначала сделайте всё «длинным» способом, через промежуточный файл, — потом тем же результатом через конвейер. Разница почувствуется сразу.</p>
+            <ol>
+              <li>Перенаправьте вывод <code class="b">ls -l /etc</code> в файл <code>tmp.txt</code>, просмотрите его через <code>less</code> и удалите файл.</li>
+              <li>Получите то же самое одной командой: <code class="b">ls -l /etc | less</code>.</li>
+              <li>Сохраните информацию о файлах в каталоге <code>/bin</code> в файл <code>binary.txt</code>.</li>
+              <li>Найдите все файлы с расширением <code>.so</code> в каталоге <code>/usr/lib</code> и просмотрите результат постранично.</li>
+              <li>Объедините файлы <code>/var/log/syslog</code> и <code>/var/log/dmesg</code> и просмотрите результат.</li>
+              <li>Объедините те же два файла, найдите строки, содержащие слово <code>kernel</code>, и просмотрите результат.</li>
+            </ol>
+            <p class="warn"><b>Если файлов нет.</b> В Ubuntu 24.04 системный журнал может вестись через <code>journalctl</code>, а <code>/var/log/syslog</code> отсутствовать. Тогда возьмите любые два существующих файла из <code>/var/log</code> — посмотрите список командой <code>ls /var/log</code>.</p>
+            <details>
+              <summary>Подсказка к пунктам 4 и 6</summary>
+              <p>Пункт 4: <code>find /usr/lib -name "*.so" | less</code>. Пункт 6: <code>cat /var/log/syslog /var/log/dmesg | grep kernel | less</code> — три команды в одной цепочке.</p>
+            </details>
+          </div>
+        </div>
+
+        <h2 id="s7"><span class="sec">§7</span>Игнорирование ошибок: /dev/null</h2>
+        <p>Поиск командой <code>find</code> по всей системе гарантированно наткнётся на каталоги, куда обычному пользователю доступ закрыт, и завалит экран сообщениями <code>Permission denied</code>. Полезный результат при этом теряется среди ошибок.</p>
+        <p>Ошибки идут потоком <code>stderr</code>, а значит, их можно перенаправить отдельно от полезного вывода. Осталось найти место, куда их отправить. В Linux для этого предусмотрен специальный файл <code>/dev/null</code> — он принимает в себя любую информацию и ничего с ней не делает. Что представляют собой такие файлы и какие они бывают, разберём позже.</p>
+        <figure class="tty">
+          <div class="tty__bar"><div class="tty__dots"><i></i><i></i><i></i></div><span class="tty__title">2&gt; /dev/null · <em>ошибки в никуда</em></span></div>
+<pre><span class="pr">user<i>@</i>ubuntuserver<i>:</i><b>~</b><i>$</i></span> <span class="cmd">find</span> <span class="pth">/</span> <span class="arg">-name</span> <span class="pth">"libc*"</span>
+<span class="err">find: '/root': Permission denied
+find: '/var/lib/private': Permission denied</span>
+<span class="out">/usr/lib/x86_64-linux-gnu/libc.so.6</span>
+<span class="err">find: '/proc/tty/driver': Permission denied</span>
+
+<span class="pr">user<i>@</i>ubuntuserver<i>:</i><b>~</b><i>$</i></span> <span class="cmd">find</span> <span class="pth">/</span> <span class="arg">-name</span> <span class="pth">"libc*"</span> <span class="op">2&gt;</span> <span class="pth">/dev/null</span>
+<span class="out">/usr/lib/x86_64-linux-gnu/libc.so.6</span></pre>
+        </figure>
+        <p>Здесь наглядно видно то, о чём говорилось в §1: обычный вывод и ошибки — действительно разные потоки. Стоило увести второй в <code>/dev/null</code>, как на экране остался только результат.</p>
+
+        <div class="try">
+          <div class="try__head"><b>⌨️ Попробуйте на своей системе</b><span>задание 4</span></div>
+          <div class="try__body">
+            <ol>
+              <li>Выполните <code class="b">find / -name "libc*"</code> и оцените, сколько ошибок доступа появилось.</li>
+              <li>Повторите с подавлением ошибок: <code class="b">find / -name "libc*" 2&gt; /dev/null</code>.</li>
+              <li>Сделайте наоборот — уберите с экрана полезный вывод, оставив только ошибки: <code class="b">find / -name "libc*" &gt; /dev/null</code>.</li>
+              <li>Соедините подавление ошибок с конвейером: <code class="b">find / -name "libc*" 2&gt; /dev/null | less</code>.</li>
+            </ol>
+            <details>
+              <summary>Почему в пункте 3 ошибки остались на экране</summary>
+              <p>Оператор <code>&gt;</code> без номера означает поток 1, то есть <code>stdout</code>. В <code>/dev/null</code> ушёл только полезный вывод, а <code>stderr</code> (поток 2) остался привязан к терминалу. Это лучшая иллюстрация того, что потоки независимы.</p>
+            </details>
+          </div>
+        </div>
+
+        <div class="try try--hard">
+          <div class="try__head"><b>🔥 Усложнённая задача</b><span>итоговая</span></div>
+          <div class="try__body">
+            <p>Соберите одной строкой команду, которая: ищет по всему каталогу <code>/usr</code> файлы с расширением <code>.so</code>, не показывает ошибок доступа, оставляет только те строки, где встречается <code>libc</code>, и записывает результат в файл <code>~/report.txt</code>. После выполнения проверьте количество найденных строк, не открывая файл целиком.</p>
+          </div>
+        </div>
+
+        <h2 id="s8"><span class="sec">§8</span>Частые ошибки</h2>
+        <div class="table-scroll errors-table">
+          <table>
+            <thead><tr><th>Что написано</th><th>Что произойдёт</th><th>Как правильно</th></tr></thead>
+            <tbody>
+              <tr><td><code>echo "текст" &gt; f.txt</code> дважды</td><td>Первая строка потеряна: файл перезаписан</td><td><code>&gt;&gt;</code> для дозаписи в конец</td></tr>
+              <tr><td><code>ls -l /etc &gt; less</code></td><td>Создался файл с именем <code>less</code></td><td><code>ls -l /etc | less</code> — конвейер, а не перенаправление</td></tr>
+              <tr><td><code>cat f.txt &gt; f.txt</code></td><td>Файл обнуляется: оболочка очищает его до запуска <code>cat</code></td><td>Писать результат в другой файл</td></tr>
+              <tr><td><code>find / -name "*.so" | grep libc</code></td><td>Ошибки доступа лезут на экран мимо <code>grep</code></td><td>Добавить <code>2&gt; /dev/null</code>: ошибки идут другим потоком</td></tr>
+              <tr><td><code>2&gt;&amp;1 &gt; log.txt</code></td><td>Ошибки остаются на экране</td><td><code>&gt; log.txt 2&gt;&amp;1</code> — порядок операторов важен</td></tr>
+              <tr><td><code>grep root | /etc/passwd</code></td><td>Ошибка: справа от <code>|</code> должна стоять команда</td><td><code>cat /etc/passwd | grep root</code></td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <h2 id="s9"><span class="sec">§9</span>Проверьте себя</h2>
+        <details>
+          <summary>Чем <code>&gt;</code> отличается от <code>&gt;&gt;</code>?</summary>
+          <p><code>&gt;</code> перезаписывает файл целиком: прежнее содержимое стирается. <code>&gt;&gt;</code> дописывает вывод в конец, сохраняя то, что было. В обоих случаях несуществующий файл создаётся.</p>
+        </details>
+        <details>
+          <summary>Почему <code>find / -name "*.txt" 2&gt; /dev/null</code> убирает ошибки, а <code>&gt; /dev/null</code> — нет?</summary>
+          <p>Потому что сообщения об ошибках идут потоком <code>stderr</code> с номером 2, а <code>&gt;</code> без номера перенаправляет поток 1, <code>stdout</code>. Чтобы убрать ошибки, номер нужно указать явно: <code>2&gt;</code>.</p>
+        </details>
+        <details>
+          <summary>Чем конвейер лучше промежуточного файла?</summary>
+          <p>Данные передаются напрямую от процесса к процессу, не попадая на диск: не создаётся мусорный файл, не нужно его потом удалять, работает быстрее. Кроме того, вторая команда начинает обрабатывать данные, не дожидаясь, пока первая закончит.</p>
+        </details>
+        <details>
+          <summary>Что делает команда <code>ls /etc | grep conf | less</code>?</summary>
+          <p>Выводит список файлов каталога <code>/etc</code>, отбирает из этого списка только строки со словом <code>conf</code> и показывает результат постранично. Каждая следующая команда получает на вход результат предыдущей.</p>
+        </details>
+        <details>
+          <summary>Как одной командой записать в файл и вывод, и ошибки?</summary>
+          <p><code>команда &gt; log.txt 2&gt;&amp;1</code>: сначала <code>stdout</code> направляется в файл, затем <code>stderr</code> — туда же, куда сейчас указывает <code>stdout</code>. Порядок обязателен: в обратной записи ошибки останутся на экране.</p>
+        </details>
+
+        <h2 id="s10"><span class="sec">§10</span>Шпаргалка</h2>
+        <div class="cheat">
+          <div>
+            <b>Три потока</b>
+            <code>0 stdin   1 stdout   2 stderr</code>
+          </div>
+          <div>
+            <b>Вывод в файл</b>
+            <code>ls -l /etc &gt; etc.txt</code>
+            <code>uname -a &gt;&gt; etc.txt</code>
+          </div>
+          <div>
+            <b>Ввод из файла</b>
+            <code>grep root &lt; /etc/passwd</code>
+          </div>
+          <div>
+            <b>Ошибки отдельно</b>
+            <code>find / -name "a*" 2&gt; err.txt</code>
+            <code>… &gt; all.txt 2&gt;&amp;1</code>
+          </div>
+          <div>
+            <b>В никуда</b>
+            <code>… 2&gt; /dev/null</code>
+          </div>
+          <div>
+            <b>Конвейер</b>
+            <code>ls -l /etc | less</code>
+            <code>cat f | grep x | less</code>
+          </div>
+        </div>
+
+        <h3>Итог главы</h3>
+        <p>Каждому процессу система выдаёт три потока: ввод <code>stdin</code> (0), вывод <code>stdout</code> (1) и ошибки <code>stderr</code> (2). Оператор <code>&gt;</code> направляет вывод в файл с перезаписью, <code>&gt;&gt;</code> — с дозаписью в конец, <code>&lt;</code> подаёт файл на вход, а <code>2&gt;</code> отделяет ошибки от полезного результата — например, отправляя их в <code>/dev/null</code>. Вертикальная черта соединяет команды в конвейер, передавая вывод одной прямо на вход другой без промежуточных файлов. На этом принципе — маленькие утилиты, соединённые в цепочки, — построена вся работа в командной строке.</p>
+
+        <h3>Мы дошли до сюда</h3>
+        <p>Пока что хватит. Команд действительно много, и вряд ли всё уляжется с первого раза — это нормально. Возвращайтесь к шпаргалкам в конце глав и, главное, набирайте команды руками: в терминале запоминается только то, что вы выполнили сами.</p>
+
+        <div class="pager"><a href="../05-fayly-i-katalogi/index.html">← 2.5 Файлы и каталоги</a><a href="../../index.html">К содержанию практикума</a></div>
+
+        <div class="colophon">
+          <span>Глава 2.6 · Потоки и конвейер · Практикум по Linux</span>
+          <span class="author-line">Автор: Макаров Максим Николаевич</span>
+        </div>
+      </main>
+    </div>
+  </div>
+</body>
+</html>

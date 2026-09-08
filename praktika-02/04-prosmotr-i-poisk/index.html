@@ -1,0 +1,478 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#F2F1E9">
+  <title>2.4 Просмотр и поиск информации · Практикум по Linux</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Literata:ital,opsz,wght@0,7..72,600;0,7..72,700;1,7..72,400&family=Pixelify+Sans:wght@500;600;700&family=Roboto+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../../styles.css">
+</head>
+<body>
+  <div class="book">
+    <div class="book__body">
+      <div class="spine"><span>Практика №2 · Bash: основные команды</span></div>
+
+      <main class="leaf">
+        <div class="running">
+          <p class="eyebrow"><a href="../../index.html" style="text-decoration:none;color:inherit">Практикум по Linux</a> · практика №2 · bash</p>
+          <p class="running__folio">Глава 2.4</p>
+        </div>
+
+        <header class="chapter-head">
+          <span class="chapter-num">2.4</span>
+          <h1>Просмотр<br>и поиск информации</h1>
+          <p class="lead">Перемещаться по системе научились — теперь научимся смотреть, что в ней лежит. Четыре команды: <code>ls</code> покажет содержимое каталога, <code>cat</code> и <code>less</code> прочитают файл, <code>grep</code> найдёт строку внутри файла, а <code>find</code> — сам файл в дереве каталогов.</p>
+          <blockquote class="quote"><p>«Половина работы в терминале — это посмотреть, что там уже есть.»</p></blockquote>
+        </header>
+
+        <dl class="passport">
+          <div><dt>Категория</dt><dd>Файловая система</dd></div>
+          <div><dt>Уровень</dt><dd>Начальный · средний</dd></div>
+          <div><dt>Связанные темы</dt><dd>Пути, аргументы, права доступа</dd></div>
+          <div><dt>Зачем это знать</dt><dd>Находить файлы и читать их содержимое, не открывая редактор</dd></div>
+        </dl>
+
+        <nav class="contents">
+          <b>В этой главе</b>
+          <ol>
+            <li><a href="#s1">Содержимое каталога: ls</a></li>
+            <li><a href="#s2">Как читать строку ls -l</a></li>
+            <li><a href="#s3">Чтение файлов: cat</a></li>
+            <li><a href="#s4">Большие файлы: less</a></li>
+            <li><a href="#s5">Поиск в файле: grep</a></li>
+            <li><a href="#s6">Поиск файла: find</a></li>
+            <li><a href="#s7">Подстановочный шаблон *</a></li>
+            <li><a href="#s8">Частые ошибки</a></li>
+            <li><a href="#s9">Проверьте себя</a></li>
+            <li><a href="#s10">Шпаргалка</a></li>
+          </ol>
+        </nav>
+
+        <h2 id="s1"><span class="sec">§1</span>Содержимое каталога: ls</h2>
+        <div class="cmdcard">
+          <div class="cmdcard__head"><b>ls</b><span>list · список файлов</span></div>
+          <div class="cmdcard__body">
+            <div class="cmdcard__syn">ls [аргументы]… [каталог/файл]…</div>
+            <p style="margin-top:12px">Без аргументов выводит содержимое текущего каталога. Можно указать один каталог или сразу несколько путей.</p>
+            <dl>
+              <dt>-a</dt><dd>вывести все файлы, включая скрытые</dd>
+              <dt>-A</dt><dd>все файлы, кроме <code>.</code> и <code>..</code></dd>
+              <dt>-l</dt><dd>подробный вертикальный список</dd>
+              <dt>-h</dt><dd>размеры в «человеческом» виде: <code>4,0K</code> вместо <code>4096</code></dd>
+              <dt>-d</dt><dd>сам каталог, а не его содержимое</dd>
+            </dl>
+          </div>
+        </div>
+        <p>Скрытыми в Linux считаются файлы, имя которых начинается с точки. Никакого специального признака «скрытый» у них нет — это просто соглашение, которого придерживается <code>ls</code>. Именно поэтому в домашнем каталоге по умолчанию почти пусто, а с ключом <code>-a</code> обнаруживается десяток файлов настроек.</p>
+        <figure class="tty">
+          <div class="tty__bar"><div class="tty__dots"><i></i><i></i><i></i></div><span class="tty__title">ls · <em>обычный вывод и полный</em></span></div>
+<pre><span class="pr">user<i>@</i>ubuntuserver<i>:</i><b>~</b><i>$</i></span> <span class="cmd">ls</span>
+<span class="out">Documents  notes.txt</span>
+<span class="pr">user<i>@</i>ubuntuserver<i>:</i><b>~</b><i>$</i></span> <span class="cmd">ls</span> <span class="arg">-a</span>
+<span class="out">.   .bash_history  .bashrc   Documents
+..  .bash_logout   .profile  notes.txt</span></pre>
+        </figure>
+        <p>Ключи, как мы помним из главы 2.2, склеиваются: <code>ls -l -a -h</code> обычно пишут как <code>ls -lah</code>.</p>
+
+        <div class="try">
+          <div class="try__head"><b>⌨️ Попробуйте на своей системе</b><span>задание 1</span></div>
+          <div class="try__body">
+            <ol>
+              <li>Находясь в домашнем каталоге, выполните <code class="b">ls</code>. Сколько файлов видно?</li>
+              <li>Выполните <code class="b">ls -a</code>. Насколько список стал длиннее и почему?</li>
+              <li>Сравните <code class="b">ls -a</code> и <code class="b">ls -A</code>: чем отличается вывод?</li>
+              <li>Выполните <code class="b">ls -lah</code> — выведите всю информацию о домашней папке. Какие файлы там есть?</li>
+              <li>Посмотрите содержимое чужого каталога, не заходя в него: <code class="b">ls /etc</code>.</li>
+              <li>Передайте команде сразу два пути: <code class="b">ls /etc /var</code>. Как оформлен вывод?</li>
+            </ol>
+          </div>
+        </div>
+
+        <h2 id="s2"><span class="sec">§2</span>Как читать строку ls -l</h2>
+        <p>С ключом <code>-l</code> каждая строка вывода описывает один файл по жёсткому формату.</p>
+        <figure class="code">
+          <figcaption><span>Формат строки</span><span>ls -l</span></figcaption>
+<pre>{тип}{права} {ссылки} {владелец} {группа} {размер} {дата} {путь}</pre>
+        </figure>
+        <figure class="scheme">
+          <div class="scheme__canvas">
+            <svg viewBox="0 0 700 260" width="700" role="img" aria-label="Разбор строки вывода ls -l по полям">
+              <text x="30" y="52" font-family="Roboto Mono, monospace" font-size="16" font-weight="700" fill="#020835" xml:space="preserve">-rwxr-xr-- 2 test user 24368 сен 1 2025 dz</text>
+              <g fill="#2D7FC1">
+                <rect x="30" y="62" width="9.6" height="4"/>
+                <rect x="39.6" y="62" width="86.4" height="4"/>
+                <rect x="135.6" y="62" width="9.6" height="4"/>
+                <rect x="154.8" y="62" width="38.4" height="4"/>
+                <rect x="202.8" y="62" width="38.4" height="4"/>
+                <rect x="250.8" y="62" width="48" height="4"/>
+                <rect x="308.4" y="62" width="96" height="4"/>
+                <rect x="414" y="62" width="19.2" height="4"/>
+              </g>
+              <g stroke="#8A93B2" stroke-width="1.5">
+                <line x1="34.8" y1="66" x2="34.8" y2="82"/>
+                <line x1="82.8" y1="66" x2="82.8" y2="82"/>
+                <line x1="140.4" y1="66" x2="140.4" y2="82"/>
+                <line x1="174" y1="66" x2="174" y2="82"/>
+                <line x1="222" y1="66" x2="222" y2="82"/>
+                <line x1="274.8" y1="66" x2="274.8" y2="82"/>
+                <line x1="356.4" y1="66" x2="356.4" y2="82"/>
+                <line x1="423.6" y1="66" x2="423.6" y2="82"/>
+              </g>
+              <g font-family="Roboto Mono, monospace" font-size="12" font-weight="700" text-anchor="middle">
+                <circle cx="34.8" cy="94" r="11" fill="#020835"/><text x="34.8" y="98" fill="#6FB8E3">1</text>
+                <circle cx="82.8" cy="94" r="11" fill="#020835"/><text x="82.8" y="98" fill="#6FB8E3">2</text>
+                <circle cx="140.4" cy="94" r="11" fill="#020835"/><text x="140.4" y="98" fill="#6FB8E3">3</text>
+                <circle cx="174" cy="94" r="11" fill="#020835"/><text x="174" y="98" fill="#6FB8E3">4</text>
+                <circle cx="222" cy="94" r="11" fill="#020835"/><text x="222" y="98" fill="#6FB8E3">5</text>
+                <circle cx="274.8" cy="94" r="11" fill="#020835"/><text x="274.8" y="98" fill="#6FB8E3">6</text>
+                <circle cx="356.4" cy="94" r="11" fill="#020835"/><text x="356.4" y="98" fill="#6FB8E3">7</text>
+                <circle cx="423.6" cy="94" r="11" fill="#020835"/><text x="423.6" y="98" fill="#6FB8E3">8</text>
+              </g>
+              <g font-family="Inter, sans-serif" font-size="13" fill="#020835">
+                <text x="30" y="148"><tspan font-weight="700">1 — тип.</tspan> <tspan fill="#3B4467">«-» файл, «d» каталог, «l» ссылка</tspan></text>
+                <text x="30" y="174"><tspan font-weight="700">2 — права</tspan> <tspan fill="#3B4467">доступа тремя группами</tspan></text>
+                <text x="30" y="200"><tspan font-weight="700">3 — число</tspan> <tspan fill="#3B4467">жёстких ссылок на файл</tspan></text>
+                <text x="30" y="226"><tspan font-weight="700">4 — владелец</tspan> <tspan fill="#3B4467">файла</tspan></text>
+                <text x="380" y="148"><tspan font-weight="700">5 — группа</tspan> <tspan fill="#3B4467">владельца</tspan></text>
+                <text x="380" y="174"><tspan font-weight="700">6 — размер</tspan> <tspan fill="#3B4467">в байтах</tspan></text>
+                <text x="380" y="200"><tspan font-weight="700">7 — дата</tspan> <tspan fill="#3B4467">последнего изменения</tspan></text>
+                <text x="380" y="226"><tspan font-weight="700">8 — имя</tspan> <tspan fill="#3B4467">файла или путь к нему</tspan></text>
+              </g>
+            </svg>
+          </div>
+          <figcaption>Восемь полей одной строки ls -l</figcaption>
+        </figure>
+        <p>Права доступа подробно разбираются в следующих практиках и на лекциях. Пока достаточно знать, как устроены эти девять символов: они делятся на три группы по три — права владельца, права группы и права всех остальных, где <code>r</code> — чтение, <code>w</code> — запись, <code>x</code> — выполнение, а прочерк означает отсутствие права.</p>
+
+        <div class="try try--hard">
+          <div class="try__head"><b>🔥 Усложнённая задача</b><span>прочитать строку</span></div>
+          <div class="try__body">
+            <p>Что можно сказать об этом файле? Назовите как можно больше фактов.</p>
+            <figure class="code">
+              <figcaption><span>Строка вывода</span><span>ls -l</span></figcaption>
+<pre>-rwxr-xr-- 2 test user 24368 сен 1  2025 /home/test/dz</pre>
+            </figure>
+            <details>
+              <summary>Что здесь видно</summary>
+              <ul>
+                <li>Это обычный файл, а не каталог — первый символ <code>-</code>.</li>
+                <li>Владелец <code>test</code> может читать, изменять и выполнять его: <code>rwx</code>.</li>
+                <li>Члены группы <code>user</code> могут читать и выполнять, но не изменять: <code>r-x</code>.</li>
+                <li>Все остальные могут только читать: <code>r--</code>.</li>
+                <li>На файл ведут две жёсткие ссылки — под другим именем он существует ещё в одном месте.</li>
+                <li>Размер 24 368 байт, примерно 24 КБ.</li>
+                <li>Последнее изменение — 1 сентября 2025 года.</li>
+                <li>Лежит в домашнем каталоге пользователя <code>test</code> и, судя по праву <code>x</code>, является программой или скриптом.</li>
+              </ul>
+            </details>
+          </div>
+        </div>
+
+        <h2 id="s3"><span class="sec">§3</span>Чтение файлов: cat</h2>
+        <div class="cmdcard">
+          <div class="cmdcard__head"><b>cat</b><span>concatenate · вывести содержимое</span></div>
+          <div class="cmdcard__body">
+            <div class="cmdcard__syn">cat [путь]…</div>
+            <p style="margin-top:12px">Выводит содержимое файлов в терминал. Если путей несколько, файлы выводятся подряд, один за другим, — отсюда и название: команда умеет <i>объединять</i> файлы.</p>
+          </div>
+        </div>
+        <figure class="tty">
+          <div class="tty__bar"><div class="tty__dots"><i></i><i></i><i></i></div><span class="tty__title">cat · <em>два файла подряд</em></span></div>
+<pre><span class="pr">user<i>@</i>ubuntuserver<i>:</i><b>~</b><i>$</i></span> <span class="cmd">cat</span> <span class="pth">/etc/hostname</span>
+<span class="out">ubuntuserver</span>
+<span class="pr">user<i>@</i>ubuntuserver<i>:</i><b>~</b><i>$</i></span> <span class="cmd">cat</span> <span class="pth">/etc/hostname /etc/hosts</span>
+<span class="out">ubuntuserver
+127.0.0.1 localhost
+127.0.1.1 ubuntuserver</span></pre>
+        </figure>
+
+        <div class="try">
+          <div class="try__head"><b>⌨️ Попробуйте на своей системе</b><span>задание 2</span></div>
+          <div class="try__body">
+            <ol>
+              <li>Выведите на экран содержимое файла <code class="b">/etc/hostname</code>. Совпадает ли оно с именем машины в приглашении?</li>
+              <li>Выведите информацию из файла <code class="b">/usr/include/errno.h</code>. Успели прочитать начало?</li>
+              <li>Объедините информацию из файлов <code class="b">/etc/fstab</code> и <code class="b">/etc/passwd</code> одной командой.</li>
+              <li>Попробуйте вывести каталог: <code class="b">cat /etc</code>. Что скажет система?</li>
+            </ol>
+            <details>
+              <summary>Почему начало файла errno.h не видно</summary>
+              <p><code>cat</code> выводит файл целиком и мгновенно. Терминал показывает только последний экран текста — начало «уехало» вверх. Пролистать его можно через <kbd>Shift</kbd>+<kbd>PageUp</kbd>, но правильное решение — команда <code>less</code> из следующего параграфа.</p>
+            </details>
+          </div>
+        </div>
+
+        <h2 id="s4"><span class="sec">§4</span>Большие файлы: less</h2>
+        <p>Терминал ограничен размером экрана. Когда файл длиннее, <code>cat</code> становится бесполезен: всё, кроме последних строк, пролетает мимо. Для таких случаев есть <span class="term">постраничный просмотрщик</span> <code>less</code>.</p>
+        <div class="cmdcard">
+          <div class="cmdcard__head"><b>less</b><span>постраничный просмотр</span></div>
+          <div class="cmdcard__body">
+            <div class="cmdcard__syn">less {путь}</div>
+            <p style="margin-top:12px">Открывает файл в отдельном режиме просмотра: содержимое можно листать, искать по нему и выйти, не изменив ни байта.</p>
+            <dl>
+              <dt>↑ ↓</dt><dd>построчно вверх и вниз</dd>
+              <dt>PgUp PgDn</dt><dd>на экран вверх и вниз</dd>
+              <dt>Home End</dt><dd>в начало и в конец файла</dd>
+              <dt>/текст</dt><dd>поиск вперёд, <code>n</code> — следующее совпадение</dd>
+              <dt>q</dt><dd>выйти</dd>
+            </dl>
+          </div>
+        </div>
+        <div class="margin-note margin-note--warn">
+          <b>Важно: выход — клавиша q</b>
+          <p>Самая частая заминка новичка: <code>less</code> открылся, а как выйти — непонятно. <kbd>Ctrl</kbd>+<kbd>C</kbd> здесь не сработает, потому что программа не «зависла», она ждёт команд. Нажмите <kbd>q</kbd> — и вернётесь к приглашению.</p>
+        </div>
+
+        <div class="try">
+          <div class="try__head"><b>⌨️ Попробуйте на своей системе</b><span>задание 3</span></div>
+          <div class="try__body">
+            <ol>
+              <li>Откройте файл <code class="b">less /usr/include/stdint.h</code>.</li>
+              <li>Полистайте его стрелками, затем клавишами <kbd>PageUp</kbd> и <kbd>PageDown</kbd>.</li>
+              <li>Нажмите <kbd>End</kbd> — вы окажетесь в конце файла, затем <kbd>Home</kbd> — в начале.</li>
+              <li>Наберите <code>/uint64</code> и нажмите <kbd>Enter</kbd>: найдётся первое вхождение. Нажмите <kbd>n</kbd> — перейдёте к следующему.</li>
+              <li>Выйдите клавишей <kbd>q</kbd>.</li>
+            </ol>
+          </div>
+        </div>
+
+        <h2 id="s5"><span class="sec">§5</span>Поиск в файле: grep</h2>
+        <div class="cmdcard">
+          <div class="cmdcard__head"><b>grep</b><span>global regular expression print</span></div>
+          <div class="cmdcard__body">
+            <div class="cmdcard__syn">grep {строка} {путь}…</div>
+            <p style="margin-top:12px">Выводит те строки файла, в которых встретился заданный фрагмент. Название расшифровывается как «глобальный поиск по регулярному выражению и вывод»: искать можно не только обычный текст, но и шаблон.</p>
+            <dl>
+              <dt>-i</dt><dd>искать без учёта регистра</dd>
+              <dt>-n</dt><dd>показывать номера строк</dd>
+              <dt>-r</dt><dd>рекурсивно по всем файлам каталога</dd>
+              <dt>-c</dt><dd>только количество совпадений</dd>
+            </dl>
+          </div>
+        </div>
+        <figure class="tty">
+          <div class="tty__bar"><div class="tty__dots"><i></i><i></i><i></i></div><span class="tty__title">grep · <em>поиск строки в файле</em></span></div>
+<pre><span class="pr">user<i>@</i>ubuntuserver<i>:</i><b>~</b><i>$</i></span> <span class="cmd">grep</span> <span class="arg">-n</span> <span class="pth">root /etc/passwd</span>
+<span class="out">1:root:x:0:0:root:/root:/bin/bash</span></pre>
+        </figure>
+        <p>В качестве образца может выступать любое <span class="term">регулярное выражение</span> — язык описания шаблонов текста. Обычная строка тоже является регулярным выражением, самым простым. Несколько символов, которые пригодятся уже сейчас:</p>
+        <div class="table-scroll">
+          <table>
+            <thead><tr><th>Шаблон</th><th>Что означает</th><th>Пример</th></tr></thead>
+            <tbody>
+              <tr><td><code>.</code></td><td>любой одиночный символ</td><td><code>k.rnel</code> найдёт <code>kernel</code></td></tr>
+              <tr><td><code>^</code></td><td>начало строки</td><td><code>^root</code> — строки, начинающиеся с <code>root</code></td></tr>
+              <tr><td><code>$</code></td><td>конец строки</td><td><code>bash$</code> — строки, оканчивающиеся на <code>bash</code></td></tr>
+              <tr><td><code>[0-9]</code></td><td>любая цифра</td><td><code>[0-9][0-9]:</code> — две цифры и двоеточие</td></tr>
+              <tr><td><code>*</code></td><td>повтор предыдущего символа</td><td><code>ro*t</code> найдёт <code>rt</code>, <code>rot</code>, <code>root</code></td></tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="margin-note">
+          <b>На полях: кавычки вокруг шаблона</b>
+          <p>Шаблон лучше всегда брать в кавычки: <code>grep "^root" /etc/passwd</code>. Иначе некоторые символы — прежде всего <code>*</code> и <code>$</code> — оболочка попытается истолковать по-своему ещё до того, как команда их увидит. Подробнее об этом в §7.</p>
+        </div>
+
+        <div class="try">
+          <div class="try__head"><b>⌨️ Попробуйте на своей системе</b><span>задание 4</span></div>
+          <div class="try__body">
+            <p class="warn"><b>Если файла нет.</b> В Ubuntu 24.04 может отсутствовать <code>/etc/netconfig</code>, а системный журнал вместо <code>/var/log/syslog</code> вести через <code>journalctl</code>. Проверьте наличие файла командой <code>ls</code> и при необходимости возьмите <code>/etc/services</code> и <code>/var/log/auth.log</code>.</p>
+            <ol>
+              <li>Найдите вхождения подстроки <code>inet</code> в файле <code class="b">/etc/netconfig</code>.</li>
+              <li>Повторите поиск с ключом <code>-n</code>, чтобы увидеть номера строк.</li>
+              <li>Посчитайте количество строк со словом <code>root</code> в <code class="b">/etc/passwd</code> с помощью ключа <code>-c</code>.</li>
+              <li>Найдите строки, которые <i>начинаются</i> со слова <code>root</code>: <code class="b">grep "^root" /etc/passwd</code>. Сравните с поиском без <code>^</code>.</li>
+            </ol>
+          </div>
+        </div>
+
+        <div class="try try--hard">
+          <div class="try__head"><b>🔥 Усложнённая задача</b><span>регулярное выражение</span></div>
+          <div class="try__body">
+            <p>Используя регулярное выражение, отобразите все события из системного журнала, произошедшие за последний час. Подумайте, как выглядит отметка времени в начале строки лога и какой шаблон опишет нужный час.</p>
+          </div>
+        </div>
+
+        <h2 id="s6"><span class="sec">§6</span>Поиск файла: find</h2>
+        <p><code>grep</code> ищет строку внутри файла. Когда же нужно найти сам файл где-то в дереве каталогов, работает <code>find</code>.</p>
+        <div class="cmdcard">
+          <div class="cmdcard__head"><b>find</b><span>найти файл или каталог</span></div>
+          <div class="cmdcard__body">
+            <div class="cmdcard__syn">find {путь} {фильтр}…</div>
+            <p style="margin-top:12px">Обходит указанный каталог и все вложенные в него, отбирая то, что подходит под фильтры. Фильтров можно указать сколько угодно — они действуют одновременно.</p>
+            <dl>
+              <dt>-name</dt><dd>имя файла, строка (можно с шаблоном)</dd>
+              <dt>-user</dt><dd>владелец, строка</dd>
+              <dt>-maxdepth</dt><dd>максимальная глубина поиска, число</dd>
+              <dt>-type</dt><dd>тип: <code>f</code> — файл, <code>d</code> — каталог</dd>
+              <dt>-not</dt><dd>отрицание следующего фильтра</dd>
+            </dl>
+          </div>
+        </div>
+        <p>Пример: нужно отыскать все файлы, <b>не</b> заканчивающиеся на <code>.h</code>, в каталоге <code>/usr/include</code>, углубляясь не более чем на два уровня.</p>
+        <figure class="tty">
+          <div class="tty__bar"><div class="tty__dots"><i></i><i></i><i></i></div><span class="tty__title">find · <em>четыре фильтра сразу</em></span></div>
+<pre><span class="pr">user<i>@</i>ubuntuserver<i>:</i><b>~</b><i>$</i></span> <span class="cmd">find</span> <span class="pth">/usr/include</span> <span class="arg">-maxdepth</span> 2 <span class="arg">-not</span> <span class="arg">-name</span> <span class="pth">"*.h"</span> <span class="arg">-type</span> f
+<span class="out">/usr/include/stdc-predef.h.gch
+/usr/include/x86_64-linux-gnu/asm/unistd_32.hpp</span></pre>
+        </figure>
+        <div class="margin-note margin-note--warn">
+          <b>Важно: кавычки вокруг шаблона обязательны</b>
+          <p>В <code>-name "*.h"</code> кавычки формально можно опустить, но делать этого не стоит. Без них символ <code>*</code> раскроет сама оболочка — ещё до запуска <code>find</code>, — и команда получит вместо шаблона список имён файлов из текущего каталога. Результат будет неверным, а сообщения об ошибке не появится. С кавычками шаблон доходит до <code>find</code> в целости, и раскрывает его уже сама утилита.</p>
+        </div>
+
+        <div class="try">
+          <div class="try__head"><b>⌨️ Попробуйте на своей системе</b><span>задание 5</span></div>
+          <div class="try__body">
+            <ol>
+              <li>Найдите расположение файла с именем <code>libc</code> в каталоге <code>/usr</code>: <code class="b">find /usr -name "libc*"</code>.</li>
+              <li>Ограничьте предыдущий поиск двумя уровнями вложенности и сравните количество результатов.</li>
+              <li>Найдите все каталоги (не файлы!) с именем <code>bin</code> внутри <code>/usr</code>.</li>
+              <li>Отыщите все файлы в каталоге <code>/etc</code>, но <b>не</b> в его подкаталогах, не являющиеся каталогами и не имеющие расширения.</li>
+            </ol>
+            <details>
+              <summary>Подсказка к пункту 4</summary>
+              <p>Три условия складываются в три фильтра: глубина — <code>-maxdepth 1</code>, только файлы — <code>-type f</code>, отсутствие расширения — <code>-not -name "*.*"</code>. Полностью: <code>find /etc -maxdepth 1 -type f -not -name "*.*"</code>.</p>
+            </details>
+          </div>
+        </div>
+
+        <h2 id="s7"><span class="sec">§7</span>Подстановочный шаблон *</h2>
+        <p>Часто одну и ту же операцию нужно применить сразу ко всем файлам определённого вида. Для этого Bash предоставляет <span class="term">подстановочный шаблон</span> — символ <code>*</code>, который заменяет любой набор символов, в том числе пустой.</p>
+        <p>Ключевое здесь — <b>кто</b> его раскрывает. Шаблон разворачивается самой оболочкой ещё до запуска команды: она подставляет вместо него список подходящих имён, и команда получает уже готовые аргументы.</p>
+        <figure class="scheme">
+          <div class="scheme__canvas">
+            <svg viewBox="0 0 700 200" width="700" role="img" aria-label="Как оболочка раскрывает подстановочный шаблон до запуска команды">
+              <rect x="20" y="30" width="200" height="46" fill="#fff" stroke="#020835" stroke-width="2.5"/>
+              <text x="120" y="59" font-family="Roboto Mono, monospace" font-size="14" font-weight="700" fill="#020835" text-anchor="middle">cat *.txt</text>
+              <text x="120" y="94" font-family="Inter, sans-serif" font-size="12" fill="#3B4467" text-anchor="middle">вы набрали</text>
+
+              <rect x="270" y="30" width="150" height="46" fill="#020835"/>
+              <text x="345" y="52" font-family="Inter, sans-serif" font-size="12.5" font-weight="700" fill="#6FB8E3" text-anchor="middle">оболочка Bash</text>
+              <text x="345" y="68" font-family="Inter, sans-serif" font-size="11" fill="#BFE2F5" text-anchor="middle">раскрывает шаблон</text>
+
+              <rect x="470" y="30" width="210" height="46" fill="#BFE2F5" stroke="#020835" stroke-width="2.5"/>
+              <text x="575" y="59" font-family="Roboto Mono, monospace" font-size="13" font-weight="700" fill="#020835" text-anchor="middle">cat a.txt b.txt c.txt</text>
+              <text x="575" y="94" font-family="Inter, sans-serif" font-size="12" fill="#3B4467" text-anchor="middle">команда получила это</text>
+
+              <g stroke="#020835" stroke-width="2.5" fill="none" marker-end="url(#ar2)">
+                <path d="M224 53 H262"/>
+                <path d="M424 53 H462"/>
+              </g>
+              <defs>
+                <marker id="ar2" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+                  <path d="M0 0 L10 5 L0 10 z" fill="#020835"/>
+                </marker>
+              </defs>
+              <rect x="20" y="130" width="660" height="46" fill="#FFF3EF" stroke="#D7541F" stroke-width="2.5"/>
+              <text x="36" y="152" font-family="Inter, sans-serif" font-size="13" font-weight="700" fill="#D7541F">Отсюда следствие:</text>
+              <text x="36" y="169" font-family="Inter, sans-serif" font-size="13" fill="#3B4467">сама команда о существовании шаблона не знает — если нужно передать «*» ей, шаблон берут в кавычки.</text>
+            </svg>
+          </div>
+          <figcaption>Шаблон раскрывается оболочкой до того, как команда запустится</figcaption>
+        </figure>
+        <p>Поэтому <code>cat /home/user/*.txt</code> прочитает все текстовые файлы каталога, а <code>find /etc -name *.conf</code> без кавычек может сработать неверно: оболочка подставит в него имена из текущего каталога. Правило простое: если шаблон описывает файлы <i>здесь и сейчас</i> — пишите без кавычек; если шаблон предназначен команде — берите в кавычки.</p>
+
+        <div class="try">
+          <div class="try__head"><b>⌨️ Попробуйте на своей системе</b><span>задание 6</span></div>
+          <div class="try__body">
+            <ol>
+              <li>Выведите список всех файлов настроек в <code>/etc</code>, оканчивающихся на <code>.conf</code>: <code class="b">ls /etc/*.conf</code>.</li>
+              <li>Выведите информацию обо всех папках, оканчивающихся на <code>.d</code>, из всех каталогов внутри <code>/etc</code>. Ограничьте вывод только самими каталогами, без их содержимого.</li>
+              <li>Сравните <code class="b">echo *</code> и <code class="b">echo "*"</code> в домашнем каталоге. Объясните разницу.</li>
+            </ol>
+            <details>
+              <summary>Подсказка к пункту 2</summary>
+              <p>Два уровня вложенности описываются двумя звёздочками через слэш, а ключ <code>-d</code> заставляет <code>ls</code> показать сами каталоги, а не то, что в них лежит: <code>ls -d /etc/*/*.d</code>.</p>
+            </details>
+          </div>
+        </div>
+
+        <h2 id="s8"><span class="sec">§8</span>Частые ошибки</h2>
+        <div class="table-scroll errors-table">
+          <table>
+            <thead><tr><th>Что написано</th><th>Что произойдёт</th><th>Как правильно</th></tr></thead>
+            <tbody>
+              <tr><td><code>cat /etc</code></td><td><code>Is a directory</code> — каталог не текстовый файл</td><td><code>ls /etc</code> для содержимого каталога</td></tr>
+              <tr><td><code>less</code> открылся, жмёте <kbd>Ctrl</kbd>+<kbd>C</kbd></td><td>Ничего не происходит</td><td>Выход из просмотрщика — клавиша <kbd>q</kbd></td></tr>
+              <tr><td><code>grep root</code> без файла</td><td>Курсор мигает: <code>grep</code> ждёт ввод с клавиатуры</td><td>Указать файл или прервать через <kbd>Ctrl</kbd>+<kbd>C</kbd></td></tr>
+              <tr><td><code>find /usr -name libc</code></td><td>Пусто: точное имя <code>libc</code> в системе встречается редко</td><td><code>find /usr -name "libc*"</code> — искать по шаблону</td></tr>
+              <tr><td><code>find /etc -name *.conf</code></td><td>Шаблон раскроет оболочка, результат неверный</td><td>Взять шаблон в кавычки: <code>-name "*.conf"</code></td></tr>
+              <tr><td><code>find / -name "*.so"</code></td><td>Экран заливает <code>Permission denied</code></td><td>Ошибки убираются перенаправлением — см. главу 2.6</td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <h2 id="s9"><span class="sec">§9</span>Проверьте себя</h2>
+        <details>
+          <summary>Почему <code>ls</code> в домашнем каталоге показывает меньше файлов, чем <code>ls -a</code>?</summary>
+          <p>Файлы, имя которых начинается с точки, считаются скрытыми, и без ключа <code>-a</code> команда их не показывает. В домашнем каталоге это в основном файлы настроек: <code>.bashrc</code>, <code>.profile</code> и подобные.</p>
+        </details>
+        <details>
+          <summary>Что означает первый символ <code>d</code> в строке вывода <code>ls -l</code>?</summary>
+          <p>Что это каталог, а не обычный файл. У обычного файла на этом месте прочерк <code>-</code>, у символьной ссылки — <code>l</code>.</p>
+        </details>
+        <details>
+          <summary>Когда стоит выбрать <code>less</code> вместо <code>cat</code>?</summary>
+          <p>Когда файл длиннее экрана. <code>cat</code> выводит всё разом, и начало уходит за верхнюю границу; <code>less</code> открывает файл в режиме просмотра с прокруткой и поиском. Для коротких файлов в две-три строки удобнее <code>cat</code>.</p>
+        </details>
+        <details>
+          <summary>Чем принципиально отличаются <code>grep</code> и <code>find</code>?</summary>
+          <p><code>grep</code> ищет текст <i>внутри</i> файлов и выводит подходящие строки. <code>find</code> ищет <i>сами</i> файлы и каталоги по имени, типу, владельцу и другим признакам, выводя пути к ним. Первое — «что написано в файле», второе — «где лежит файл».</p>
+        </details>
+        <details>
+          <summary>В чём разница между <code>echo *</code> и <code>echo "*"</code>?</summary>
+          <p>В первом случае оболочка раскроет шаблон и <code>echo</code> получит список всех файлов текущего каталога — их и выведет. Во втором кавычки запрещают раскрытие, и на экран попадёт одна звёздочка. Тот же механизм объясняет, почему в <code>find -name</code> шаблон берут в кавычки.</p>
+        </details>
+
+        <h2 id="s10"><span class="sec">§10</span>Шпаргалка</h2>
+        <div class="cheat">
+          <div>
+            <b>Содержимое каталога</b>
+            <code>ls</code>
+            <code>ls -lah /etc</code>
+          </div>
+          <div>
+            <b>Скрытые файлы</b>
+            <code>ls -a</code>
+            <code># имена начинаются с точки</code>
+          </div>
+          <div>
+            <b>Прочитать файл</b>
+            <code>cat /etc/hostname</code>
+            <code>cat file1 file2</code>
+          </div>
+          <div>
+            <b>Большой файл</b>
+            <code>less /usr/include/stdint.h</code>
+            <code># выход — q</code>
+          </div>
+          <div>
+            <b>Поиск в файле</b>
+            <code>grep -n "root" /etc/passwd</code>
+            <code>grep -i  grep -c</code>
+          </div>
+          <div>
+            <b>Поиск файла</b>
+            <code>find /usr -name "libc*"</code>
+            <code>find /etc -maxdepth 1 -type f</code>
+          </div>
+        </div>
+
+        <h3>Итог главы</h3>
+        <p><code>ls</code> показывает, что лежит в каталоге, а с ключом <code>-l</code> — восемь полей о каждом файле, от типа и прав до даты изменения. Короткие файлы читают через <code>cat</code>, длинные — через <code>less</code>, откуда выходят клавишей <kbd>q</kbd>. Найти строку внутри файла помогает <code>grep</code>, найти сам файл в дереве каталогов — <code>find</code>. И отдельно стоит запомнить механику звёздочки: её раскрывает оболочка до запуска команды, поэтому шаблон, предназначенный команде, берут в кавычки.</p>
+
+        <div class="pager"><a href="../03-peremeshchenie/index.html">← 2.3 Перемещение по каталогам</a><a href="../../index.html">К содержанию практикума</a><a href="../05-fayly-i-katalogi/index.html">2.5 Файлы и каталоги →</a></div>
+
+        <div class="colophon">
+          <span>Глава 2.4 · Просмотр и поиск информации · Практикум по Linux</span>
+          <span class="author-line">Автор: Макаров Максим Николаевич</span>
+        </div>
+      </main>
+    </div>
+  </div>
+</body>
+</html>

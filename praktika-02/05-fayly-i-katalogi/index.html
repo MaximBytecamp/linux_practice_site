@@ -1,0 +1,385 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#F2F1E9">
+  <title>2.5 Файлы и каталоги · Практикум по Linux</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Literata:ital,opsz,wght@0,7..72,600;0,7..72,700;1,7..72,400&family=Pixelify+Sans:wght@500;600;700&family=Roboto+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../../styles.css">
+</head>
+<body>
+  <div class="book">
+    <div class="book__body">
+      <div class="spine"><span>Практика №2 · Bash: основные команды</span></div>
+
+      <main class="leaf">
+        <div class="running">
+          <p class="eyebrow"><a href="../../index.html" style="text-decoration:none;color:inherit">Практикум по Linux</a> · практика №2 · bash</p>
+          <p class="running__folio">Глава 2.5</p>
+        </div>
+
+        <header class="chapter-head">
+          <span class="chapter-num">2.5</span>
+          <h1>Файлы<br>и каталоги</h1>
+          <p class="lead">До сих пор мы только смотрели. Теперь начнём менять систему: создавать каталоги и файлы, копировать, перемещать, переименовывать и удалять. Здесь же появляется первая команда, которой стоит опасаться, — <code>rm</code> удаляет без корзины и без вопросов.</p>
+          <blockquote class="quote"><p>«В Linux нет корзины. Удалённое удалено.»</p></blockquote>
+        </header>
+
+        <dl class="passport">
+          <div><dt>Категория</dt><dd>Файловая система</dd></div>
+          <div><dt>Уровень</dt><dd>Начальный</dd></div>
+          <div><dt>Связанные темы</dt><dd>Пути, аргументы, права доступа</dd></div>
+          <div><dt>Зачем это знать</dt><dd>Создавать и приводить в порядок собственные файлы и каталоги</dd></div>
+        </dl>
+
+        <nav class="contents">
+          <b>В этой главе</b>
+          <ol>
+            <li><a href="#s1">Создание каталогов: mkdir</a></li>
+            <li><a href="#s2">Создание файлов: touch</a></li>
+            <li><a href="#s3">Копирование и перемещение</a></li>
+            <li><a href="#s4">Переименование</a></li>
+            <li><a href="#s5">Удаление каталогов: rmdir</a></li>
+            <li><a href="#s6">Удаление файлов: rm</a></li>
+            <li><a href="#s7">Частые ошибки</a></li>
+            <li><a href="#s8">Проверьте себя</a></li>
+            <li><a href="#s9">Шпаргалка</a></li>
+          </ol>
+        </nav>
+
+        <h2 id="s1"><span class="sec">§1</span>Создание каталогов: mkdir</h2>
+        <div class="cmdcard">
+          <div class="cmdcard__head"><b>mkdir</b><span>make directory</span></div>
+          <div class="cmdcard__body">
+            <div class="cmdcard__syn">mkdir [аргументы]… {путь}…</div>
+            <p style="margin-top:12px">Создаёт каталог по указанному пути. Путей можно перечислить несколько через пробел — тогда создастся несколько каталогов сразу.</p>
+            <dl>
+              <dt>-p</dt><dd>создать все недостающие каталоги пути</dd>
+              <dt>-v</dt><dd>сообщать о каждом созданном каталоге</dd>
+            </dl>
+          </div>
+        </div>
+        <figure class="tty">
+          <div class="tty__bar"><div class="tty__dots"><i></i><i></i><i></i></div><span class="tty__title">mkdir · <em>один каталог и сразу три</em></span></div>
+<pre><span class="pr">user<i>@</i>ubuntuserver<i>:</i><b>~</b><i>$</i></span> <span class="cmd">mkdir</span> <span class="pth">test</span>
+<span class="pr">user<i>@</i>ubuntuserver<i>:</i><b>~</b><i>$</i></span> <span class="cmd">mkdir</span> <span class="pth">test/dir1 test/dir2 test/dir3</span>
+<span class="pr">user<i>@</i>ubuntuserver<i>:</i><b>~</b><i>$</i></span> <span class="cmd">ls</span> <span class="pth">test</span>
+<span class="out">dir1  dir2  dir3</span></pre>
+        </figure>
+        <p>Обратите внимание на важное ограничение: <code>mkdir</code> создаёт <b>один</b> уровень вложенности. Команда <code>mkdir /tmp/dir1/dir2/dir3</code> завершится ошибкой, если <code>/tmp/dir1</code> ещё не существует, — родительский каталог должен быть на месте. Обойти это позволяет ключ <code>-p</code> (parents): он создаст всю цепочку разом.</p>
+        <div class="duo">
+          <div class="duo--no">
+            <b>Не сработает</b>
+            <p><code>mkdir /tmp/a/b/c</code></p>
+            <p><code>No such file or directory</code>, если <code>/tmp/a</code> не существует.</p>
+          </div>
+          <div class="duo--ok">
+            <b>Сработает</b>
+            <p><code>mkdir -p /tmp/a/b/c</code></p>
+            <p>Создаст <code>a</code>, внутри него <code>b</code>, внутри него <code>c</code>.</p>
+          </div>
+        </div>
+
+        <div class="try">
+          <div class="try__head"><b>⌨️ Попробуйте на своей системе</b><span>задание 1</span></div>
+          <div class="try__body">
+            <ol>
+              <li>Создайте папку <code>test</code> в домашней директории. Можете сначала перейти туда командой <code>cd</code>.</li>
+              <li>Создайте одной командой три каталога <code>dir1</code>, <code>dir2</code>, <code>dir3</code> внутри <code>test</code>.</li>
+              <li>Проверьте результат: <code class="b">ls test</code>.</li>
+              <li>Попробуйте создать каталог <code class="b">/tmp/dir1/dir2/dir3</code> за одну команду. Что произошло?</li>
+              <li>Добейтесь того же результата с ключом <code>-p</code> и проверьте: <code class="b">ls -R /tmp/dir1</code>.</li>
+            </ol>
+          </div>
+        </div>
+
+        <h2 id="s2"><span class="sec">§2</span>Создание файлов: touch</h2>
+        <div class="cmdcard">
+          <div class="cmdcard__head"><b>touch</b><span>«прикоснуться»</span></div>
+          <div class="cmdcard__body">
+            <div class="cmdcard__syn">touch {имя}…</div>
+            <p style="margin-top:12px">Если файла нет — создаёт пустой файл. Если файл есть — обновляет время последнего изменения, не трогая содержимое.</p>
+          </div>
+        </div>
+        <p>Название команды объясняется её основным назначением: изначально <code>touch</code> придумали не для создания файлов, а для изменения их временных отметок — времени модификации и времени последнего доступа. «Прикоснуться к файлу», ничего в нём не поменяв. Побочный эффект — создание пустого файла, если его не было, — оказался настолько удобным, что стал основным способом применения.</p>
+        <figure class="tty">
+          <div class="tty__bar"><div class="tty__dots"><i></i><i></i><i></i></div><span class="tty__title">touch · <em>создание нескольких файлов</em></span></div>
+<pre><span class="pr">user<i>@</i>ubuntuserver<i>:</i><b>~</b><i>$</i></span> <span class="cmd">touch</span> <span class="pth">notes.txt report.txt data.csv</span>
+<span class="pr">user<i>@</i>ubuntuserver<i>:</i><b>~</b><i>$</i></span> <span class="cmd">ls</span> <span class="arg">-l</span>
+<span class="out">-rw-rw-r-- 1 user user 0 сен  8 10:14 data.csv
+-rw-rw-r-- 1 user user 0 сен  8 10:14 notes.txt
+-rw-rw-r-- 1 user user 0 сен  8 10:14 report.txt
+drwxrwxr-x 5 user user 4096 сен  8 10:12 test</span></pre>
+        </figure>
+        <p>Размер созданных файлов — ноль байт: они действительно пустые. Заполнять их мы научимся в следующей главе.</p>
+
+        <div class="try">
+          <div class="try__head"><b>⌨️ Попробуйте на своей системе</b><span>задание 2</span></div>
+          <div class="try__body">
+            <ol>
+              <li>Создайте в домашней папке несколько пустых файлов одной командой.</li>
+              <li>Проверьте их размер через <code class="b">ls -l</code> — он должен быть равен нулю.</li>
+              <li>Подождите минуту и выполните <code class="b">touch notes.txt</code> ещё раз. Посмотрите <code>ls -l</code>: что изменилось у этого файла?</li>
+            </ol>
+          </div>
+        </div>
+
+        <h2 id="s3"><span class="sec">§3</span>Копирование и перемещение</h2>
+        <p>Две команды-близнецы отличаются одной деталью: одна оставляет оригинал на месте, другая — нет.</p>
+        <div class="cmdcard">
+          <div class="cmdcard__head"><b>cp</b><span>copy · копировать</span></div>
+          <div class="cmdcard__body">
+            <div class="cmdcard__syn">cp {расположение1}… {расположение2}</div>
+            <p style="margin-top:12px">Создаёт копию. Оригинал остаётся на месте.</p>
+            <dl>
+              <dt>-r</dt><dd>рекурсивно — копировать каталог со всем содержимым</dd>
+              <dt>-i</dt><dd>спрашивать перед перезаписью существующего файла</dd>
+            </dl>
+          </div>
+        </div>
+        <div class="cmdcard">
+          <div class="cmdcard__head"><b>mv</b><span>move · переместить</span></div>
+          <div class="cmdcard__body">
+            <div class="cmdcard__syn">mv {расположение1}… {расположение2}</div>
+            <p style="margin-top:12px">Перемещает файл. По исходному пути его больше не будет. Ключ <code>-r</code> не нужен: каталоги перемещаются целиком сами собой.</p>
+          </div>
+        </div>
+        <figure class="scheme">
+          <div class="scheme__canvas">
+            <svg viewBox="0 0 700 250" width="700" role="img" aria-label="Разница между копированием и перемещением файла">
+              <text x="20" y="26" font-family="Inter, sans-serif" font-size="13" font-weight="700" fill="#020835">cp notes.txt test/</text>
+              <rect x="20" y="40" width="120" height="40" fill="#fff" stroke="#020835" stroke-width="2.5"/>
+              <text x="80" y="65" font-family="Roboto Mono, monospace" font-size="12.5" fill="#020835" text-anchor="middle">notes.txt</text>
+              <rect x="300" y="40" width="120" height="40" fill="#BFE2F5" stroke="#020835" stroke-width="2.5"/>
+              <text x="360" y="65" font-family="Roboto Mono, monospace" font-size="12.5" fill="#020835" text-anchor="middle">notes.txt</text>
+              <path d="M148 60 H292" stroke="#2D7FC1" stroke-width="2.5" fill="none" marker-end="url(#a3)"/>
+              <text x="220" y="52" font-family="Inter, sans-serif" font-size="11.5" fill="#2D7FC1" text-anchor="middle">копия</text>
+              <text x="440" y="65" font-family="Inter, sans-serif" font-size="12.5" fill="#3B4467">оригинал остался — файлов стало два</text>
+
+              <text x="20" y="146" font-family="Inter, sans-serif" font-size="13" font-weight="700" fill="#020835">mv notes.txt test/</text>
+              <rect x="20" y="160" width="120" height="40" fill="#fff" stroke="#8A93B2" stroke-width="2.5" stroke-dasharray="6 4"/>
+              <text x="80" y="185" font-family="Roboto Mono, monospace" font-size="12.5" fill="#8A93B2" text-anchor="middle">notes.txt</text>
+              <rect x="300" y="160" width="120" height="40" fill="#BFE2F5" stroke="#020835" stroke-width="2.5"/>
+              <text x="360" y="185" font-family="Roboto Mono, monospace" font-size="12.5" fill="#020835" text-anchor="middle">notes.txt</text>
+              <path d="M148 180 H292" stroke="#B4791A" stroke-width="2.5" fill="none" marker-end="url(#a3)"/>
+              <text x="220" y="172" font-family="Inter, sans-serif" font-size="11.5" fill="#B4791A" text-anchor="middle">перенос</text>
+              <text x="440" y="185" font-family="Inter, sans-serif" font-size="12.5" fill="#3B4467">по старому пути файла больше нет</text>
+              <defs>
+                <marker id="a3" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+                  <path d="M0 0 L10 5 L0 10 z" fill="#020835"/>
+                </marker>
+              </defs>
+              <line x1="20" y1="112" x2="680" y2="112" stroke="#020835" stroke-width="2" stroke-dasharray="4 4"/>
+            </svg>
+          </div>
+          <figcaption>Одинаковый синтаксис, разный результат</figcaption>
+        </figure>
+        <p>Правило про второй аргумент важно помнить: если файлов копируется <b>несколько</b>, последним аргументом обязан быть каталог — иначе непонятно, во что их всех превращать. А если файл <b>один</b>, второй аргумент может быть новым именем.</p>
+
+        <div class="try">
+          <div class="try__head"><b>⌨️ Попробуйте на своей системе</b><span>задание 3</span></div>
+          <div class="try__body">
+            <ol>
+              <li>Скопируйте созданные в прошлом задании файлы в папку <code>test</code>.</li>
+              <li>Убедитесь, что оригиналы остались на месте: <code class="b">ls</code> и <code class="b">ls test</code>.</li>
+              <li>Переместите один из файлов в папку <code>test/dir1</code>.</li>
+              <li>Проверьте, что по старому пути его больше нет.</li>
+              <li>Скопируйте весь каталог <code>test</code> под именем <code>test_backup</code>. Без ключа <code>-r</code> команда откажется работать — прочитайте её сообщение.</li>
+            </ol>
+          </div>
+        </div>
+
+        <h2 id="s4"><span class="sec">§4</span>Переименование</h2>
+        <p>Отдельной команды для переименования в Linux нет — и она не нужна. Переименование это частный случай перемещения: файл переносится туда же, где лежал, но под другим именем.</p>
+        <figure class="tty">
+          <div class="tty__bar"><div class="tty__dots"><i></i><i></i><i></i></div><span class="tty__title">mv · <em>переименование</em></span></div>
+<pre><span class="pr">user<i>@</i>ubuntuserver<i>:</i><b>~</b><i>$</i></span> <span class="cmd">mv</span> <span class="pth">text.txt newtext.txt</span>
+<span class="pr">user<i>@</i>ubuntuserver<i>:</i><b>~</b><i>$</i></span> <span class="cmd">ls</span>
+<span class="out">newtext.txt  test</span></pre>
+        </figure>
+        <div class="margin-note margin-note--warn">
+          <b>Важно: перезапись происходит молча</b>
+          <p>Если файл с новым именем уже существует, <code>mv</code> и <code>cp</code> перезапишут его без единого вопроса, и старое содержимое исчезнет. Привычка, которая однажды спасёт вам работу: добавлять ключ <code>-i</code> — тогда команда спросит подтверждение перед перезаписью.</p>
+        </div>
+
+        <div class="try">
+          <div class="try__head"><b>⌨️ Попробуйте на своей системе</b><span>задание 4</span></div>
+          <div class="try__body">
+            <ol>
+              <li>Переименуйте любой из своих файлов.</li>
+              <li>Создайте два файла <code>a.txt</code> и <code>b.txt</code>, запишите в них разные имена через <code>touch</code> и <code>ls</code>, затем выполните <code class="b">mv a.txt b.txt</code>. Сколько файлов осталось?</li>
+              <li>Повторите тот же опыт с ключом <code>-i</code> и сравните поведение команды.</li>
+              <li>Переименуйте каталог <code>test_backup</code> в <code>backup</code>. Работает ли <code>mv</code> с каталогами так же, как с файлами?</li>
+            </ol>
+          </div>
+        </div>
+
+        <h2 id="s5"><span class="sec">§5</span>Удаление каталогов: rmdir</h2>
+        <div class="cmdcard">
+          <div class="cmdcard__head"><b>rmdir</b><span>remove directory</span></div>
+          <div class="cmdcard__body">
+            <div class="cmdcard__syn">rmdir {путь}…</div>
+            <p style="margin-top:12px">Удаляет каталог — но только если он пуст. Непустой каталог команда трогать откажется, и это её главное достоинство.</p>
+          </div>
+        </div>
+        <p>Осторожность <code>rmdir</code> выглядит неудобной, пока не вспомнить, что удаление в Linux необратимо. Отказ удалить каталог, в котором что-то лежит, — это защита от случайной потери данных, а не каприз.</p>
+
+        <div class="try">
+          <div class="try__head"><b>⌨️ Попробуйте на своей системе</b><span>задание 5</span></div>
+          <div class="try__body">
+            <ol>
+              <li>Удалите каталог <code class="b">test/dir3</code> — он пуст, всё пройдёт гладко.</li>
+              <li>Попробуйте удалить каталог <code class="b">test/dir1</code>, в котором лежит перемещённый ранее файл. Что произошло? Прочитайте сообщение.</li>
+              <li>Аналогичным образом попробуйте удалить через <code>rmdir</code> любой файл. Почему не выходит?</li>
+            </ol>
+            <details>
+              <summary>Почему rmdir не удаляет файлы</summary>
+              <p>Команда предназначена ровно для одной задачи — удаления пустых каталогов, и файл для неё объект неподходящего типа: <code>Not a directory</code>. Такая узкая специализация типична для Unix: каждая утилита делает одну вещь, зато делает её предсказуемо.</p>
+            </details>
+          </div>
+        </div>
+
+        <h2 id="s6"><span class="sec">§6</span>Удаление файлов: rm</h2>
+        <div class="cmdcard">
+          <div class="cmdcard__head"><b>rm</b><span>remove · удалить</span></div>
+          <div class="cmdcard__body">
+            <div class="cmdcard__syn">rm [аргументы]… {путь}…</div>
+            <p style="margin-top:12px">Удаляет файлы. С ключом <code>-r</code> удаляет каталоги вместе со всем содержимым — целыми деревьями.</p>
+            <dl>
+              <dt>-r</dt><dd>recursive — рекурсивно, вместе с содержимым</dd>
+              <dt>-i</dt><dd>спрашивать подтверждение по каждому файлу</dd>
+              <dt>-f</dt><dd>force — не задавать вопросов вообще</dd>
+            </dl>
+          </div>
+        </div>
+        <div class="margin-note margin-note--warn">
+          <b>Важно: корзины нет</b>
+          <p>Удалённое командой <code>rm</code> не попадает никуда — оно просто перестаёт существовать. Восстановление возможно только специальными средствами и далеко не всегда. Особенно опасна связка <code>rm -rf</code>: она рекурсивно и без единого вопроса стирает всё, до чего дотянется. Прежде чем нажать <kbd>Enter</kbd>, прочитайте путь ещё раз — глазами, целиком. Особенно если он начинается с <code>/</code>.</p>
+        </div>
+        <p>Полезная привычка: перед удалением по шаблону выполните ту же команду с <code>ls</code> вместо <code>rm</code>. Так вы увидите точный список того, что исчезнет.</p>
+        <div class="duo">
+          <div class="duo--ok">
+            <b>Сначала посмотреть</b>
+            <p><code>ls test/*.txt</code></p>
+            <p>Список файлов, которые попадут под шаблон.</p>
+          </div>
+          <div class="duo--no">
+            <b>Потом удалять</b>
+            <p><code>rm test/*.txt</code></p>
+            <p>Та же команда, но результат необратим.</p>
+          </div>
+        </div>
+
+        <div class="try">
+          <div class="try__head"><b>⌨️ Попробуйте на своей системе</b><span>задание 6</span></div>
+          <div class="try__body">
+            <p class="warn"><b>Только внутри своего домашнего каталога.</b> Все пути в этом задании начинаются с <code>~/test</code>. Не экспериментируйте с <code>rm</code> в системных каталогах и никогда не запускайте эту команду с путём <code>/</code>.</p>
+            <ol>
+              <li>Теперь с помощью <code class="b">rm</code> удалите любой файл.</li>
+              <li>С помощью <code class="b">rm -r</code> удалите каталог <code>test/dir1</code> со всем его содержимым.</li>
+              <li>Перед удалением остального посмотрите, что там лежит: <code class="b">ls -R ~/test</code>.</li>
+              <li>Осуществите удаление всего дерева каталогов, начиная с каталога <code>test</code>.</li>
+              <li>Проверьте результат: <code class="b">ls ~</code>.</li>
+            </ol>
+            <details>
+              <summary>Как потренироваться безопасно</summary>
+              <p>Создайте отдельную песочницу и работайте только в ней: <code>mkdir -p ~/sandbox/a/b</code>, <code>touch ~/sandbox/a/f1 ~/sandbox/a/b/f2</code>. Тогда любая ошибка в <code>rm -r ~/sandbox</code> стоит ровно ничего — каталог создаётся заново одной командой.</p>
+            </details>
+          </div>
+        </div>
+
+        <div class="try try--hard">
+          <div class="try__head"><b>🔥 Усложнённая задача</b><span>без подсказки</span></div>
+          <div class="try__body">
+            <p>Соберите в домашнем каталоге такую структуру одной-двумя командами: каталог <code>projects</code>, внутри него <code>lab1</code>, <code>lab2</code>, <code>lab3</code>, а в каждом из них — пустые файлы <code>main.c</code> и <code>readme.txt</code>. Затем: скопируйте <code>lab1</code> целиком под именем <code>lab4</code>, переименуйте в нём <code>main.c</code> в <code>main_v2.c</code> и удалите каталог <code>lab2</code> вместе с содержимым. Проверьте итог командой <code>ls -R ~/projects</code>.</p>
+          </div>
+        </div>
+
+        <h2 id="s7"><span class="sec">§7</span>Частые ошибки</h2>
+        <div class="table-scroll errors-table">
+          <table>
+            <thead><tr><th>Что написано</th><th>Что произойдёт</th><th>Как правильно</th></tr></thead>
+            <tbody>
+              <tr><td><code>mkdir /tmp/a/b/c</code>, где <code>a</code> нет</td><td><code>No such file or directory</code></td><td><code>mkdir -p /tmp/a/b/c</code></td></tr>
+              <tr><td><code>mkdir мой каталог</code></td><td>Создадутся <b>два</b> каталога: <code>мой</code> и <code>каталог</code></td><td><code>mkdir "мой каталог"</code> — пробел в имени требует кавычек</td></tr>
+              <tr><td><code>cp test backup</code> для каталога</td><td><code>-r not specified; omitting directory</code></td><td><code>cp -r test backup</code></td></tr>
+              <tr><td><code>mv a.txt b.txt</code>, где <code>b.txt</code> существует</td><td>Содержимое <code>b.txt</code> потеряно без предупреждения</td><td><code>mv -i a.txt b.txt</code> — с подтверждением</td></tr>
+              <tr><td><code>rmdir test</code> для непустого каталога</td><td><code>Directory not empty</code></td><td><code>rm -r test</code>, предварительно проверив содержимое</td></tr>
+              <tr><td><code>rm -rf /</code> или <code>rm -rf ~</code></td><td>Уничтожение системы или всех личных данных</td><td>Никогда не запускать; всегда читать путь перед вводом</td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <h2 id="s8"><span class="sec">§8</span>Проверьте себя</h2>
+        <details>
+          <summary>Зачем <code>mkdir</code> ключ <code>-p</code>, если каталог можно создать и без него?</summary>
+          <p>Без <code>-p</code> команда создаёт только последний каталог пути и требует, чтобы все родительские уже существовали. Ключ <code>-p</code> создаёт всю цепочку сразу — за одну команду вместо нескольких.</p>
+        </details>
+        <details>
+          <summary>Почему команда называется <code>touch</code>, а не <code>create</code>?</summary>
+          <p>Её основное назначение — обновление временных отметок файла: времени изменения и времени последнего доступа. «Прикоснуться, ничего не поменяв». Создание пустого файла — побочный эффект, который стал самым популярным способом её применения.</p>
+        </details>
+        <details>
+          <summary>Чем отличается <code>cp a.txt b.txt</code> от <code>mv a.txt b.txt</code>?</summary>
+          <p>После <code>cp</code> останутся оба файла с одинаковым содержимым. После <code>mv</code> останется только <code>b.txt</code>: это переименование, то есть перемещение в то же место под другим именем.</p>
+        </details>
+        <details>
+          <summary>Когда <code>rmdir</code> удобнее, чем <code>rm -r</code>?</summary>
+          <p>Когда вы хотите удалить каталог, только если он действительно пуст. <code>rmdir</code> откажется работать с непустым каталогом и тем самым предупредит о том, что внутри что-то есть. <code>rm -r</code> в такой ситуации молча удалит всё вместе с содержимым.</p>
+        </details>
+        <details>
+          <summary>Как безопасно проверить, что именно удалит <code>rm ~/test/*.log</code>?</summary>
+          <p>Выполнить ту же команду, заменив <code>rm</code> на <code>ls</code>: <code>ls ~/test/*.log</code>. Шаблон раскроет оболочка, и вы увидите точный список файлов, которые попадут под удаление. Дополнительно помогает ключ <code>-i</code>: он спросит подтверждение по каждому файлу.</p>
+        </details>
+
+        <h2 id="s9"><span class="sec">§9</span>Шпаргалка</h2>
+        <div class="cheat">
+          <div>
+            <b>Создать каталог</b>
+            <code>mkdir test</code>
+            <code>mkdir -p a/b/c</code>
+          </div>
+          <div>
+            <b>Создать файл</b>
+            <code>touch notes.txt</code>
+            <code>touch a.txt b.txt</code>
+          </div>
+          <div>
+            <b>Копировать</b>
+            <code>cp notes.txt test/</code>
+            <code>cp -r test backup</code>
+          </div>
+          <div>
+            <b>Переместить и переименовать</b>
+            <code>mv notes.txt test/</code>
+            <code>mv old.txt new.txt</code>
+          </div>
+          <div>
+            <b>Удалить</b>
+            <code>rmdir empty_dir</code>
+            <code>rm file.txt    rm -r dir</code>
+          </div>
+          <div>
+            <b>Подстраховаться</b>
+            <code>cp -i    mv -i    rm -i</code>
+            <code>ls путь   # перед rm</code>
+          </div>
+        </div>
+
+        <h3>Итог главы</h3>
+        <p>Каталоги создаёт <code>mkdir</code> (с ключом <code>-p</code> — сразу всю цепочку), пустые файлы — <code>touch</code>. Копирование и перемещение выполняют <code>cp</code> и <code>mv</code> с одинаковым синтаксисом; разница в том, остаётся ли оригинал. Переименование — это <code>mv</code> в то же место под другим именем. Удаляют <code>rmdir</code> (только пустые каталоги) и <code>rm</code> (файлы, а с <code>-r</code> — деревья каталогов). И главное, что стоит унести из этой главы: корзины в Linux нет, поэтому перед <code>rm</code> путь читают глазами, а не по памяти.</p>
+
+        <div class="pager"><a href="../04-prosmotr-i-poisk/index.html">← 2.4 Просмотр и поиск</a><a href="../../index.html">К содержанию практикума</a><a href="../06-potoki-i-konveyer/index.html">2.6 Потоки и конвейер →</a></div>
+
+        <div class="colophon">
+          <span>Глава 2.5 · Файлы и каталоги · Практикум по Linux</span>
+          <span class="author-line">Автор: Макаров Максим Николаевич</span>
+        </div>
+      </main>
+    </div>
+  </div>
+</body>
+</html>
